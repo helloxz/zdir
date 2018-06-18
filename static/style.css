@@ -1,0 +1,16 @@
+.header{
+	background-color:#393D49;
+    width:100%;
+}
+.footer{
+    width:100%;
+    position:fixed;
+    left:0;
+	bottom:0;
+	background: #2F4056;
+	color:#E1E1E1;
+	padding:14px;
+}
+.footer a{
+    color:#E1E1E1;
+}
