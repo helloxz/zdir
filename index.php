@@ -9,6 +9,8 @@
 
 	//获取目录
 	$dir = $_GET['dir'];
+	//分割字符串
+	$navigation = explode("/",$dir);
 
 	if(($dir == '') || (!isset($dir))) {
 		$listdir = scandir($thedir);
@@ -51,6 +53,7 @@
 	<meta name="author" content="" />
 	<meta name="keywords" content="" />
 	<meta name="description" content="" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="./static/layui/css/layui.css">
 	<link rel='stylesheet' href='./static/style.css'>
 	<link rel="stylesheet" href="./static/font-awesome/css/font-awesome.min.css">
@@ -75,6 +78,30 @@
         </div>
     </div>
     <!-- 顶部导航栏END -->
+    <!--面包屑导航-->
+	<div id="navigation">
+		<div class="layui-container">
+			<div class="layui-row">
+				<div class="layui-col-lg12">
+					<p>
+						当前位置：<a href="./">首页</a> 
+						<!--遍历导航-->
+						<?php foreach( $navigation as $menu )
+						{
+							$remenu = $remenu.'/'.$menu;
+							
+							if($remenu == '/'){
+								$remenu = $menu;
+							}
+						?>
+						<a href="./index.php?dir=<?php echo $remenu; ?>"><?php echo $menu; ?></a> / 
+						<?php } ?>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+    <!--面包屑导航END-->
 	<!--遍历目录-->
 	<div id="list">
 		<div class="layui-container">
@@ -97,6 +124,8 @@
 					  </thead>
 					  <tbody>
 					    <?php foreach( $listdir as $showdir ) {
+						    //防止中文乱码
+						    $showdir = iconv('gb2312' , 'utf-8' , $showdir );
 						    //文件完整路径
 						    $fullpath = $thedir.'/'.$dir.'/'.$showdir;
 						    
