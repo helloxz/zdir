@@ -50,10 +50,11 @@
 	<meta charset="utf-8" />
 	<title><?php echo $siteinfo['title']; ?></title>
 	<meta name="generator" content="EverEdit" />
-	<meta name="author" content="" />
-	<meta name="keywords" content="" />
-	<meta name="description" content="" />
+	<meta name="author" content="xiaoz.me" />
+	<meta name="keywords" content="<?php echo $siteinfo['keywords']; ?>" />
+	<meta name="description" content="<?php echo $siteinfo['description']; ?>" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="shortcut icon" href="favicon.ico"  type="image/x-icon" />
 	<link rel="stylesheet" href="./static/layui/css/layui.css">
 	<link rel='stylesheet' href='./static/style.css'>
 	<link rel="stylesheet" href="./static/font-awesome/css/font-awesome.min.css">
@@ -68,18 +69,21 @@
                         <ul class="layui-nav menu" lay-filter="">
                             <li class="layui-nav-item"><a href="./"><i class="fa fa-home fa-lg"></i> Zdir</a></li>
                             <li class="layui-nav-item"><a href="https://github.com/helloxz/zdir" target = "_blank" rel = "nofollow"><i class="fa fa-github fa-lg"></i> 源码</a></li>
-                            <li class="layui-nav-item"><a href="about.php"><i class="layui-icon">&#xe60b;</i> 关于</a></li>
+                            <li class="layui-nav-item"><a href="https://www.xiaoz.me/" target = "_blank"><i class="layui-icon">&#xe60b;</i> 关于</a></li>
                         </ul>
                     </div>
-                    
-                    
+                    <div class = "layui-hide-lg">
+                        <ul class="layui-nav menu" lay-filter="">
+                            <li class="layui-nav-item"><a href="./"><i class="fa fa-home fa-lg"></i> Zdir</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     <!-- 顶部导航栏END -->
     <!--面包屑导航-->
-	<div id="navigation">
+	<div id="navigation" class = "layui-hide-xs">
 		<div class="layui-container">
 			<div class="layui-row">
 				<div class="layui-col-lg12">
@@ -109,7 +113,8 @@
 		    	<div class="layui-col-lg12">
 			    	<table class="layui-table" lay-skin="line">
 					  	<colgroup>
-					    <col width="600">
+					    <col width="400">
+					    <col width="200">
 					    <col width="200">
 					    <col width="200">
 					    <col>
@@ -117,9 +122,10 @@
 					  <thead>
 					    <tr>
 					      <th>文件名</th>
+					      <th class = "layui-hide-xs"></th>
 					      <th>修改时间</th>
 					      <th>文件大小</th>
-					      <th>操作</th>
+					      <th class = "layui-hide-xs">操作</th>
 					    </tr> 
 					  </thead>
 					  <tbody>
@@ -128,6 +134,7 @@
 						    $showdir = iconv('gb2312' , 'utf-8' , $showdir );
 						    //文件完整路径
 						    $fullpath = $thedir.'/'.$dir.'/'.$showdir;
+						    $fullpath = str_replace("\\","\/",$fullpath);
 						    
 						    //获取文件修改时间
 						    $ctime = filemtime($fullpath);
@@ -152,8 +159,11 @@
 							    
 							    $ico = "fa fa-folder-open";
 							    $fsize = '-';
-						    }//是一个文件
-						    else{
+							    //返回类型
+							    $type = 'dir';
+						    }
+						    //如果是文件
+						    if(is_file($fullpath)){
 							    //获取文件后缀
 						    	$suffix = explode(".",$showdir);
 						    	$suffix = end($suffix);
@@ -167,14 +177,43 @@
 							    $fsize = filesize($fullpath);
 							    $fsize = ceil ($fsize / 1024);
 							    $fsize = $fsize.'kb';
+							    $type = 'file';
+							    #$info = "<a href = ''><i class='fa fa-info-circle' aria-hidden='true'></i></a>";
+						    }
+						    //其它情况，可能是中文目录
+						    else{
+							    $suffix = '';
+							    //设置上级目录
+							    if($showdir == '..'){
+								    $url = $updir;
+							    }
+							    else{
+								    $url = "./index.php?dir=".$dir.'/'.$showdir;
+							    }
+							    
+							    $ico = "fa fa-folder-open";
+							    $fsize = '-';
+							    $type = 'dir';
 						    }
 						    $i++;
 						?>
 					    <tr id = "id<?php echo $i; ?>">
-						    <td><i class="<?php echo $ico; ?>"></i> <a href="<?php echo $url ?>" id = "url<?php echo $i; ?>"><?php echo $showdir; ?></a></td>
+						    <td>
+							    <a href="<?php echo $url ?>" id = "url<?php echo $i; ?>"><i class="<?php echo $ico; ?>"></i> <?php echo $showdir; ?></a>
+						    </td>
+						    <td id = "info" class = "layui-hide-xs">
+							    <!--如果是readme.md-->
+							    <?php if(($showdir == 'README.md') || ($showdir == 'readme.md')){ ?>
+								<a class = "layui-btn layui-btn-xs" href="javascript:;" onclick = "viewmd('<?php echo $url ?>')" title = "点此查看使用说明">使用说明</a>
+							    <?php } ?>
+							    <!--如果是文件-->
+							    <?php if($type == 'file'){ ?>
+								<a href="javascript:;" title = "查看文件hash" onclick = "filehash('<?php echo $showdir; ?>','<?php echo $fullpath; ?>')"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
+							    <?php } ?>
+						    </td>
 						    <td><?php echo $ctime; ?></td>
 						    <td><?php echo $fsize; ?></td>
-						    <td>
+						    <td class = "layui-hide-xs">
 							    <?php if($fsize != '-'){ ?>
 								<a href="javascript:;" class = "layui-btn layui-btn-xs" onclick = "copy('<?php echo $url ?>')">复制</a>
 							    <?php } ?>
@@ -196,7 +235,7 @@
 		<div class = "layui-container">
 			<div class = "layui-row">
 				<div class = "layui-col-lg12">
-				Copyright © 2017-2018 Powered by <a href="https://imgurl.org/" target = "_blank">ImgURL</a> | Author <a href="https://www.xiaoz.me/" target = "_blank">xiaoz.me</a>
+				Copyright © 2017-2018 Powered by <a href="https://github.com/helloxz/zdir" target = "_blank">Zdir</a> | Author <a href="https://www.xiaoz.me/" target = "_blank">xiaoz.me</a>
 				</div>
 			</div>
 		</div>

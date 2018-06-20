@@ -20,3 +20,9 @@
 #navigation{
 	margin-top:1em;
 }
+#info{
+	text-align:right;
+}
+#info a{
+	margin-right:1em;
+}

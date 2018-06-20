@@ -64,3 +64,23 @@ function viewmd(url){
 	  	content: url //这里content是一个普通的String
 	});
 }
+
+//计算文件hash
+function filehash(name,path){
+	var file = path;
+	
+	
+	$.post("./functions/hash.php",{file:file},function(data,status){
+		var fileinfo = eval('(' + data + ')');
+		if(fileinfo.code == 1){
+			layer.open({
+  				title:name,
+  				area: ['400px', 'auto'],
+			  	content: '<b>md5: </b>' + fileinfo.md5 + '<br /><b>sha1: </b>' + fileinfo.sha1
+			});  
+		}
+		else{
+			layer.msg(fileinfo.msg); 
+		}
+	});
+}
