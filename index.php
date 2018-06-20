@@ -69,7 +69,7 @@
                         <ul class="layui-nav menu" lay-filter="">
                             <li class="layui-nav-item"><a href="./"><i class="fa fa-home fa-lg"></i> Zdir</a></li>
                             <li class="layui-nav-item"><a href="https://github.com/helloxz/zdir" target = "_blank" rel = "nofollow"><i class="fa fa-github fa-lg"></i> 源码</a></li>
-                            <li class="layui-nav-item"><a href="https://www.xiaoz.me/" target = "_blank"><i class="layui-icon">&#xe60b;</i> 关于</a></li>
+                            <li class="layui-nav-item"><a href="https://www.xiaoz.me/archives/10465" target = "_blank"><i class="layui-icon">&#xe60b;</i> 关于</a></li>
                         </ul>
                     </div>
                     <div class = "layui-hide-lg">
