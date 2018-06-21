@@ -31,11 +31,17 @@ function copy(url){
 			break;
 		case 'css':
 			url = "<link rel='stylesheet' href='" + url + "'>";
-
 		default:
-			url = url;
+			//如果是图片
+			if((suffix == 'jpg') || (suffix == 'jpeg') || (suffix == 'gif') || (suffix == 'bmp') || (suffix == 'png')){
+				url = "<img src = '" + url + "' />";
+			}
+			else{
+				url = url;
+			}
 		break;
 	}
+	
 	
 	var copy = new clipBoard(document.getElementById('list'), {
         beforeCopy: function() {
