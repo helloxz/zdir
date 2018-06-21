@@ -56,7 +56,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="shortcut icon" href="favicon.ico"  type="image/x-icon" />
 	<link rel="stylesheet" href="./static/layui/css/layui.css">
-	<link rel='stylesheet' href='./static/style.css'>
+	<link rel='stylesheet' href='./static/style.css?v=1.2'>
 	<link rel="stylesheet" href="./static/font-awesome/css/font-awesome.min.css">
 </head>
 <body>
@@ -200,7 +200,15 @@
 						?>
 					    <tr id = "id<?php echo $i; ?>">
 						    <td>
-							    <a href="<?php echo $url ?>" id = "url<?php echo $i; ?>"><i class="<?php echo $ico; ?>"></i> <?php echo $showdir; ?></a>
+							    <!--判断文件是否是图片-->
+							    <?php if(($suffix == 'jpg') || ($suffix == 'jpeg') || ($suffix == 'png') || ($suffix == 'gif') || ($suffix == 'bmp')){
+
+							   	?>
+							   	<a href="<?php echo $url ?>" id = "url<?php echo $i; ?>" onmouseover = "showimg(<?php echo $i; ?>,'<?php echo $url; ?>')"><i class="<?php echo $ico; ?>" onmousemove = "hideimg(<?php echo $i; ?>)"></i> <?php echo $showdir; ?></a>
+							   	<div class = "showimg" id = "show<?php echo $i; ?>" onmousemove = "hideimg(<?php echo $i; ?>)"><img src="" id = "imgid<?php echo $i; ?>"></div>
+							   	<?php }else{ ?>
+							    <a href="<?php echo $url ?>" id = "url<?php echo $i; ?>" onmousemove = "hideimg(<?php echo $i; ?>)"><i class="<?php echo $ico; ?>"></i> <?php echo $showdir; ?></a>
+							    <?php } ?>
 						    </td>
 						    <td id = "info" class = "layui-hide-xs">
 							    <!--如果是readme.md-->
@@ -246,7 +254,7 @@
 	<!--遍历目录END-->
 	<script type="text/javascript" src = "https://libs.xiaoz.top/jquery/2.0.3/jquery-2.0.3.min.js"></script>
 	<script type="text/javascript" src="./static/layui/layui.js"></script>
-	<script type="text/javascript" src="./static/embed.js"></script>
+	<script type="text/javascript" src="./static/embed.js?v=1.2"></script>
 	<script type="text/javascript" src="https://libs.xiaoz.top/clipBoard.js/clipBoard.min.js"></script>
 </body>
 </html>

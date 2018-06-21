@@ -26,3 +26,14 @@
 #info a{
 	margin-right:1em;
 }
+.showimg{
+	display:none;
+	position:absolute;
+	max-width:460px;
+	top:3em;
+	z-index:99;
+}
+
+.layui-table img {
+    max-width: 460px;
+}

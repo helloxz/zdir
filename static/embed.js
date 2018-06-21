@@ -84,3 +84,27 @@ function filehash(name,path){
 		}
 	});
 }
+
+//显示图片
+function showimg(id,url){
+	var imgid = "imgid" + id;
+	//获取上一个id
+	var upid = id - 1;
+	//获取下一个ID
+	var dnid = id + 1;
+	//隐藏图片
+	$("#show" + upid).hide();
+	$("#show" + dnid).hide();
+	//显示图片
+	$("#" + imgid).attr('src',url);
+	$("#show" + id).show(); 
+}
+//隐藏图片
+function hideimg(id){
+	var upid = id - 1;
+	//获取下一个ID
+	var dnid = id + 1;
+	$("#show" + id).hide();
+	$("#show" + upid).hide();
+	$("#show" + dnid).hide();
+}
