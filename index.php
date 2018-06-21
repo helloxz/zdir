@@ -135,6 +135,7 @@
 						    //文件完整路径
 						    $fullpath = $thedir.'/'.$dir.'/'.$showdir;
 						    $fullpath = str_replace("\\","\/",$fullpath);
+						    $fullpath = str_replace("//","/",$fullpath);
 						    
 						    //获取文件修改时间
 						    $ctime = filemtime($fullpath);

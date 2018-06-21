@@ -1,4 +1,9 @@
 <?php
+	//获取当前路径
+	$thedir = __DIR__;
+	$thedir = str_replace("\\","/",$thedir);
+	$thedir = str_replace("/functions","",$thedir);
+	#$thedir = str_replace("");
 	//获取文件路径
 	$filepath = $_POST['file'];
 
@@ -7,6 +12,16 @@
 		$filehash = array(
 		"code"	=>	0,
 		"msg"	=>	"文件不存在！"
+		);
+		$filehash = json_encode($filehash);
+		echo $filehash;
+		exit;
+	}
+	//如果文件不是项目路径
+	if(!strstr($filepath,$thedir)){
+		$filehash = array(
+		"code"	=>	0,
+		"msg"	=>	"目录不正确！"
 		);
 		$filehash = json_encode($filehash);
 		echo $filehash;

@@ -69,7 +69,7 @@ function viewmd(url){
 function filehash(name,path){
 	var file = path;
 	
-	
+	//alert(file);
 	$.post("./functions/hash.php",{file:file},function(data,status){
 		var fileinfo = eval('(' + data + ')');
 		if(fileinfo.code == 1){
