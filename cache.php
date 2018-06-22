@@ -1,5 +1,6 @@
 <?php
 	include_once("./config.php");
+	@$del = $_GET['del'];
 	//缓存文件夹路径
 	$cachefile = "./functions/caches/indexes.html";
 	//获取文件修改时间
@@ -10,7 +11,12 @@
 
 	//计算时差
 	$diff = $thetime - $ftime;
-
+	//删除缓存文件
+	if($del == 'cache') {
+		unlink($cachefile);
+		header("location:./cache.php");
+		exit;
+	}
 	//判断缓存文件是否存在
 	if((!file_exists($cachefile)) || ($diff > 24)){
 		$url = get_url();
