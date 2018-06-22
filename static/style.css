@@ -37,3 +37,14 @@
 .layui-table img {
     max-width: 460px;
 }
+#cache{
+	margin-top:2em;
+	
+}
+#cache ul{
+	background-color: #f2f2f2;
+	display: block;
+	line-height:1.5em;
+	padding-left:1em;
+	
+}

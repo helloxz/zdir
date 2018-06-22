@@ -14,6 +14,9 @@
 		"config.php",
 		"index.php",
 		"static",
-		"LICENSE"
+		"LICENSE",
+		"template",
+		"cache.php",
+		"indexes.php"
 	);	
 ?>
