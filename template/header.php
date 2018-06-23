@@ -10,7 +10,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="shortcut icon" href="favicon.ico"  type="image/x-icon" />
 	<link rel="stylesheet" href="./static/layui/css/layui.css">
-	<link rel='stylesheet' href='./static/style.css?v=1.3'>
+	<link rel='stylesheet' href='./static/style.css?v=1.4'>
 	<link rel="stylesheet" href="./static/font-awesome/css/font-awesome.min.css">
 </head>
 <body>

@@ -91,7 +91,7 @@
 					    <tr>
 					      <th>文件名</th>
 					      <th class = "layui-hide-xs"></th>
-					      <th>修改时间</th>
+					      <th class = "layui-hide-xs">修改时间</th>
 					      <th>文件大小</th>
 					      <th class = "layui-hide-xs">操作</th>
 					    </tr> 
@@ -192,10 +192,11 @@
 							    <?php } ?>
 							    <!--如果是文件-->
 							    <?php if($type == 'file'){ ?>
-								<a href="javascript:;" title = "查看文件hash" onclick = "filehash('<?php echo $showdir; ?>','<?php echo $fullpath; ?>')"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
+									<a href="javascript:;" title = "查看文件hash" onclick = "filehash('<?php echo $showdir; ?>','<?php echo $fullpath; ?>')"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
+									<a href="javascript:;" onclick = "qrcode('<?php echo $showdir; ?>','<?php echo $url; ?>')" title = "显示二维码"><i class="fa fa-qrcode" aria-hidden="true"></i></a>
 							    <?php } ?>
 						    </td>
-						    <td><?php echo $ctime; ?></td>
+						    <td class = "layui-hide-xs"><?php echo $ctime; ?></td>
 						    <td><?php echo $fsize; ?></td>
 						    <td class = "layui-hide-xs">
 							    <?php if($fsize != '-'){ ?>

@@ -12,6 +12,10 @@ $(document).ready(function(){
 	}
 });
 
+protocol = window.location.protocol;		//获取协议
+host = window.location.host;				//获取主机
+pageurl = protocol + '//' + host + '/';
+
 //复制按钮
 function copy(url){
 	url = url.replace("./","");
@@ -113,4 +117,24 @@ function hideimg(id){
 	$("#show" + id).hide();
 	$("#show" + upid).hide();
 	$("#show" + dnid).hide();
+}
+
+//显示二维码
+function qrcode(name,url){
+	url = url.replace("./","");
+	//重组url
+	protocol = window.location.protocol;		//获取协议
+	host = window.location.host;				//获取主机
+	url = protocol + '//' + host + '/' + url;
+
+	//二维码接口
+	qrcodeapi = "https://sapi.k780.com/?app=qr.get&level=L&size=5&data=" + url;
+	var qrimg = "<center><img src = '" + qrcodeapi + "' /></center>";
+	layer.open({
+		type: 1,
+		area: '200px',
+	  	title: name,
+	  	content: qrimg
+	});   
+	
 }
