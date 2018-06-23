@@ -32,6 +32,8 @@
 	max-width:460px;
 	top:3em;
 	z-index:99;
+	border:1px solid #e2e2e2;
+	border-radius:5px;
 }
 
 .layui-table img {
@@ -47,4 +49,17 @@
 	line-height:1.5em;
 	padding-left:1em;
 	
+}
+.logo{
+	float:left;
+	color:#FFFFFF;
+	vertical-align: middle;
+	margin-top:1em;
+	margin-bottom:1em;
+}
+.logo a{
+	color:#FFFFFF;
+}
+.menu{
+	float:left;
 }

@@ -2,6 +2,8 @@
 	error_reporting(E_ALL^E_NOTICE^E_WARNING^E_DEPRECATED);
 	//载入配置文件
 	include_once("./config.php");
+	//载入zdir类
+	include_once("./functions/zdir.class.php");
 	//获取当前目录
 	$thedir = __DIR__;
 	$i = 0;
@@ -135,15 +137,22 @@
 						    	$suffix = explode(".",$showdir);
 						    	$suffix = end($suffix);
 						    	
-						    	
 							    $url = '.'.$dir.'/'.$showdir;
+
+							    //根据不同后缀显示不同图标
+							    $ico = $zdir->ico($suffix);
 							    
-							    $ico = "fa fa-file-text-o";
 
 							    //获取文件大小
 							    $fsize = filesize($fullpath);
 							    $fsize = ceil ($fsize / 1024);
-							    $fsize = $fsize.'kb';
+							    if($fsize >= 1024) {
+								    $fsize = $fsize / 1024;
+								    $fsize = round($fsize,2).'MB';
+							    }
+							    else{
+								    $fsize = $fsize.'KB';
+							    }
 							    $type = 'file';
 							    #$info = "<a href = ''><i class='fa fa-info-circle' aria-hidden='true'></i></a>";
 						    }
