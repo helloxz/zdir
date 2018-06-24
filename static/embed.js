@@ -132,7 +132,7 @@ function qrcode(name,url){
 	var qrimg = "<center><img src = '" + qrcodeapi + "' /></center>";
 	layer.open({
 		type: 1,
-		area: '200px',
+		area: '240px',
 	  	title: name,
 	  	content: qrimg
 	});   
