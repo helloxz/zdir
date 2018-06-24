@@ -18,7 +18,8 @@
 		$listdir = scandir($thedir);
 	}
 	else{
-		$listdir = scandir($thedir."/".$dir);
+		$zh_dir = iconv('utf-8','gb2312',$dir);
+		$listdir = scandir($thedir."/".$zh_dir);
 	}
 
 	//计算上级目录
@@ -116,7 +117,7 @@
 						    }
 						    
 						    //判读文件是否是目录,当前路径 + 获取到的路径 + 遍历后的目录
-						    if(is_dir($thedir.'/'.$dir.'/'.$showdir)){
+						    if(is_dir($fullpath)){
 							    $suffix = '';
 							    //设置上级目录
 							    if($showdir == '..'){
@@ -130,6 +131,7 @@
 							    $fsize = '-';
 							    //返回类型
 							    $type = 'dir';
+							    
 						    }
 						    //如果是文件
 						    if(is_file($fullpath)){
@@ -162,12 +164,27 @@
 							    //设置上级目录
 							    if($showdir == '..'){
 								    $url = $updir;
+								    $url = str_replace("\/..","",$url);
+								    #$url = 'ds';
+							    }
+							    $fullpath = iconv("utf-8","gb2312",$fullpath);
+							    if(is_file($fullpath)){
+								    $url = "./".$dir.'/'.$showdir;
+								    $url = str_replace("//","/",$url);
+								    $ico = "fa fa-file-text-o";
 							    }
 							    else{
-								    $url = "./index.php?dir=".$dir.'/'.$showdir;
+								    if($showdir == '..') {
+									    $url = $updir;
+								    }
+								    else{
+									    $url = "./index.php?dir=".$dir.'/'.$showdir;
+								    }
+								    #$url = str_replace("/..","",$url);
+								    $ico = "fa fa-folder-open";
 							    }
 							    
-							    $ico = "fa fa-folder-open";
+							    
 							    $fsize = '-';
 							    $type = 'dir';
 						    }
