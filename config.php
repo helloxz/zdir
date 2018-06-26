@@ -18,5 +18,14 @@
 		"template",
 		"cache.php",
 		"indexes.php"
+	);
+	//设置IP与密码
+	$config = array(
+		"allowip"	=>	array(
+			"::1",
+			"127.0.0.1",
+			"192.168.1."
+		),
+		"password"	=>	"xiaoz.me"
 	);	
 ?>

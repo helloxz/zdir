@@ -4,6 +4,7 @@
 	include_once("./config.php");
 	//载入zdir类
 	include_once("./functions/zdir.class.php");
+	@$admin = $_GET['admin'];
 	//获取当前目录
 	$thedir = __DIR__;
 	$i = 0;
@@ -84,7 +85,7 @@
 					    <col width="400">
 					    <col width="200">
 					    <col width="200">
-					    <col width="200">
+					    <col width="180">
 					    <col>
 					  </colgroup>
 					  <thead>
@@ -201,6 +202,10 @@
 						    <td class = "layui-hide-xs">
 							    <?php if($fsize != '-'){ ?>
 								<a href="javascript:;" class = "layui-btn layui-btn-xs" onclick = "copy('<?php echo $url ?>')">复制</a>
+							    <?php } ?>
+							    <!--如果是管理模式-->
+							    <?php if((isset($admin)) && ($fsize != '-')) { ?>
+									<a href="javascript:;" class = "layui-btn layui-btn-xs layui-btn-danger" onclick = "delfile(<?php echo $i; ?>,'<?php echo $showdir; ?>','<?php echo $fullpath; ?>')">删除</a>
 							    <?php } ?>
 							    <!--如果是markdown文件-->
 							    <?php if(($suffix == 'md') && ($suffix != null)){ ?>

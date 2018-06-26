@@ -132,9 +132,29 @@ function qrcode(name,url){
 	var qrimg = "<center><img src = '" + qrcodeapi + "' /></center>";
 	layer.open({
 		type: 1,
-		area: '240px',
+		area: '230px',
 	  	title: name,
 	  	content: qrimg
 	});   
-	
+}
+
+//删除文件
+function delfile(id,filename,filepath){
+	id = "id" + id;
+	layer.prompt({
+		formType: 1,
+		title: '请输入密码删除 - ' + filename
+	}, function(value, index, elem){
+		$.post('./functions/delfile.php',{filepath:filepath,password:value},function(data,status){
+			var redata = eval('(' + data + ')');
+			if(redata.code == 1){
+				$("#" + id).remove();
+				layer.msg(redata.msg + ' ' + filename);
+			}
+			else{
+				layer.msg(redata.msg);
+			}
+		});
+		layer.close(index);
+	});
 }
