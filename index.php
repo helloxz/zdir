@@ -12,6 +12,7 @@
 
 	//获取目录
 	$dir = $_GET['dir'];
+	$dir = str_replace("../","",$zdir);
 	//分割字符串
 	$navigation = explode("/",$dir);
 
