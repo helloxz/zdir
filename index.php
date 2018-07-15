@@ -12,7 +12,12 @@
 
 	//获取目录
 	$dir = $_GET['dir'];
-	$dir = str_replace("../","",$dir);
+	//对目录进行过滤
+	if((stripos($dir,'./')) || (stripos($dir,'.\\'))){
+		echo '非法请求';
+		
+		exit;
+	}
 	//分割字符串
 	$navigation = explode("/",$dir);
 
@@ -20,6 +25,7 @@
 		$listdir = scandir($thedir);
 	}
 	else{
+		echo $thedir."/".$dir;
 		$listdir = scandir($thedir."/".$dir);
 	}
 
