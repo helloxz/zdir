@@ -14,8 +14,7 @@
 	$dir = $_GET['dir'];
 	//对目录进行过滤
 	if((stripos($dir,'./')) || (stripos($dir,'.\\'))){
-		echo '非法请求';
-		
+		echo '非法请求！';
 		exit;
 	}
 	//分割字符串
@@ -25,7 +24,6 @@
 		$listdir = scandir($thedir);
 	}
 	else{
-		echo $thedir."/".$dir;
 		$listdir = scandir($thedir."/".$dir);
 	}
 
