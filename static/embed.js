@@ -74,6 +74,14 @@ function viewmd(url){
 	  	content: url //这里content是一个普通的String
 	});
 }
+//预览PDF文件
+//function viewpdf(filepath){
+//	//重组url
+//	protocol = window.location.protocol;		//获取协议
+//	host = window.location.host;				//获取主机
+//	url = protocol + '//' + host + '/' + url;
+//	alert(url);
+//}
 
 //计算文件hash
 function filehash(name,path){

@@ -156,6 +156,14 @@
 			return $filepath;
 	    }
 	}
+	//预览pdf
+	function viewpdf($filepath){
+		//对文件进行判断
+		$filepath = $this->checkfile($filepath);
+		$file = fopen($filepath,"r");
+		fclose($file);
+		return $file;
+	}
 
 	$zdir = new Zdir;
 ?>

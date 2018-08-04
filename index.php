@@ -185,10 +185,10 @@
 							    <?php if(($suffix == 'jpg') || ($suffix == 'jpeg') || ($suffix == 'png') || ($suffix == 'gif') || ($suffix == 'bmp')){
 
 							   	?>
-							   	<a href="<?php echo $url ?>" id = "url<?php echo $i; ?>" onmouseover = "showimg(<?php echo $i; ?>,'<?php echo $url; ?>')"><i class="<?php echo $ico; ?>" onmousemove = "hideimg(<?php echo $i; ?>)"></i> <?php echo $showdir; ?></a>
-							   	<div class = "showimg" id = "show<?php echo $i; ?>" onmousemove = "hideimg(<?php echo $i; ?>)"><img src="" id = "imgid<?php echo $i; ?>"></div>
+							   	<a href="<?php echo $url ?>" id = "url<?php echo $i; ?>" onmouseover = "showimg(<?php echo $i; ?>,'<?php echo $url; ?>')" onmouseout = "hideimg(<?php echo $i; ?>)"><i class="<?php echo $ico; ?>"></i> <?php echo $showdir; ?></a>
+							   	<div class = "showimg" id = "show<?php echo $i; ?>"><img src="" id = "imgid<?php echo $i; ?>"></div>
 							   	<?php }else{ ?>
-							    <a href="<?php echo $url ?>" id = "url<?php echo $i; ?>" onmousemove = "hideimg(<?php echo $i; ?>)"><i class="<?php echo $ico; ?>"></i> <?php echo $showdir; ?></a>
+							    <a href="<?php echo $url ?>" id = "url<?php echo $i; ?>"><i class="<?php echo $ico; ?>"></i> <?php echo $showdir; ?></a>
 							    <?php } ?>
 						    </td>
 						    <td id = "info" class = "layui-hide-xs">
