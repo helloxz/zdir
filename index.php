@@ -105,8 +105,7 @@
 					  <tbody>
 					    <?php foreach( $listdir as $showdir ) {
 						    //防止中文乱码
-						    $showdir = iconv('gb2312' , 'utf-8' , $showdir );
-						    //文件完整路径
+						    //$showdir = iconv('gb2312' , 'utf-8' , $showdir );
 						    $fullpath = $thedir.'/'.$dir.'/'.$showdir;
 						    $fullpath = str_replace("\\","\/",$fullpath);
 						    $fullpath = str_replace("//","/",$fullpath);
@@ -214,7 +213,7 @@
 							    <?php } ?>
 							    <!--如果是markdown文件-->
 							    <?php if(($suffix == 'md') && ($suffix != null)){ ?>
-								&nbsp;&nbsp;<a href="javascript:;" onclick = "viewmd('<?php echo $url ?>')" title = "点击查看"><i class="fa fa-eye fa-lg"></i></a> 
+								&nbsp;&nbsp;<a href="javascript:;" onclick = "viewmd('<?php echo urlencode($url); ?>')" title = "点击查看"><i class="fa fa-eye fa-lg"></i></a> 
 							    <?php } ?>
 						    </td>
 					    </tr>
