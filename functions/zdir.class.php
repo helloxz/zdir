@@ -64,7 +64,7 @@
 			{
 				$reip = strstr($myip,$ip);
 				if($ip == '0.0.0.0'){
-					$reip == true;
+					$reip = true;
 					break;
 				}
 				//如果已经找到结果
