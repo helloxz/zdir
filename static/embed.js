@@ -78,11 +78,12 @@ function viewmd(url){
 function video(url){
 	
 	var videourl = "./functions/video.php?url=" + url;
+	//layer.msg(videourl);
 	layer.open({
 		title:url,
 	  	type: 2, 
-	  	area: ['80%', '80%'],
-	  	content: url //这里content是一个普通的String
+	  	area: ['1300px', '80%'],
+	  	content: videourl //这里content是一个普通的String
 	});
 }
 

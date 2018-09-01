@@ -193,7 +193,10 @@
 				"txt",
 				"py",
 				"sh",
-				"conf"
+				"conf",
+				"go",
+				"c",
+				"cpp"
 			);
 			$status = false;
 			foreach( $support as $value )
@@ -218,7 +221,10 @@
 				"txt",
 				"py",
 				"sh",
-				"conf"
+				"conf",
+				"go",
+				"c",
+				"cpp"
 			);
 			//遍历后缀
 			foreach( $support as  $value )

@@ -1,6 +1,7 @@
 <?php
 	//获取视频播放地址
 	@$url = $_GET['url'];
+	$url = str_replace("./","../",$url);
 ?>
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
