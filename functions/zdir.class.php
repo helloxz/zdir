@@ -169,7 +169,7 @@
 			$suffix = end($suffix);
 			$suffix = strtolower($suffix);
 
-			if($suffix == 'mp4'){
+			if(($suffix == 'mp4') || ($suffix == 'm3u8')){
 				return true;
 			}
 			else{
