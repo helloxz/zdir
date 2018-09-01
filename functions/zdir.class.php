@@ -63,8 +63,12 @@
 			foreach( $config['allowip'] as $ip )
 			{
 				$reip = strstr($myip,$ip);
+				if($ip == '0.0.0.0'){
+					$reip == true;
+					break;
+				}
 				//如果已经找到结果
-				if($reip){
+				elseif($reip){
 					break;
 				}
 			}
@@ -155,6 +159,87 @@
 			}
 			return $filepath;
 	    }
+	    //判断是否是mp4
+		function video($filepath){
+			//echo $filepath;
+			//对文件进行判断
+			//$filepath = $this->checkfile($filepath);
+			//获取文件后缀
+			$suffix = explode(".",$filepath);
+			$suffix = end($suffix);
+			$suffix = strtolower($suffix);
+
+			if($suffix == 'mp4'){
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
+		//获取文件后缀
+		function suffix($filepath){
+			//获取文件后缀
+			$suffix = explode(".",$filepath);
+			$suffix = end($suffix);
+			$suffix = strtolower($suffix);
+
+			return $suffix;
+		}
+		//如果是指定后缀，显示查看按钮
+		function is_text($filepath){
+			$suffix = $this->suffix($filepath);
+			//设置支持的后缀
+			$support = array(
+				"txt",
+				"py",
+				"sh",
+				"conf"
+			);
+			$status = false;
+			foreach( $support as $value )
+			{
+				if($suffix == $value){
+					$status = true;
+					break;
+				}
+			}
+			return $status;
+		}
+		//文本查看器
+		function vtext($filepath){
+			//判断文件
+			$this->checkfile($filepath);
+			//判断文件后缀
+			$suffix = $this->suffix($filepath);
+			$status = 0;
+			
+			//设置支持的后缀
+			$support = array(
+				"txt",
+				"py",
+				"sh",
+				"conf"
+			);
+			//遍历后缀
+			foreach( $support as  $value )
+			{
+				if($suffix == $value){
+					$status = 1;
+					break;
+				}
+			}
+			if($status != 1){
+				echo '不支持的文本格式！';
+				exit;
+			}
+			//打开文件
+			$content = file_get_contents($filepath);
+			$content = str_replace("<","&lt;",$content);
+			$content = str_replace(">","&gt;",$content);
+			
+
+			return $content;
+		}
 	}
 	//预览pdf
 	function viewpdf($filepath){
@@ -164,6 +249,7 @@
 		fclose($file);
 		return $file;
 	}
+	
 
 	$zdir = new Zdir;
 ?>

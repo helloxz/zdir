@@ -74,6 +74,28 @@ function viewmd(url){
 	  	content: url //这里content是一个普通的String
 	});
 }
+//播放视频文件
+function video(url){
+	
+	var videourl = "./functions/video.php?url=" + url;
+	layer.open({
+		title:url,
+	  	type: 2, 
+	  	area: ['80%', '80%'],
+	  	content: url //这里content是一个普通的String
+	});
+}
+
+//查看文本文档
+function viewtext(url){
+	var url = "./functions/viewtext.php?file=" + url;
+	layer.open({
+		title:'Zdir文本查看器',
+	  	type: 2, 
+	  	area: ['80%', '80%'],
+	  	content: url //这里content是一个普通的String
+	});
+}
 //预览PDF文件
 //function viewpdf(filepath){
 //	//重组url

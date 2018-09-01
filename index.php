@@ -194,6 +194,15 @@
 							    <!--如果是readme.md-->
 							    <?php if(($showdir == 'README.md') || ($showdir == 'readme.md')){ ?>
 								<a class = "layui-btn layui-btn-xs" href="javascript:;" onclick = "viewmd('<?php echo $url ?>')" title = "点此查看使用说明">使用说明</a>
+								<!--视频播放器-->
+							    <?php }elseif($zdir->video($url)){
+
+							    ?>
+								<a class = "layui-btn layui-btn-xs" href="javascript:;" onclick = "video('<?php echo $url ?>')">播放</a>
+								<!--文档查看器-->
+							    <?php }elseif($zdir->is_text($url)){
+							    ?>
+								<a class = "layui-btn layui-btn-xs" href="javascript:;" onclick = "viewtext('<?php echo $fullpath; ?>')">查看</a>
 							    <?php } ?>
 							    <!--如果是文件-->
 							    <?php if($type == 'file'){ ?>
