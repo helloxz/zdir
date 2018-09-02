@@ -82,7 +82,7 @@ function video(url){
 	layer.open({
 		title:url,
 	  	type: 2, 
-	  	area: ['1300px', '80%'],
+	  	area: ['1300px', '83%'],
 	  	content: videourl //这里content是一个普通的String
 	});
 }

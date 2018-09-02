@@ -23,8 +23,7 @@
 	</style>
 </head>
 <body>
-<pre><code>
-<?php echo $content; ?>
+<pre><code><?php echo $content; ?>
 </code></pre>
 	<script src = 'https://libs.xiaoz.top/highlight.js/9.12.0/highlight.min.js'></script>
 	<script>hljs.initHighlightingOnLoad();</script>

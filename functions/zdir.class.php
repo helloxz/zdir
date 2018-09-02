@@ -49,6 +49,22 @@
 		    	case 'deb':
 		    		$ico = "fa fa-linux";
 		    		break;
+		    	case 'mp4':
+		    	case 'm3u8':
+		    	case 'flv':
+		    	case 'rm':
+		    	case 'rmvb':
+		    	case 'mkv':
+		    	case 'avi':
+		    		$ico = "fa fa-file-video-o";
+		    		break;
+		    	case 'py':
+		    	case 'sh':
+		    	case 'c':
+		    	case 'cpp':
+		    	case 'go':
+		    		$ico = "fa fa-file-code-o";
+		    		break;
 		    	default:
 		    		$ico = "fa fa-file-text-o";
 		    		break;
@@ -242,7 +258,6 @@
 			$content = file_get_contents($filepath);
 			$content = str_replace("<","&lt;",$content);
 			$content = str_replace(">","&gt;",$content);
-			
 
 			return $content;
 		}
