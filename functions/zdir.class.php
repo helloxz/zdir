@@ -261,6 +261,25 @@
 
 			return $content;
 		}
+		//markdown查看器
+		function viewmd($filepath){
+			//判断文件
+			$this->checkfile($filepath);
+			//获取文件后缀
+			$suffix = $this->suffix($filepath);
+
+			if($suffix == 'md'){
+				$myfile = fopen($filepath, "r") or die("Unable to open file!");
+				$content = fread($myfile,filesize($filepath));
+				fclose($myfile);
+
+				return $content;
+			}
+			else{
+				echo '不支持的文件后缀';
+				exit;
+			}
+		}
 	}
 	//预览pdf
 	function viewpdf($filepath){

@@ -74,6 +74,16 @@ function viewmd(url){
 	  	content: url //这里content是一个普通的String
 	});
 }
+//新版markdown查看器
+function newmd(url){
+	var url = "./functions/viewmd.php?file=" + url;
+	layer.open({
+		title:'MarkDown查看器',
+	  	type: 2, 
+	  	area: ['80%', '80%'],
+	  	content: url //这里content是一个普通的String
+	});
+}
 //播放视频文件
 function video(url){
 	
