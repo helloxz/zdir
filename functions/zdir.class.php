@@ -255,7 +255,16 @@
 				exit;
 			}
 			//打开文件
-			$content = file_get_contents($filepath);
+			$myfile = fopen("$filepath","r") or die("无法打开文件！");
+			$content = fread($myfile,filesize($filepath));
+			fclose($myfile);
+			//@$content = iconv('GB2312', 'UTF-8', $content);
+			//$content = file_get_contents($filepath);
+			$coding = mb_detect_encoding($content,"UTF-8,GBK,GB2312");
+			//如果不是UTF-8编码就转换为UTF-8
+			if($coding != 'UTF-8'){
+				@$content = iconv('GB2312', 'UTF-8', $content);
+			}
 			$content = str_replace("<","&lt;",$content);
 			$content = str_replace(">","&gt;",$content);
 
