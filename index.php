@@ -12,6 +12,9 @@
 
 	//获取目录
 	$dir = $_GET['dir'];
+	//获取markdown文件地址
+	
+	//echo $readme;
 	//对目录进行过滤
 	if((stripos($dir,'./')) || (stripos($dir,'.\\'))){
 		echo '非法请求！';
@@ -22,11 +25,13 @@
 
 	if(($dir == '') || (!isset($dir))) {
 		$listdir = scandir($thedir);
+		$readme = $thedir.'/readme.md';
 	}
 	else{
 		$listdir = scandir($thedir."/".$dir);
+		$readme = $thedir."/".$dir.'/readme.md';
 	}
-
+	$readme = str_replace('\\','/',$readme);
 	//计算上级目录
 	function updir($dir){
 		//分割目录
@@ -51,6 +56,7 @@
 	}
 	#echo updir($dir);
 	$updir = updir($dir);
+
 ?>
 <?php
 	//载入页头
@@ -76,6 +82,18 @@
 						<?php } ?>
 					</p>
 				</div>
+				<!--使用说明-->
+				<!--<div class="layui-col-lg12" style = "margin-top:1em;">
+					<div class="layui-collapse">
+					  <div class="layui-colla-item">
+					    <h2 class="layui-colla-title">使用说明（必看）</h2>
+					    <div class="layui-colla-content">
+						    <iframe src="<?php echo './functions/viewmd.php?file='.$readme; ?>" width="100%" height="600px" name="" frameborder = "0" align="middle"></iframe>
+					    </div>
+					  </div>
+					</div>
+				</div>-->
+				<!--使用说明END-->
 			</div>
 		</div>
 	</div>
@@ -193,7 +211,7 @@
 						    <td id = "info" class = "layui-hide-xs">
 							    <!--如果是readme.md-->
 							    <?php if(($showdir == 'README.md') || ($showdir == 'readme.md')){ ?>
-								<a class = "layui-btn layui-btn-xs" href="javascript:;" onclick = "viewmd('<?php echo $url ?>')" title = "点此查看使用说明">使用说明</a>
+								<a class = "layui-btn layui-btn-xs" href="javascript:;" onclick = "newmd('<?php echo $fullpath; ?>')" title = "点此查看使用说明">使用说明</a>
 								<!--视频播放器-->
 							    <?php }elseif($zdir->video($url)){
 
@@ -222,7 +240,7 @@
 							    <?php } ?>
 							    <!--如果是markdown文件-->
 							    <?php if(($suffix == 'md') && ($suffix != null)){ ?>
-								&nbsp;&nbsp;<a href="javascript:;" onclick = "viewmd('<?php echo urlencode($url); ?>')" title = "点击查看"><i class="fa fa-eye fa-lg"></i></a> 
+								&nbsp;&nbsp;<a href="javascript:;" onclick = "newmd('<?php echo $fullpath; ?>')" title = "点击查看"><i class="fa fa-eye fa-lg"></i></a> 
 							    <?php } ?>
 						    </td>
 					    </tr>
