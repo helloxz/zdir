@@ -289,6 +289,17 @@
 				exit;
 			}
 		}
+		//域名切换按钮
+		function https(){
+			//获取当前主机名
+			$server = $_SERVER['SERVER_NAME'];
+			if($server == 'soft.xiaoz.org'){
+				echo '<a href = "https://wget.ovh/"><i class="fa fa-expeditedssl" aria-hidden="true"></i> HTTPS</a>';
+			}
+			else{
+				echo '<a href = "http://soft.xiaoz.org/"><i class="fa fa-globe" aria-hidden="true"></i> HTTP</a>';
+			}
+		}
 	}
 	//预览pdf
 	function viewpdf($filepath){
@@ -298,6 +309,7 @@
 		fclose($file);
 		return $file;
 	}
+	
 	
 
 	$zdir = new Zdir;
