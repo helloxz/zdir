@@ -29,6 +29,7 @@
                             <!--<li class="layui-nav-item"><?php $zdir->https(); ?></li>-->
                             <li class="layui-nav-item"><a href="https://github.com/helloxz/zdir" target = "_blank" rel = "nofollow"><i class="fa fa-code" aria-hidden="true"></i> 源码</a></li>
                             <li class="layui-nav-item"><a href="https://doc.xiaoz.me/#/zdir/" target = "_blank" rel = "nofollow"><i class="fa fa-file-text-o" aria-hidden="true"></i> 帮助文档</a></li>
+                            <li class="layui-nav-item"><a href="https://www.xiaoz.me/api/pay/?name=%E8%8E%B7%E5%8F%96Zdir%E6%8D%90%E8%B5%A0%E7%89%88%20-%20%E6%82%A8%E7%9A%84%E5%9F%9F%E5%90%8D&price=20" target = "_blank" rel = "nofollow"><i class="fa fa-rmb" aria-hidden="true"></i> 捐赠</a></li>
                             <li class="layui-nav-item"><a href="https://www.xiaoz.me/archives/10465" target = "_blank"><i class="layui-icon">&#xe60b;</i> 关于</a></li>
                         </ul>
                     </div>
