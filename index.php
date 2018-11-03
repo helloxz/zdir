@@ -217,6 +217,11 @@
 
 							    ?>
 								<a class = "layui-btn layui-btn-xs" href="javascript:;" onclick = "video('<?php echo $url ?>')">播放</a>
+								<!-- office在线预览 -->
+								<?php }elseif($zdir->office($url)){
+
+								?>
+								<a class = "layui-btn layui-btn-xs" href="javascript:;" onclick = "office('<?php echo $url ?>')">预览</a>
 								<!--文档查看器-->
 							    <?php }elseif($zdir->is_text($url)){
 							    ?>

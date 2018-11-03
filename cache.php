@@ -1,6 +1,8 @@
 <?php
 	error_reporting(E_ALL^E_NOTICE^E_WARNING^E_DEPRECATED);
 	include_once("./config.php");
+	//载入zdir类
+	include_once("./functions/zdir.class.php");
 	@$del = $_GET['del'];
 	//缓存文件夹路径
 	$cachefile = "./functions/caches/indexes.html";
@@ -23,7 +25,7 @@
 		$url = get_url();
 		$curl = curl_init($url."indexes.php");
 
-	    curl_setopt($curl, CURLOPT_USERAGENT, "Mozilla/5.0 (compatible; Baiduspider/2.0; +http://www.baidu.com/search/spider.html)");
+	    curl_setopt($curl, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36");
 	    curl_setopt($curl, CURLOPT_FAILONERROR, true);
 	    curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
 	    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);

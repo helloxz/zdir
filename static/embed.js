@@ -107,6 +107,28 @@ function viewtext(url){
 	  	content: url //这里content是一个普通的String
 	});
 }
+//预览office
+function office(url){
+	//文件名
+	filename = url;
+	var uri = url.replace("./","/");
+	uri = encodeURI(uri);
+	//获取协议
+	var protocol = window.location.protocol + '//';
+	//获取主机
+	var host = window.location.host;
+	//获取页面目录，通常是二级目录的情况下
+	var pathname = window.location.pathname;
+	pathname = pathname.replace("index.php","");
+	url = protocol + host + pathname + uri;
+	var apiurl = "https://view.officeapps.live.com/op/view.aspx?src=" + url;
+	layer.open({
+		title:filename,
+	  	type: 2, 
+	  	area: ['80%', '80%'],
+	  	content: apiurl //这里content是一个普通的String
+	});
+}
 //预览PDF文件
 //function viewpdf(filepath){
 //	//重组url

@@ -19,7 +19,11 @@
 		    	case 'doc':
 		    	case 'docx':
 		    		$ico = "fa fa-file-word-o";
-		    		break;
+					break;
+				case 'ppt':
+				case 'pptx':
+					$ico = "fa fa-file-powerpoint-o";
+					break;
 		    	case 'xls':
 		    	case 'xlsx':
 		    		$ico = "fa fa-file-excel-o";
@@ -190,6 +194,26 @@
 			}
 			else{
 				return false;
+			}
+		}
+		//判断是否是office文档
+		function office($filepath){
+			$suffix = explode(".",$filepath);
+			$suffix = end($suffix);
+			$suffix = strtolower($suffix);
+
+			switch ($suffix) {
+				case 'doc':
+				case 'docx':
+				case 'xls':
+				case 'xlsx':
+				case 'ppt':
+				case 'pptx':
+					return true;
+					break;
+				default:
+					return false;
+					break;
 			}
 		}
 		//获取文件后缀

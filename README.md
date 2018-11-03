@@ -17,6 +17,7 @@
 * 图片预览
 * 视频播放（仅支持mp4格式）
 * 文本查看器（支持的格式有.txt .sh .py .go .c .cpp）
+* Office在线预览（支持.doc .docx .xls .xlsx .ppt .pptx）
 * 文件索引
 * 二维码生成
 * 文件删除
