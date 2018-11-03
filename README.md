@@ -7,7 +7,7 @@
 * 下载源码放到站点根目录
 * 修改`config.php`设置自己的网站标题/关键词/描述
 * 如果需要排除某个目录，再次修改`config.php` ，里面有说明
-* 更多说明请查看帮助文档：[https://doc.xiaoz.me/docs/zdir](https://doc.xiaoz.me/docs/zdir)
+* 更多说明请查看帮助文档：[https://doc.xiaoz.me/#/zdir/](https://doc.xiaoz.me/#/zdir/)
 
 ### 主要功能
 * 目录浏览
