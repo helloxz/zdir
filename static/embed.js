@@ -21,8 +21,8 @@ function copy(url){
 	url = url.replace("./","");
 	//重组url
 	protocol = window.location.protocol;		//获取协议
-	host = window.location.host;				//获取主机
-	url = protocol + '//' + host + '/' + url;
+	host = window.location.href;				//获取主机
+	url = host + url;
 
 	//获取文件后缀
 	var index1=url.lastIndexOf(".");
