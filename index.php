@@ -16,7 +16,7 @@
 	
 	//echo $readme;
 	//对目录进行过滤
-	if((stripos($dir,'./')) || (stripos($dir,'.\\'))){
+	if((stripos($dir,'./') === 0) || (stripos($dir,'.\\') === 0)){
 		echo '非法请求！';
 		exit;
 	}
