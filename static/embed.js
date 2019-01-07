@@ -27,7 +27,7 @@ function copy(url){
 	
 	url = protocol + '//' + host + dir + url;
 
-	console.log(url);
+	//console.log(url);
 
 	//获取文件后缀
 	var index1=url.lastIndexOf(".");
