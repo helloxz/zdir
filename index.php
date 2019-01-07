@@ -12,6 +12,7 @@
 
 	//获取目录
 	$dir = $_GET['dir'];
+	$dir = strip_tags($dir);
 	$dir = str_replace("\\","/",$dir);
 	//获取markdown文件地址
 	
