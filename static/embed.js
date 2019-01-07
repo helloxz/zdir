@@ -22,7 +22,12 @@ function copy(url){
 	//重组url
 	protocol = window.location.protocol;		//获取协议
 	host = window.location.host;				//获取主机
-	url = protocol + '//' + host + '/' + url;
+	dir = window.location.pathname;				//获取目录
+	dir = dir.replace("index.php","");
+	
+	url = protocol + '//' + host + dir + url;
+
+	console.log(url);
 
 	//获取文件后缀
 	var index1=url.lastIndexOf(".");

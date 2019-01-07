@@ -12,11 +12,12 @@
 
 	//获取目录
 	$dir = $_GET['dir'];
+	$dir = str_replace("\\","/",$dir);
 	//获取markdown文件地址
 	
 	//echo $readme;
 	//对目录进行过滤
-	if((stripos($dir,'./') === 0) || (stripos($dir,'.\\') === 0) || (stripos($dir,'../'))){
+	if((stripos($dir,'./') === 0) || (stripos($dir,'../')) || (stripos($dir,'../') === 0)){
 		echo '非法请求！';
 		exit;
 	}
