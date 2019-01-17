@@ -17,15 +17,17 @@
 	//删除缓存文件
 	if($del == 'cache') {
 		unlink($cachefile);
-		header("location:./cache.php");
+		header("location:./index.php?c=cache");
 		exit;
 	}
 	//判断缓存文件是否存在
 	if((!file_exists($cachefile)) || ($diff > 24)){
 		$url = get_url();
-		$curl = curl_init($url."functions/indexes.php");
+		$url = $url."functions/indexes.php";
+		$url = str_replace("\\","/",$url);
+		$curl = curl_init($url);
 
-		//echo $url."functions/indexes.php";
+		//echo $url;
 
 	    curl_setopt($curl, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36");
 	    curl_setopt($curl, CURLOPT_FAILONERROR, true);
@@ -74,10 +76,15 @@
 		//或如URI
 		$uri =  $_SERVER["REQUEST_URI"];
 		$uri = dirname($uri);
+		$uri = str_replace("\\",'/',$uri);
+		//二级目录
+		if($uri != '/'){
+			$uri = $uri.'/';
+		}
 		
 		//$uri = str_replace("cache.php","",$uri);
 		//组合为完整的URL
-		$domain = $protocol.$_SERVER['SERVER_NAME'].$port.$uri.'/';
+		$domain = $protocol.$_SERVER['SERVER_NAME'].$port.$uri;
 		return $domain;
 	}
 ?>
