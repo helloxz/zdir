@@ -13,7 +13,10 @@
 		if((strpos($value,$s)) || (strpos($value,$s) === 0)){
 			//echo $value.'--';
 			$value = trim($value);
-			array_push($txt,$value);
+			//如果值带有.，说明是一个文件
+			if(strpos($value,'.')){
+				array_push($txt,$value);
+			}
 		}
 	}
 	
@@ -27,20 +30,7 @@
 		<div class="layui-container">
 			<div class="layui-row">
 				<div class="layui-col-lg12">
-					<p>
-						当前位置：<a href="./">首页</a> 
-						<!--遍历导航-->
-						<?php foreach( $navigation as $menu )
-						{
-							$remenu = $remenu.'/'.$menu;
-							
-							if($remenu == '/'){
-								$remenu = $menu;
-							}
-						?>
-						<a href="./index.php?dir=<?php echo $remenu; ?>"><?php echo $menu; ?></a> / 
-						<?php } ?>
-					</p>
+					<h2>"<?php echo $s; ?>"搜索结果</h2>
 				</div>
 			</div>
 		</div>
