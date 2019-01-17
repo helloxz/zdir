@@ -4,15 +4,17 @@
 	$s = @$_GET['s'];
 	$s = trim($s);
 	$s = strip_tags($s);
+	$s = strtolower($s);
 
 	$text = strip_tags($html);
 	$arr = explode("\n",$text);
 	$txt = array();
 	foreach( $arr as $value )
 	{
-		if((strpos($value,$s)) || (strpos($value,$s) === 0)){
+		if((stripos($value,$s)) || (stripos($value,$s) === 0)){
 			//echo $value.'--';
 			$value = trim($value);
+			//$value = strtolower($value);
 			//如果值带有.，说明是一个文件
 			if(strpos($value,'.')){
 				array_push($txt,$value);
