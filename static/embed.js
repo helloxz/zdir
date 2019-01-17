@@ -65,6 +65,54 @@ function copy(url){
     });
 }
 
+//复制按钮
+function scopy(url){
+	url = url.replace("./","");
+	//重组url
+	protocol = window.location.protocol;		//获取协议
+	host = window.location.host;				//获取主机
+	dir = window.location.pathname;				//获取目录
+	dir = dir.replace("index.php","");
+	
+	url = protocol + '//' + host + url;
+
+	//console.log(url);
+
+	//获取文件后缀
+	var index1=url.lastIndexOf(".");
+	var index2=url.length;
+	var suffix=url.substring(index1+1,index2);
+
+	switch(suffix){
+		case 'js':
+			url = "<script src = '" + url + "'></script>";
+			break;
+		case 'css':
+			url = "<link rel='stylesheet' href='" + url + "'>";
+		default:
+			//如果是图片
+			if((suffix == 'jpg') || (suffix == 'jpeg') || (suffix == 'gif') || (suffix == 'bmp') || (suffix == 'png')){
+				url = "<img src = '" + url + "' />";
+			}
+			else{
+				url = url;
+			}
+		break;
+	}
+	
+	
+	var copy = new clipBoard(document.getElementById('list'), {
+        beforeCopy: function() {
+            
+        },
+        copy: function() {
+            return url;
+        },
+        afterCopy: function() {
+			layer.msg('复制成功！');
+        }
+    });
+}
 //查看markdown文件
 function viewmd(url){
 	url = url.replace("./","");

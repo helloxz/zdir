@@ -23,7 +23,9 @@
 	//判断缓存文件是否存在
 	if((!file_exists($cachefile)) || ($diff > 24)){
 		$url = get_url();
-		$curl = curl_init($url."indexes.php");
+		$curl = curl_init($url."functions/indexes.php");
+
+		//echo $url."functions/indexes.php";
 
 	    curl_setopt($curl, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36");
 	    curl_setopt($curl, CURLOPT_FAILONERROR, true);
@@ -71,9 +73,11 @@
 		
 		//或如URI
 		$uri =  $_SERVER["REQUEST_URI"];
-		$uri = str_replace("cache.php","",$uri);
+		$uri = dirname($uri);
+		
+		//$uri = str_replace("cache.php","",$uri);
 		//组合为完整的URL
-		$domain = $protocol.$_SERVER['SERVER_NAME'].$port.$uri;
+		$domain = $protocol.$_SERVER['SERVER_NAME'].$port.$uri.'/';
 		return $domain;
 	}
 ?>

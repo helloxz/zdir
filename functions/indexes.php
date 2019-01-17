@@ -1,5 +1,5 @@
 <?php
-include_once( 'config.php' );
+include_once( '../config.php' );
 
 /**********************
 一个简单的目录递归函数
@@ -20,8 +20,14 @@ function tree($directory,$ignore) {
                 //递归读取目录 
                 tree("$directory/$file",$ignore);
             } elseif ($file != "." && $file != "..") {
+	            $uri =  $_SERVER["REQUEST_URI"];
+				$uri = dirname($uri);
+				$uri = str_replace("/functions","",$uri);
+				//echo $uri;
+				//exit;
 	            $filepath = "$directory/$file";
-                echo "<li><i class='fa fa-file-text-o'></i> <a href = '$filepath' target = '_blank'>$filepath</a></li>\n";
+	            $url = $uri.'/'.$file;
+                echo "<li><i class='fa fa-file-text-o'></i> <a href = '$url' target = '_blank'>$url</a></li>\n";
             }
 
         }
@@ -34,4 +40,4 @@ function tree($directory,$ignore) {
 
 } 
 //开始运行
-tree(".",$ignore); 
+tree("..",$ignore); 
