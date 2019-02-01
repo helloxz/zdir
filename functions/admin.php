@@ -5,13 +5,13 @@ include_once("../config.php");
 $CONFIG = '{"lang":"ch","error_reporting":false,"show_hidden":false}';
 
 /**
- * H3K | Tiny File Manager V2.3
+ * H3K | Tiny File Manager V2.3.1
  * CCP Programmers | ccpprogrammers@gmail.com
  * https://tinyfilemanager.github.io
  */
 
 //TFM version
-define('VERSION', '2.3');
+define('VERSION', '2.3.1');
 
 // Auth with login/password (set true/false to enable/disable it)
 $use_auth = true;
@@ -81,7 +81,7 @@ if ( !defined( 'FM_SESSION_ID')) {
 $cfg = new FM_Config();
 
 // Default language
-$lang = isset($cfg->data['lang']) ? $cfg->data['lang'] : 'en';
+$lang = isset($cfg->data['lang']) ? $cfg->data['lang'] : 'ch';
 
 // Show or hide files and folders that starts with a dot
 $show_hidden_files = isset($cfg->data['show_hidden']) ? $cfg->data['show_hidden'] : true;
@@ -91,7 +91,7 @@ $report_errors = isset($cfg->data['error_reporting']) ? $cfg->data['error_report
 
 //available languages
 $lang_list = array(
-    'en' => 'English'
+    'ch' => 'Chinese'
 );
 
 //--- EDIT BELOW CAREFULLY OR DO NOT EDIT AT ALL
@@ -136,6 +136,11 @@ if (empty($auth_users)) {
 $is_https = isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1)
     || isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https';
 
+// update $root_url based on user specific directories
+if (isset($_SESSION[FM_SESSION_ID]['logged']) && !empty($directories_users[$_SESSION[FM_SESSION_ID]['logged']])) {
+    $wd = fm_clean_path(dirname($_SERVER['PHP_SELF']));
+    $root_url =  $root_url.$wd.DIRECTORY_SEPARATOR.$directories_users[$_SESSION[FM_SESSION_ID]['logged']];
+}
 // clean $root_url
 $root_url = fm_clean_path($root_url);
 
@@ -184,13 +189,8 @@ if ($use_auth) {
             <div class="container h-100">
                 <div class="row justify-content-md-center h-100">
                     <div class="card-wrapper">
-                        <div class="brand">
-                            <svg version="1.0" xmlns="http://www.w3.org/2000/svg" M1008 width="100%" height="121px" viewBox="0 0 238.000000 140.000000" aria-label="H3K Tiny File Manager">
-                                <g transform="translate(0.000000,140.000000) scale(0.100000,-0.100000)" fill="#000000" stroke="none">
-                                    <path d="M160 700 l0 -600 110 0 110 0 0 260 0 260 70 0 70 0 0 -260 0 -260 110 0 110 0 0 600 0 600 -110 0 -110 0 0 -260 0 -260 -70 0 -70 0 0 260 0 260 -110 0 -110 0 0 -600z"/>
-                                    <path fill="#003500" d="M1008 1227 l-108 -72 0 -117 0 -118 110 0 110 0 0 110 0 110 70 0 70 0 0 -180 0 -180 -125 0 c-69 0 -125 -3 -125 -6 0 -3 23 -39 52 -80 l52 -74 73 0 73 0 0 -185 0 -185 -70 0 -70 0 0 115 0 115 -110 0 -110 0 0 -190 0 -190 181 0 181 0 109 73 108 72 1 181 0 181 -69 48 -68 49 68 50 69 49 0 249 0 248 -182 -1 -183 0 -107 -72z"/>
-                                    <path d="M1640 700 l0 -600 110 0 110 0 0 208 0 208 35 34 35 34 35 -34 35 -34 0 -208 0 -208 110 0 110 0 0 212 0 213 -87 87 -88 88 88 88 87 87 0 213 0 212 -110 0 -110 0 0 -208 0 -208 -70 -69 -70 -69 0 277 0 277 -110 0 -110 0 0 -600z"/></g>
-                            </svg>
+                        <div class="brand text-center">
+                            <h1 class="fa fa-sitemap fa-5x"></h1>
                         </div>
                         <div class="text-center">
                             <h1 class="card-title"><?php echo lng('AppName'); ?></h1>
@@ -205,7 +205,7 @@ if ($use_auth) {
 
                                     <div class="form-group">
                                         <label for="fm_pwd"><?php echo lng('Password'); ?></label>
-                                        <input type="password" class="form-control" id="fm_pwd" name="fm_pwd" required>
+                                        <input type="password" class="form-control" id="fm_pwd" name="fm_pwd">
                                     </div>
 
                                     <div class="form-group">
@@ -294,40 +294,6 @@ if (isset($_POST['ajax']) && !FM_READONLY) {
         $newFile = $file . '-' . $date . '.bak';
         copy($path . '/' . $file, $path . '/' . $newFile) or die("Unable to backup");
         echo "Backup $newFile Created";
-    }
-
-    // Save Config
-    if (isset($_POST['type']) && $_POST['type'] == "settings") {
-        global $cfg, $lang, $report_errors, $show_hidden_files, $lang_list;
-        $newLng = $_POST['js-language'];
-        fm_get_translations([]);
-        if (!array_key_exists($newLng, $lang_list)) {
-            $newLng = 'en';
-        }
-
-        $erp = isset($_POST['js-error-report']) && $_POST['js-error-report'] == "true" ? true : false;
-        $shf = isset($_POST['js-show-hidden']) && $_POST['js-show-hidden'] == "true" ? true : false;
-
-        if ($cfg->data['lang'] != $newLng) {
-            $cfg->data['lang'] = $newLng;
-            $lang = $newLng;
-        }
-        if ($cfg->data['error_reporting'] != $erp) {
-            $cfg->data['error_reporting'] = $erp;
-            $report_errors = $erp;
-        }
-        if ($cfg->data['show_hidden'] != $shf) {
-            $cfg->data['show_hidden'] = $shf;
-            $show_hidden_files = $shf;
-        }
-        $cfg->save();
-        echo true;
-    }
-
-    // new password hash
-    if (isset($_POST['type']) && $_POST['type'] == "pwdhash") {
-        $res = isset($_POST['inputPassword2']) && !empty($_POST['inputPassword2']) ? password_hash($_POST['inputPassword2'], PASSWORD_DEFAULT) : '';
-        echo $res;
     }
 
     //upload using url
@@ -603,6 +569,7 @@ if (isset($_GET['dl'])) {
         header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
         header('Pragma: public');
         header('Content-Length: ' . filesize($path . '/' . $dl));
+        ob_end_clean();
         readfile($path . '/' . $dl);
         exit;
     } else {
@@ -1034,148 +1001,6 @@ if (isset($_GET['copy']) && !isset($_GET['finish']) && !FM_READONLY) {
             }
             ?>
         </ul>
-    </div>
-    <?php
-    fm_show_footer();
-    exit;
-}
-
-if (isset($_GET['settings']) && !FM_READONLY) {
-    fm_show_header(); // HEADER
-    fm_show_nav_path(FM_PATH); // current path
-    global $cfg, $lang, $lang_list;
-    ?>
-
-    <div class="col-md-8 offset-md-2 pt-3">
-        <div class="card mb-2">
-            <h6 class="card-header">
-                <i class="fa fa-cog"></i>  <?php echo lng('Settings') ?>
-                <a href="?p=<?php echo FM_PATH ?>" class="float-right"><i class="fa fa-window-close"></i> <?php echo lng('Cancel')?></a>
-            </h6>
-            <div class="card-body">
-                <form id="js-settings-form" action="" method="post" data-type="ajax" onsubmit="return save_settings(this)">
-                    <input type="hidden" name="type" value="settings" aria-label="hidden" aria-hidden="true">
-                    <div class="form-group row">
-                        <label for="js-language" class="col-sm-3 col-form-label"><?php echo lng('Language') ?></label>
-                        <div class="col-sm-5">
-                            <select class="form-control" id="js-language" name="js-language">
-                                <?php
-                                function getSelected($l) {
-                                    global $lang;
-                                    return ($lang == $l) ? 'selected' : '';
-                                }
-                                foreach ($lang_list as $k => $v) {
-                                    echo "<option value='$k' ".getSelected($k).">$v</option>";
-                                }
-                                ?>
-                            </select>
-                        </div>
-                    </div>
-                    <?php
-                    //get ON/OFF and active class
-                    function getChecked($conf, $val, $txt) {
-                        if($conf== 1 && $val ==1) {
-                            return $txt;
-                        } else if($conf == '' && $val == '') {
-                            return $txt;
-                        } else {
-                            return '';
-                        }
-                    }
-                    ?>
-                    <div class="form-group row">
-                        <label for="js-err-rpt-1" class="col-sm-3 col-form-label">Error Reporting</label>
-                        <div class="col-sm-9">
-                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                <label class="btn btn-secondary <?php echo getChecked($report_errors, 1, 'active') ?>">
-                                    <input type="radio" name="js-error-report" id="js-err-rpt-1" autocomplete="off" value="true" <?php echo getChecked($report_errors, 1, 'checked') ?> > ON
-                                </label>
-                                <label class="btn btn-secondary <?php echo getChecked($report_errors, '', 'active') ?>">
-                                    <input type="radio" name="js-error-report" id="js-err-rpt-0" autocomplete="off" value="false" <?php echo getChecked($report_errors, '', 'checked') ?> > OFF
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label for="js-hdn-1" class="col-sm-3 col-form-label">Show Hidden Files</label>
-                        <div class="col-sm-9">
-                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                <label class="btn btn-secondary <?php echo getChecked($show_hidden_files, 1, 'active') ?>">
-                                    <input type="radio" name="js-show-hidden" id="js-hdn-1" autocomplete="off" value="true" <?php echo getChecked($show_hidden_files, 1, 'checked') ?> > ON
-                                </label>
-                                <label class="btn btn-secondary <?php echo getChecked($show_hidden_files, '', 'active') ?>">
-                                    <input type="radio" name="js-show-hidden" id="js-hdn-0" autocomplete="off" value="false" <?php echo getChecked($show_hidden_files, '', 'checked') ?> > OFF
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <div class="col-sm-10">
-                            <button type="submit" class="btn btn-success"> <i class="fa fa-check-circle"></i> <?php echo lng('Save'); ?></button>
-                        </div>
-                    </div>
-
-                </form>
-            </div>
-        </div>
-    </div>
-    <?php
-    fm_show_footer();
-    exit;
-}
-
-if (isset($_GET['help'])) {
-    fm_show_header(); // HEADER
-    fm_show_nav_path(FM_PATH); // current path
-    global $cfg, $lang;
-    ?>
-
-    <div class="col-md-8 offset-md-2 pt-3">
-        <div class="card mb-2">
-            <h6 class="card-header">
-                <i class="fa fa-exclamation-circle"></i> <?php echo lng('Help') ?>
-                <a href="?p=<?php echo FM_PATH ?>" class="float-right"><i class="fa fa-window-close"></i> <?php echo lng('Cancel')?></a>
-            </h6>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-xs-12 col-sm-6">
-                        <p><h3><a href="https://github.com/prasathmani/tinyfilemanager" target="_blank" class="app-v-title"> Tiny File Manager <?php echo VERSION; ?></a></h3></p>
-                        <p>Author: Prasath Mani</p>
-                        <p>Mail Us: <a href="mailto:ccpprogrammers@gmail.com">ccpprogrammers[at]gmail.com</a> </p>
-                    </div>
-                    <div class="col-xs-12 col-sm-6">
-                        <div class="card">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item"><a href="https://tinyfilemanager.github.io/" target="_blank"><i class="fa fa-question-circle"></i> Help Documents</a> </li>
-                                <li class="list-group-item"><a href="https://github.com/prasathmani/tinyfilemanager/issues" target="_blank"><i class="fa fa-bug"></i> Report Issue</a></li>
-                                <li class="list-group-item"><a href="javascript:latest_release_info('<?php echo VERSION; ?>');" target="_blank"><i class="fa fa-link"></i> Check Latest Version</a></li>
-                                <?php if(!FM_READONLY) { ?>
-                                <li class="list-group-item"><a href="javascript:show_new_pwd();" target="_blank"><i class="fa fa-lock"></i> Generate new password hash</a></li>
-                                <?php } ?>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="row js-new-pwd hidden mt-2">
-                    <div class="col-12">
-                        <form class="form-inline" onsubmit="return new_password_hash(this)" method="POST" action="">
-                            <input type="hidden" name="type" value="pwdhash" aria-label="hidden" aria-hidden="true">
-                            <div class="form-group mb-2">
-                                <label for="staticEmail2">Generate new password hash</label>
-                            </div>
-                            <div class="form-group mx-sm-3 mb-2">
-                                <label for="inputPassword2" class="sr-only">Password</label>
-                                <input type="text" class="form-control btn-sm" id="inputPassword2" name="inputPassword2" placeholder="Password" required>
-                            </div>
-                            <button type="submit" class="btn btn-success btn-sm mb-2">Generate</button>
-                        </form>
-                        <textarea class="form-control" rows="2" readonly id="js-pwd-result"></textarea>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
     <?php
     fm_show_footer();
@@ -1694,11 +1519,11 @@ $all_files_size = 0;
                     <tr><?php if (!FM_READONLY): ?>
                             <td class="gray"></td><?php endif; ?>
                         <td class="gray" colspan="<?php echo !FM_IS_WIN ? '6' : '4' ?>">
-                            Full size: <span title="<?php printf('%s bytes', $all_files_size) ?>"><?php echo '<span class="badge badge-light">'.fm_get_filesize($all_files_size).'</span>' ?></span>,
+                            <?php echo lng('FullSize') ?>: <span title="<?php printf('%s bytes', $all_files_size) ?>"><?php echo '<span class="badge badge-light">'.fm_get_filesize($all_files_size).'</span>' ?></span>,
                             <?php echo lng('File').': <span class="badge badge-light">'.$num_files.'</span>' ?>,
                             <?php echo lng('Folder').': <span class="badge badge-light">'.$num_folders.'</span>' ?>,
                             <?php echo lng('MemoryUsed').': <span class="badge badge-light">'.fm_get_filesize(@memory_get_usage(true)).'</span>' ?>,
-                            <?php echo lng('PartitionSize').': <span class="badge badge-light">'.fm_get_filesize(@disk_free_space($path)) .'</span> free of <span class="badge badge-light">'.fm_get_filesize(@disk_total_space($path)).'</span>'; ?>
+                            <?php echo lng('PartitionSize').': <span class="badge badge-light">'.fm_get_filesize(@disk_free_space($path)) .'</span> '.lng('FreeOf').' <span class="badge badge-light">'.fm_get_filesize(@disk_total_space($path)).'</span>'; ?>
                         </td>
                     </tr>
                 </tfoot>
@@ -2640,8 +2465,8 @@ function fm_show_nav_path($path)
     global $lang, $sticky_navbar;
     $isStickyNavBar = $sticky_navbar ? 'fixed-top' : '';
     ?>
-    <nav class="navbar navbar-expand-lg navbar-light bg-white mb-4 main-nav <?php echo $isStickyNavBar ?>">
-        <a class="navbar-brand" href=""> <?php echo lng('AppTitle') ?> </a>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 main-nav <?php echo $isStickyNavBar ?>">
+        <a class="navbar-brand" href=""> <i class="fa fa-sitemap" aria-hidden="true"></i> <?php echo lng('AppTitle') ?> </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -2687,11 +2512,7 @@ function fm_show_nav_path($path)
                     <?php if (FM_USE_AUTH): ?>
                     <li class="nav-item avatar dropdown">
                         <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-5" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fa fa-user-circle"></i> <?php if(isset($_SESSION[FM_SESSION_ID]['logged'])) { echo $_SESSION[FM_SESSION_ID]['logged']; } ?></a>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink-5">
-                            <?php if (!FM_READONLY): ?>
-                            <a title="<?php echo lng('Settings') ?>" class="dropdown-item nav-link" href="?p=<?php echo urlencode(FM_PATH) ?>&amp;settings=1"><i class="fa fa-cog" aria-hidden="true"></i> <?php echo lng('Settings') ?></a>
-                            <?php endif ?>
-                            <a title="<?php echo lng('Help') ?>" class="dropdown-item nav-link" href="?p=<?php echo urlencode(FM_PATH) ?>&amp;help=2"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> <?php echo lng('Help') ?></a>
+                        <div class="dropdown-menu dropdown-menu-right bg-dark" aria-labelledby="navbarDropdownMenuLink-5">
                             <a title="<?php echo lng('Logout') ?>" class="dropdown-item nav-link" href="?logout=1"><i class="fa fa-sign-out" aria-hidden="true"></i> <?php echo lng('Logout') ?></a>
                         </div>
                     </li>
@@ -2739,8 +2560,9 @@ global $lang;
     <meta name="robots" content="noindex, nofollow">
     <meta name="googlebot" content="noindex">
     <link rel="icon" href="<?php echo FM_SELF_URL ?>?img=favicon" type="image/png">
-    <title>H3K | Tiny File Manager</title>
+    <title>Zdir | Tiny File Manager</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/font-awesome/css/font-awesome.min.css">
     <style>
         body.fm-login-page{background-color:#f7f9fb;font-size:14px}
         .fm-login-page .brand{width:121px;overflow:hidden;margin:0 auto;margin:40px auto;margin-bottom:0;position:relative;z-index:1}
@@ -2809,9 +2631,9 @@ $isStickyNavBar = $sticky_navbar ? 'navbar-fixed' : 'navbar-normal';
     <meta name="robots" content="noindex, nofollow">
     <meta name="googlebot" content="noindex">
     <link rel="icon" href="<?php echo FM_SELF_URL ?>?img=favicon" type="image/png">
-    <title>H3K | Tiny File Manager</title>
+    <title>Zdir | Tiny File Manger</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../static/font-awesome/css/font-awesome.min.css">
     <?php if (isset($_GET['view']) && FM_USE_HIGHLIGHTJS): ?>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/<?php echo FM_HIGHLIGHTJS_STYLE ?>.min.css">
     <?php endif; ?>
@@ -3054,6 +2876,8 @@ $isStickyNavBar = $sticky_navbar ? 'navbar-fixed' : 'navbar-normal';
             border-top: 1px dashed #8c8b8b;
             border-bottom: 1px dashed #fff;
         }
+        .dropdown-menu.bg-dark a { background: #676767; }
+        @media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : landscape) and (-webkit-min-device-pixel-ratio: 2) { .navbar-collapse .col-xs-6.text-right { padding: 0; } }
         .btn.active.focus,.btn.active:focus,.btn.focus,.btn.focus:active,.btn:active:focus,.btn:focus{outline:0!important;outline-offset:0!important;background-image:none!important;-webkit-box-shadow:none!important;box-shadow:none!important}
         .lds-facebook{display:none;position:relative;width:64px;height:64px}.lds-facebook div,.lds-facebook.show-me{display:inline-block}.lds-facebook div{position:absolute;left:6px;width:13px;background:#007bff;animation:lds-facebook 1.2s cubic-bezier(0,.5,.5,1) infinite}.lds-facebook div:nth-child(1){left:6px;animation-delay:-.24s}.lds-facebook div:nth-child(2){left:26px;animation-delay:-.12s}.lds-facebook div:nth-child(3){left:45px;animation-delay:0}@keyframes lds-facebook{0%{top:6px;height:51px}100%,50%{top:19px;height:26px}}
     </style>
@@ -3157,41 +2981,6 @@ $isStickyNavBar = $sticky_navbar ? 'navbar-fixed' : 'navbar-normal';
         return n.open("POST", "", !0), n.setRequestHeader("Content-type", "application/x-www-form-urlencoded"), n.onreadystatechange = function () {
             4 == n.readyState && 200 == n.status && alert(n.responseText)
         }, n.send(a), !1
-    }
-    //Save file
-    function edit_save(e, t) {
-        var n = "ace" == t ? editor.getSession().getValue() : document.getElementById("normal-editor").value;
-        if (n) {
-            var a = document.createElement("form");
-            a.setAttribute("method", "POST"), a.setAttribute("action", "");
-            var o = document.createElement("textarea");
-            o.setAttribute("type", "textarea"), o.setAttribute("name", "savedata");
-            var c = document.createTextNode(n);
-            o.appendChild(c), a.appendChild(o), document.body.appendChild(a), a.submit()
-        }
-    }
-    //Check latest version
-    function latest_release_info(v) {
-        if(!!window.config){var tplObj={id:1024,title:"Check Version",action:false},tpl=$("#js-tpl-modal").html();
-        if(window.config.version!=v){tplObj.content=window.config.newUpdate;}else{tplObj.content=window.config.noUpdate;}
-        $('#wrapper').append(template(tpl,tplObj));$("#js-ModalCenter-1024").modal('show');}else{fm_get_config();}
-    }
-    function show_new_pwd() { $(".js-new-pwd").toggleClass('hidden'); window.open("https://tinyfilemanager.github.io/docs/pwd.html", '_blank'); }
-    //Save Settings
-    function save_settings($this) {
-        let form = $($this);
-        $.ajax({
-            type: form.attr('method'), url: form.attr('action'), data: form.serialize()+"&ajax="+true,
-            success: function (data) {if(data) { window.location.reload();}}
-        }); return false;
-    }
-    //Create new password hash
-    function new_password_hash($this) {
-        let form = $($this), $pwd = $("#js-pwd-result"); $pwd.val('');
-        $.ajax({
-            type: form.attr('method'), url: form.attr('action'), data: form.serialize()+"&ajax="+true,
-            success: function (data) { if(data) { $pwd.val(data); } }
-        }); return false;
     }
     //Upload files using URL @param {Object}
     function upload_from_url($this) {
@@ -3339,34 +3128,37 @@ function fm_show_image($img)
 function lng($txt) {
     global $lang;
 
-    // English Language
-    $tr['en']['AppName']        = 'Tiny File Manager';      $tr['en']['AppTitle']           = 'File Manager';
-    $tr['en']['Login']          = 'Sign in';                $tr['en']['Username']           = 'Username';
-    $tr['en']['Password']       = 'Password';               $tr['en']['Logout']             = 'Sign Out';
-    $tr['en']['Move']           = 'Move';                   $tr['en']['Copy']               = 'Copy';
-    $tr['en']['Save']           = 'Save';                   $tr['en']['SelectAll']          = 'Select all';
-    $tr['en']['UnSelectAll']    = 'Unselect all';           $tr['en']['File']               = 'File';
-    $tr['en']['Back']           = 'Back';                   $tr['en']['Size']               = 'Size';
-    $tr['en']['Perms']          = 'Perms';                  $tr['en']['Modified']           = 'Modified';
-    $tr['en']['Owner']          = 'Owner';                  $tr['en']['Search']             = 'Search';
-    $tr['en']['NewItem']        = 'New Item';               $tr['en']['Folder']             = 'Folder';
-    $tr['en']['Delete']         = 'Delete';                 $tr['en']['Rename']             = 'Rename';
-    $tr['en']['CopyTo']         = 'Copy to';                $tr['en']['DirectLink']         = 'Direct link';
-    $tr['en']['UploadingFiles'] = 'Upload Files';           $tr['en']['ChangePermissions']  = 'Change Permissions';
-    $tr['en']['Copying']        = 'Copying';                $tr['en']['CreateNewItem']      = 'Create New Item';
-    $tr['en']['Name']           = 'Name';                   $tr['en']['AdvancedEditor']     = 'Advanced Editor';
-    $tr['en']['RememberMe']     = 'Remember Me';            $tr['en']['Actions']            = 'Actions';
-    $tr['en']['Upload']         = 'Upload';                 $tr['en']['Cancel']             = 'Cancel';
-    $tr['en']['InvertSelection']= 'Invert Selection';       $tr['en']['DestinationFolder']  = 'Destination Folder';
-    $tr['en']['ItemType']       = 'Item Type';              $tr['en']['ItemName']           = 'Item Name';
-    $tr['en']['CreateNow']      = 'Create Now';             $tr['en']['Download']           = 'Download';
-    $tr['en']['Open']           = 'Open';                   $tr['en']['UnZip']              = 'UnZip';
-    $tr['en']['UnZipToFolder']  = 'UnZip to folder';        $tr['en']['Edit']               = 'Edit';
-    $tr['en']['NormalEditor']   = 'Normal Editor';          $tr['en']['BackUp']             = 'Back Up';
-    $tr['en']['SourceFolder']   = 'Source Folder';          $tr['en']['Files']              = 'Files';
-    $tr['en']['Move']           = 'Move';                   $tr['en']['Change']             = 'Change';
-    $tr['en']['Settings']       = 'Settings';               $tr['en']['Language']           = 'Language';
-    $tr['en']['MemoryUsed']     = 'Memory used';            $tr['en']['PartitionSize']      = 'Partition size';
+    // Chinese (Simplified)
+    $tr['ch']['AppName']        = 'Zdir';                $tr['ch']['AppTitle']           = 'Zdir';
+    $tr['ch']['Login']          = '登录';                 $tr['ch']['Username']           = '账号';
+    $tr['ch']['Password']       = '密码';                 $tr['ch']['Logout']             = '注销';
+    $tr['ch']['Move']           = '移动';                 $tr['ch']['Copy']               = '复制';
+    $tr['ch']['Save']           = '保存';                 $tr['ch']['SelectAll']          = '全选';
+    $tr['ch']['UnSelectAll']    = '取消全选';             $tr['ch']['File']               = '文件';
+    $tr['ch']['Back']           = '返回';                 $tr['ch']['Size']               = '大小';
+    $tr['ch']['Perms']          = '权限';                 $tr['ch']['Modified']           = '修改时间';
+    $tr['ch']['Owner']          = '所有人';               $tr['ch']['Search']             = '搜索';
+    $tr['ch']['NewItem']        = '新文件';               $tr['ch']['Folder']             = '文件夹';
+    $tr['ch']['Delete']         = '删除';                 $tr['ch']['Rename']             = '重命名';
+    $tr['ch']['CopyTo']         = '复制到';               $tr['ch']['DirectLink']         = '直链';
+    $tr['ch']['UploadingFiles'] = '上传文件';             $tr['ch']['ChangePermissions']  = '修改权限';
+    $tr['ch']['Copying']        = '复制';                 $tr['ch']['CreateNewItem']      = '创建新文件';
+    $tr['ch']['Name']           = '文件名';               $tr['ch']['AdvancedEditor']     = '高级编辑';
+    $tr['ch']['RememberMe']     = '记住我';               $tr['ch']['Actions']            = '动作';
+    $tr['ch']['Upload']         = '上传';                 $tr['ch']['Cancel']             = '取消';
+    $tr['ch']['InvertSelection']= '反选';                 $tr['ch']['DestinationFolder']  = '目标文件夹';
+    $tr['ch']['ItemType']       = '文件类型';             $tr['ch']['ItemName']           = '文件名称';
+    $tr['ch']['CreateNow']      = '创建';                 $tr['ch']['Download']           = '下载';
+    $tr['ch']['Open']           = '打开';                 $tr['ch']['UnZip']              = '解压';
+    $tr['ch']['UnZipToFolder']  = '解压至文件夹';          $tr['ch']['Edit']               = '编辑';
+    $tr['ch']['NormalEditor']   = '普通编辑';              $tr['ch']['BackUp']            = '备份';
+    $tr['ch']['SourceFolder']   = '源文件夹';              $tr['ch']['Files']              = '文件';
+    $tr['ch']['Move']           = '移动';                  $tr['ch']['Change']            = '修改';
+    $tr['ch']['Settings']       = '设置';                  $tr['ch']['Language']          = '语言';
+    $tr['ch']['MemoryUsed']     = '使用的内存';            $tr['ch']['PartitionSize']     = '分区大小';
+    $tr['ch']['ErrorReporting'] = '错误报告';              $tr['ch']['ShowHiddenFiles']   = '显示隐藏文件';
+    $tr['ch']['FreeOf']         = '免费的';                $tr['ch']['FullSize']             = '全尺寸';
+    $tr['ch']['Zip']            = '压缩';                  $tr['ch']['Tar']                 = '柏油';
 
     $i18n = fm_get_translations($tr);
     $tr = $i18n ? $i18n : $tr;
