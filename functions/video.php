@@ -18,6 +18,14 @@
 <body>
 	<video id="my-video" class="video-js" controls preload="auto" width="1280" height="720" data-setup="{}">
     	<source src="<?php echo $url; ?>">
+	<?php
+	if (file_exists(str_replace(".mp4", ".vtt", $url)))
+	{
+	?>
+	<track src="<?php echo str_replace(".mp4", ".vtt", $url); ?>" label="English" kind="subtitles" srclang="en" default>
+	<?php
+	}
+	?>
   	</video>
 	<script src = "../static/video.js"></script>
 </body>
