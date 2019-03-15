@@ -12,6 +12,7 @@
 	$dir = $_GET['dir'];
 	$dir = strip_tags($dir);
 	$dir = str_replace("\\","/",$dir);
+	$rel_path = $thedir."/".$dir;
 	//获取markdown文件地址
 	
 	//echo $readme;
@@ -26,6 +27,12 @@
 	if(($dir == '') || (!isset($dir))) {
 		$listdir = scandir($thedir);
 		$readme = $thedir.'/readme.md';
+	}
+	//如果目录不存在
+	else if(!is_dir($rel_path)){
+		echo '目录不存在，3s后返回首页！';
+		header("Refresh:3;url=index.php");
+		exit;
 	}
 	else{
 		$listdir = scandir($thedir."/".$dir);

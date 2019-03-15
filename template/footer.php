@@ -11,9 +11,9 @@
 	<!-- 底部END -->
 	
 	<!--遍历目录END-->
-	<script type="text/javascript" src = "https://libs.xiaoz.top/jquery/2.0.3/jquery-2.0.3.min.js"></script>
+	<script type="text/javascript" src = "./static/jquery.min.js"></script>
 	<script type="text/javascript" src="./static/layui/layui.js"></script>
 	<script type="text/javascript" src="./static/embed.js?v=<?php echo $version; ?>"></script>
-	<script type="text/javascript" src="https://libs.xiaoz.top/clipBoard.js/clipBoard.min.js"></script>
+	<script type="text/javascript" src="./static/clipBoard.min.js"></script>
 </body>
 </html>

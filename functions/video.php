@@ -2,6 +2,11 @@
 	//获取视频播放地址
 	@$url = $_GET['url'];
 	$url = str_replace("./","../",$url);
+	//判断文件是否存在
+	if(!file_exists($url)){
+		echo '视频文件不存在！';
+		exit;
+	}
 ?>
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
