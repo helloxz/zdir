@@ -3159,7 +3159,7 @@ function lng($txt) {
     $tr['ch']['MemoryUsed']     = '使用的内存';            $tr['ch']['PartitionSize']     = '分区大小';
     $tr['ch']['ErrorReporting'] = '错误报告';              $tr['ch']['ShowHiddenFiles']   = '显示隐藏文件';
     $tr['ch']['FreeOf']         = '免费的';                $tr['ch']['FullSize']             = '全尺寸';
-    $tr['ch']['Zip']            = '压缩';                  $tr['ch']['Tar']                 = '柏油';
+    $tr['ch']['Zip']            = 'Zip';                  $tr['ch']['Tar']                 = 'Tar';
 
     $i18n = fm_get_translations($tr);
     $tr = $i18n ? $i18n : $tr;
