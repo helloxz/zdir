@@ -38,6 +38,31 @@
 		$listdir = scandir($thedir."/".$dir);
 		$readme = $thedir."/".$dir.'/readme.md';
 	}
+	//遍历目录和文件，并进行排序，文件夹排前面
+	$newdir = array();
+	$newfile = array();
+	foreach( $listdir as $value )
+	{
+		//如果参数为空
+		if(!isset($dir)){
+			$tmp_path = $thedir;
+		}
+		if(isset($dir)){
+			$tmp_path = $thedir.'/'.$dir.'/'.$value;
+		}
+		$tmp_path = str_replace("///","/",$tmp_path);
+		//echo $tmp_path."<br />";
+		//如果是文件夹
+		if(is_dir($tmp_path)){
+			array_push($newdir,$value);
+		}
+		else{
+			array_push($newfile,$value);
+		}
+	}
+	//两个数组顺序合并
+	$listdir = array_merge($newdir,$newfile);
+	
 	$readme = str_replace('\\','/',$readme);
 	//计算上级目录
 	function updir($dir){
@@ -140,8 +165,8 @@
 						    $ctime = date("Y-m-d H:i",$ctime);
 
 						    
-						    //搜索忽略的目录
-						    if(array_search($showdir,$ignore)) {
+						    //搜索忽略的目录，如果包含.php 一并排除
+						    if(array_search($showdir,$ignore) || strripos($showdir,".php")) {
 							    continue;
 						    }
 						    

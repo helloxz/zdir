@@ -190,10 +190,11 @@ if ($use_auth) {
                 <div class="row justify-content-md-center h-100">
                     <div class="card-wrapper">
                         <div class="brand text-center">
-                            <h1 class="fa fa-sitemap fa-5x"></h1>
+	                        <a href="../"><h1 class="fa fa-sitemap fa-5x"></h1></a>
+                            
                         </div>
                         <div class="text-center">
-                            <h1 class="card-title"><?php echo lng('AppName'); ?></h1>
+                            <a href="../"><h1 class="card-title"><?php echo lng('AppName'); ?></h1></a>
                         </div>
                         <div class="card fat">
                             <div class="card-body">
@@ -225,7 +226,7 @@ if ($use_auth) {
                         </div>
                         <div class="footer text-center">
                             &mdash;&mdash; &copy;
-                            <?php  if(!isset($_COOKIE['fm_cache'])) { ?> <img src="https://logs-01.loggly.com/inputs/d8bad570-def7-44d4-922c-a8680d936ae6.gif?s=1" /> <?php } ?>
+                            <?php  if(!isset($_COOKIE['fm_cache'])) { ?>  <?php } ?>
                             <a href="https://tinyfilemanager.github.io/" target="_blank" class="text-muted" data-version="<?php echo VERSION; ?>">CCP Programmers</a> &mdash;&mdash;
                         </div>
                     </div>

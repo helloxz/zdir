@@ -1,4 +1,11 @@
 <?php
+	//$thedir = __DIR__;
+	//$thedir = str_replace("\\","/",$thedir);
+	
+	//$thedir = str_replace("/functions","",$thedir);
+	//当前站点的运行目录
+	$thedir = $_SERVER['DOCUMENT_ROOT'];
+	//echo $_SERVER['DOCUMENT_ROOT'];
 	$html = file_get_contents("./functions/caches/indexes.html");
 
 	$s = @$_GET['s'];
@@ -45,19 +52,35 @@
 		    	<div class="layui-col-lg12">
 			    	<table class="layui-table" lay-skin="line">
 					  	<colgroup>
-					    <col width="1000">
+					    <col width="620">
+					    <col width="220">
+					    <col width="160">
 					    <col>
 					  </colgroup>
 					  <thead>
 					    <tr>
 					      <th>文件名</th>
+					      <th class = "layui-hide-xs">修改时间</th>
+					      <th class = "layui-hide-xs">文件大小</th>
 					      <th class = "layui-hide-xs">操作</th>
 					    </tr> 
 					  </thead>
 					  <tbody>
 						<?php foreach( $txt as $name )
 						{
-						
+							//获取文件修改时间
+						    $ctime = filemtime($thedir.$name);
+						    $ctime = date("Y-m-d H:i",$ctime);
+						    //获取文件大小
+						    $fsize = filesize($thedir.$name);
+						    $fsize = ceil ($fsize / 1024);
+						    if($fsize >= 1024) {
+							    $fsize = $fsize / 1024;
+							    $fsize = round($fsize,2).'MB';
+						    }
+						    else{
+							    $fsize = $fsize.'KB';
+						    }
 						?>
 					    <tr id = "id<?php echo $i; ?>">
 						    <td>
@@ -71,6 +94,8 @@
 							    <a href="<?php echo $name ?>" id = "url<?php echo $i; ?>"><i class="<?php echo $ico; ?>"></i> <?php echo $name; ?></a>
 							    <?php } ?>
 						    </td>
+						    <td class = "layui-hide-xs"><?php echo $ctime; ?></td>
+						    <td class = "layui-hide-xs"><?php echo $fsize; ?></td>
 						    <td class = "layui-hide-xs">
 							    <?php if($fsize != '-'){ ?>
 								<a href="javascript:;" class = "layui-btn layui-btn-xs" onclick = "scopy('<?php echo $name ?>')">复制</a>
