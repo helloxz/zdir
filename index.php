@@ -16,6 +16,7 @@
 		//载入主页
 		include_once("./functions/home.php");
 	}
+	//不允许放的控制器
 	else if($c == 'indexes'){
 		echo '非法请求！';
 		exit;
