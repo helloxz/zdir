@@ -16,6 +16,10 @@
 		//载入主页
 		include_once("./functions/home.php");
 	}
+	else if($c == 'indexes'){
+		echo '非法请求！';
+		exit;
+	}
 	else{
 		include_once("./functions/".$c.'.php');
 	}
