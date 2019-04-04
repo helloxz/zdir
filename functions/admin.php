@@ -684,12 +684,12 @@ if (isset($_POST['group'], $_POST['delete']) && !FM_READONLY) {
             }
         }
         if ($errors == 0) {
-            fm_set_msg('Selected files and folder deleted');
+            fm_set_msg('选中的文件和文件夹已删除！');
         } else {
-            fm_set_msg('Error while deleting items', 'error');
+            fm_set_msg('删除文件出错！', 'error');
         }
     } else {
-        fm_set_msg('Nothing selected', 'alert');
+        fm_set_msg('未选择任何内容！', 'alert');
     }
 
     fm_redirect(FM_SELF_URL . '?p=' . urlencode(FM_PATH));
