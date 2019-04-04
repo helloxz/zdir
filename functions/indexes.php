@@ -1,4 +1,6 @@
 <?php
+#设置超时时间
+ini_set('max_execution_time', '600');
 include_once( '../config.php' );
 
 /**********************
