@@ -177,6 +177,16 @@
 				echo $filehash;
 				exit;
 			}
+			//如果载入上级目录
+			if(stripos($filepath,'../')){
+				$filehash = array(
+				"code"	=>	0,
+				"msg"	=>	"非法请求！"
+				);
+				$filehash = json_encode($filehash);
+				echo $filehash;
+				exit;
+			}
 			return $filepath;
 	    }
 	    //判断是否是mp4
