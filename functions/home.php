@@ -243,7 +243,7 @@
 							   	<div class = "showimg" id = "show<?php echo $i; ?>"><img src="" id = "imgid<?php echo $i; ?>"></div>
 							   	<!--如果是.exe文件-->
 							   	<?php }elseif($zdir->is_exe($fullpath)){ ?>
-								<a href="<?php echo $url ?>?v=<?php @$zdir->exe_version($fullpath); ?>" id = "url<?php echo $i; ?>"><i class="<?php echo $ico; ?>"></i> <?php echo $showdir; ?></a>
+								<a href="<?php echo $url ?>" id = "url<?php echo $i; ?>"><i class="<?php echo $ico; ?>"></i> <?php echo $showdir; ?></a>
 							   	<!--.exe文件END-->
 							   	<?php }else{ ?>
 							    <a href="<?php echo $url ?>" id = "url<?php echo $i; ?>"><i class="<?php echo $ico; ?>"></i> <?php echo $showdir; ?></a>
