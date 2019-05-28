@@ -27,6 +27,7 @@
 			"127.0.0.1",
 			"192.168.1."
 		),
-		"password"	=>	"xiaoz.me"
+		"password"	=>	"xiaoz.me",
+		"auth"		=>	FALSE
 	);	
 ?>
