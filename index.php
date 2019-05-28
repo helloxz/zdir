@@ -10,6 +10,17 @@
 	include_once("./config.php");
 	//载入zdir类
 	include_once("./functions/zdir.class.php");
+	//获取密码
+	$password = $config['password'];
+	//如果开启了验证
+	if(@$config['auth'] === TRUE){
+		//基本验证
+		if ( ($_SERVER['PHP_AUTH_PW'] !== $password) || ($_SERVER['PHP_AUTH_USER'] !== 'admin') ){
+			header('WWW-Authenticate: Basic realm="Please verify."');
+		    header('HTTP/1.0 401 Unauthorized');
+		    exit('权限不足！');
+		}
+	}
 	//根据不同的请求载入不同的方法
 	//如果没有请求控制器
 	if((!isset($c)) || ($c == '')){

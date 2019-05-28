@@ -17,11 +17,13 @@
 	<meta name="author" content="" />
 	<meta name="keywords" content="" />
 	<meta name="description" content="" />
-	<link rel="stylesheet" href="../static/video-js.css" type="" media=""/>
-	
+	<link rel="stylesheet" href="../static/dplayer/DPlayer.min.css" type="" media=""/>
 </head>
 <body>
-	<video id="my-video" class="video-js" controls preload="auto" width="1280" height="720" data-setup="{}">
+	<!--视频播放容器-->
+	<div id="dplayer"></div>
+	<!--视频播放容器END-->
+	<!--<video id="my-video" class="video-js" controls preload="auto" width="1280" height="720" data-setup="{}">
     	<source src="<?php echo $url; ?>">
 	<?php
 	if (file_exists(str_replace(".mp4", ".vtt", $url)))
@@ -31,7 +33,15 @@
 	<?php
 	}
 	?>
-  	</video>
-	<script src = "../static/video.js"></script>
+  	</video>-->
+	<script src = "../static/dplayer/DPlayer.min.js"></script>
+	<script type="text/javascript">
+		const dp = new DPlayer({
+	    container: document.getElementById('dplayer'),
+	    video: {
+	        url: '<?php echo $url; ?>'
+	    }
+	});
+	</script>
 </body>
 </html>

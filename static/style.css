@@ -69,3 +69,15 @@
 	text-overflow:ellipsis;
 	white-space: nowrap;
 }
+#msg{
+	border:1px solid #FF5722;
+	border-radius:2px;
+	color:#505050;
+	padding:0.7em;
+	line-height:1.3em;
+	margin-bottom:0.8em;
+	/*background-color:#F5F5F5;*/
+}
+#msg a{
+	color:#5FB878;
+}

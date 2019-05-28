@@ -1,5 +1,45 @@
 <?php
 	class Zdir{
+		//获取.exe文件版本号
+		function exe_version($filepath){
+			//判断文件
+			$this->checkfile($filepath);
+			//判断文件后缀
+			$suffix = $this->suffix($filepath);
+			$status = 0;
+			
+			//设置支持的后缀
+			$support = array(
+				"exe"
+			);
+			//遍历后缀
+			foreach( $support as  $value )
+			{
+				if($suffix == $value){
+					$status = 1;
+					break;
+				}
+			}
+			if($status != 1){
+				echo '不支持的文件格式！';
+				exit;
+			}
+			$strFileContent = file_get_contents($filepath);
+		    if($strFileContent)
+		    {
+		        //$strTagBefore = 'F\0i\0l\0e\0V\0e\0r\0s\0i\0o\0n\0\0\0\0\0';        // 如果使用这行，读取的是 FileVersion
+		        $strTagBefore = 'P\0r\0o\0d\0u\0c\0t\0V\0e\0r\0s\0i\0o\0n\0\0';    // 如果使用这行，读取的是 ProductVersion
+		        $strTagAfter = '\0\0';
+		        if (preg_match("/$strTagBefore(.*?)$strTagAfter/", $strFileContent, $arrMatches))
+		        {
+		            if(count($arrMatches) == 2) 
+		            {
+		                $fileversion = str_replace("\0", '', $arrMatches[1]);
+		            }
+		        }
+		    }
+	    	echo $fileversion;
+		}
 		//文件图标
 		function ico($suffix){
 			//根据不同后缀显示不同图标
@@ -199,7 +239,32 @@
 			$suffix = end($suffix);
 			$suffix = strtolower($suffix);
 
-			if(($suffix == 'mp4') || ($suffix == 'm3u8')){
+			//允许播放的类型
+			$type_arr = array('mp4','m3u8','ts','mp3','wav','flac','ape');
+			$re_type = gettype(array_search($suffix,$type_arr));
+			
+			if( $re_type === 'integer' ){
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
+		//判断是否是.exe文件
+		function is_exe($filepath){
+			//echo $filepath;
+			//对文件进行判断
+			//$filepath = $this->checkfile($filepath);
+			//获取文件后缀
+			$suffix = explode(".",$filepath);
+			$suffix = end($suffix);
+			$suffix = strtolower($suffix);
+
+			//允许播放的类型
+			$type_arr = array('exe');
+			$re_type = gettype(array_search($suffix,$type_arr));
+			
+			if( $re_type === 'integer' ){
 				return true;
 			}
 			else{
@@ -343,7 +408,6 @@
 		fclose($file);
 		return $file;
 	}
-	
 	
 
 	$zdir = new Zdir;

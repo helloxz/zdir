@@ -98,6 +98,12 @@
 	<div id="navigation" class = "layui-hide-xs">
 		<div class="layui-container">
 			<div class="layui-row">
+				<!--滚动消息-->
+				<div id = "msg" class="layui-col-lg12">
+					<i class="layui-icon layui-icon-notice" style="color: #FF5722;font-weight:bold;"></i> 
+					<span id = "msg-content"></span>
+				</div>
+				<!--滚动消息END-->
 				<div class="layui-col-lg12">
 					<p>
 						当前位置：<a href="./">首页</a> 
@@ -169,7 +175,6 @@
 						    if(array_search($showdir,$ignore) || strripos($showdir,".php")) {
 							    continue;
 						    }
-						    
 						    //判读文件是否是目录,当前路径 + 获取到的路径 + 遍历后的目录
 						    if(is_dir($thedir.'/'.$dir.'/'.$showdir)){
 							    $suffix = '';
@@ -236,6 +241,10 @@
 							   	?>
 							   	<a href="<?php echo $url ?>" id = "url<?php echo $i; ?>" onmouseover = "showimg(<?php echo $i; ?>,'<?php echo $url; ?>')" onmouseout = "hideimg(<?php echo $i; ?>)"><i class="<?php echo $ico; ?>"></i> <?php echo $showdir; ?></a>
 							   	<div class = "showimg" id = "show<?php echo $i; ?>"><img src="" id = "imgid<?php echo $i; ?>"></div>
+							   	<!--如果是.exe文件-->
+							   	<?php }elseif($zdir->is_exe($fullpath)){ ?>
+								<a href="<?php echo $url ?>?v=<?php @$zdir->exe_version($fullpath); ?>" id = "url<?php echo $i; ?>"><i class="<?php echo $ico; ?>"></i> <?php echo $showdir; ?></a> (<span title = "软件版本">v<?php $zdir->exe_version($fullpath); ?></span>)
+							   	<!--.exe文件END-->
 							   	<?php }else{ ?>
 							    <a href="<?php echo $url ?>" id = "url<?php echo $i; ?>"><i class="<?php echo $ico; ?>"></i> <?php echo $showdir; ?></a>
 							    <?php } ?>
@@ -272,9 +281,7 @@
 								<a href="javascript:;" class = "layui-btn layui-btn-xs" onclick = "copy('<?php echo $url ?>')">复制</a>
 							    <?php } ?>
 							    <!--如果是管理模式-->
-							    <?php if((isset($admin)) && ($fsize != '-')) { ?>
-									<a href="javascript:;" class = "layui-btn layui-btn-xs layui-btn-danger" onclick = "delfile(<?php echo $i; ?>,'<?php echo $showdir; ?>','<?php echo $fullpath; ?>')">删除</a>
-							    <?php } ?>
+							    <!--管理模式END-->
 							    <!--如果是markdown文件-->
 							    <?php if(($suffix == 'md') && ($suffix != null)){ ?>
 								&nbsp;&nbsp;<a href="javascript:;" onclick = "newmd('<?php echo $fullpath; ?>')" title = "点击查看"><i class="fa fa-eye fa-lg"></i></a> 
