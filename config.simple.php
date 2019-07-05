@@ -9,6 +9,7 @@
 	$ignore	= array(
 		".",
 		".git",
+		".user.ini",
 		"favicon.ico",
 		"functions",
 		"config.php",
