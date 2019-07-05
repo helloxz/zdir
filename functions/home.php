@@ -6,7 +6,6 @@
 	$thedir = str_replace("functions",'',$thedir);
 	
 	$i = 0;
-	
 
 	//获取目录
 	$dir = $_GET['dir'];
@@ -14,6 +13,16 @@
 	$dir = str_replace("\\","/",$dir);
 	$rel_path = $thedir."/".$dir;
 	//获取markdown文件地址
+	//判断是否是首页
+	function is_home(){
+		$dir = $GLOBALS['dir'];
+		if(empty($dir)){
+			return TRUE;
+		}
+		else{
+			return FALSE;
+		}
+	}
 	
 	//echo $readme;
 	//对目录进行过滤
@@ -62,7 +71,12 @@
 	}
 	//两个数组顺序合并
 	$listdir = array_merge($newdir,$newfile);
-	
+	//返回数组的差集
+	$listdir = array_diff($listdir,$ignore);
+	//如果是首页，隐藏..
+	if(is_home()){
+		$listdir = array_diff($listdir,['..']);
+	}
 	$readme = str_replace('\\','/',$readme);
 	//计算上级目录
 	function updir($dir){
@@ -172,7 +186,7 @@
 
 						    
 						    //搜索忽略的目录，如果包含.php 一并排除
-						    if(array_search($showdir,$ignore) || strripos($showdir,".php")) {
+						    if( strripos($showdir,".php") ) {
 							    continue;
 						    }
 						    //判读文件是否是目录,当前路径 + 获取到的路径 + 遍历后的目录
@@ -190,7 +204,7 @@
 							    $fsize = '-';
 							    //返回类型
 							    $type = 'dir';
-						    }
+							}
 						    //如果是文件
 						    if(is_file($fullpath)){
 							    //获取文件后缀
@@ -215,7 +229,7 @@
 							    }
 							    $type = 'file';
 							    #$info = "<a href = ''><i class='fa fa-info-circle' aria-hidden='true'></i></a>";
-						    }
+							}
 						    //其它情况，可能是中文目录
 						    else{
 							    $suffix = '';
@@ -230,7 +244,7 @@
 							    $ico = "fa fa-folder-open";
 							    $fsize = '-';
 							    $type = 'dir';
-						    }
+							}
 						    $i++;
 						?>
 					    <tr id = "id<?php echo $i; ?>">
@@ -289,6 +303,7 @@
 						    </td>
 					    </tr>
 					    <?php } ?>
+						
 					  </tbody>
 					</table>
 		    	</div>

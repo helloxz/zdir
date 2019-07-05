@@ -4,12 +4,14 @@ layui.use(['layer','element'], function(){
 })
 $(document).ready(function(){
 	//隐藏.
-	$("#id1").remove();
+	//$("#id1").remove();
 	//如果是首页，隐藏..
 	uri = window.location.search;
-	if(uri == '') {
-		$("#id2").remove();
-	}
+	//console.log(uri);
+	//隐藏首页..，现在不需要了
+	// if(uri == '') {
+	// 	$("#id1").remove();
+	// }
 });
 
 protocol = window.location.protocol;		//获取协议

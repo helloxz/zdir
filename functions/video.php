@@ -34,6 +34,7 @@
 	}
 	?>
   	</video>-->
+	<script src="../static/hls.min.js"></script>
 	<script src = "../static/dplayer/DPlayer.min.js"></script>
 	<script type="text/javascript">
 		const dp = new DPlayer({
