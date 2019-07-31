@@ -2,7 +2,8 @@
 	include_once("./zdir.class.php");
 	include_once("./Parsedown.php");
 	$Parsedown = new Parsedown();
-	@$file = $_GET['file'];
+	//@$file = $_GET['file'];
+	@$file = $_SERVER['DOCUMENT_ROOT'].$_GET['file'];
 
 	$content = $zdir->viewmd($file);
 	$content = $Parsedown->text($content);
