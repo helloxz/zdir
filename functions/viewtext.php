@@ -1,7 +1,8 @@
 <?php
 	include_once("./zdir.class.php");
 
-	@$file = $_GET['file'];
+	//@$file = $_GET['file'];
+	@$file = $_SERVER['DOCUMENT_ROOT'].$_GET['file'];
 
 	$content = $zdir->vtext($file);
 ?>
