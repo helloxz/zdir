@@ -5,7 +5,8 @@
 	$thedir = str_replace("/functions","",$thedir);
 	#$thedir = str_replace("");
 	//获取文件路径
-	$filepath = $_POST['file'];
+	//$filepath = $_POST['file'];
+	$filepath = $_SERVER['DOCUMENT_ROOT'].$_POST['file'];
 
 	//如果文件不存在
 	if(!is_file($filepath)) {
