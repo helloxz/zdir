@@ -1,7 +1,8 @@
 <?php
 	@$admin = $_GET['admin'];
 	//获取当前目录
-	$thedir = __DIR__;
+	//$thedir = __DIR__;
+	$thedir = $_SERVER['DOCUMENT_ROOT'].$uploadDir;
 	$thedir = str_replace("\\",'/',$thedir);
 	$thedir = str_replace("functions",'',$thedir);
 	
@@ -176,12 +177,14 @@
 					    <?php foreach( $listdir as $showdir ) {
 						    //防止中文乱码
 						    //$showdir = iconv('gb2312' , 'utf-8' , $showdir );
-						    $fullpath = $thedir.'/'.$dir.'/'.$showdir;
+						    //$fullpath = $thedir.'/'.$dir.'/'.$showdir;
+                                                    $fullpath = $uploadDir.$dir.'/'.$showdir;
 						    $fullpath = str_replace("\\","\/",$fullpath);
 						    $fullpath = str_replace("//","/",$fullpath);
 						    
 						    //获取文件修改时间
-						    $ctime = filemtime($fullpath);
+						    //$ctime = filemtime($fullpath);
+	                                            $ctime = filemtime($_SERVER['DOCUMENT_ROOT'].$fullpath);
 						    $ctime = date("Y-m-d H:i",$ctime);
 
 						    
@@ -206,7 +209,8 @@
 							    $type = 'dir';
 							}
 						    //如果是文件
-						    if(is_file($fullpath)){
+						    //if(is_file($fullpath)){
+	                                            if(is_file($_SERVER['DOCUMENT_ROOT'].$fullpath)){
 							    //获取文件后缀
 						    	$suffix = explode(".",$showdir);
 						    	$suffix = end($suffix);
@@ -218,7 +222,8 @@
 							    
 
 							    //获取文件大小
-							    $fsize = filesize($fullpath);
+							    //$fsize = filesize($fullpath);
+							    $fsize = filesize($_SERVER['DOCUMENT_ROOT'].$fullpath);
 							    $fsize = ceil ($fsize / 1024);
 							    if($fsize >= 1024) {
 								    $fsize = $fsize / 1024;
