@@ -38,7 +38,7 @@
 
 	if(($dir == '') || (!isset($dir))) {
 		$listdir = scandir($thedir);
-		$readme = $thedir.'/readme.md';
+		$readme = $thedir.'/README.md';
 	}
 	//如果目录不存在
 	else if(!is_dir($rel_path)){
@@ -48,7 +48,7 @@
 	}
 	else{
 		$listdir = scandir($thedir."/".$dir);
-		$readme = $thedir."/".$dir.'/readme.md';
+		$readme = $thedir."/".$dir.'/README.md';
 	}
 	//遍历目录和文件，并进行排序，文件夹排前面
 	$newdir = array();
