@@ -26,7 +26,7 @@
 				                	echo $siteinfo['site_name'];
 			                	}
 			                	else {
-				                	echo 'Zdir';
+				                	echo "<i class='fa fa-sitemap' aria-hidden='true'></i> Zdir";
 			                	}
 			                ?>
 		                </a></h1>
@@ -38,7 +38,7 @@
 				                	echo $siteinfo['site_name'];
 			                	}
 			                	else {
-				                	echo 'Zdir';
+				                	echo "<i class='fa fa-sitemap' aria-hidden='true'></i> Zdir";
 			                	}
 			                ?>
 		                </a></h1>
