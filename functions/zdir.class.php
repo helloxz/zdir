@@ -240,7 +240,28 @@
 			$suffix = strtolower($suffix);
 
 			//允许播放的类型
-			$type_arr = array('mp4','m3u8','ts','mp3','wav','flac','ape');
+			$type_arr = array('mp4','m3u8','ts');
+			$re_type = gettype(array_search($suffix,$type_arr));
+			
+			if( $re_type === 'integer' ){
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
+		//判断是否是音乐
+		public function music($filepath){
+			//echo $filepath;
+			//对文件进行判断
+			//$filepath = $this->checkfile($filepath);
+			//获取文件后缀
+			$suffix = explode(".",$filepath);
+			$suffix = end($suffix);
+			$suffix = strtolower($suffix);
+
+			//允许播放的类型
+			$type_arr = array('mp3','wav','flac','ape');
 			$re_type = gettype(array_search($suffix,$type_arr));
 			
 			if( $re_type === 'integer' ){
@@ -354,9 +375,7 @@
 				exit;
 			}
 			//打开文件
-			$myfile = fopen("$filepath","r") or die("无法打开文件！");
-			$content = fread($myfile,filesize($filepath));
-			fclose($myfile);
+			$content = file_get_contents($filepath);
 			//@$content = iconv('GB2312', 'UTF-8', $content);
 			//$content = file_get_contents($filepath);
 			$coding = mb_detect_encoding($content,"UTF-8,GBK,GB2312");
@@ -371,16 +390,14 @@
 		}
 		//markdown查看器
 		function viewmd($filepath){
+			$filepath = con_coding($filepath,FALSE);
 			//判断文件
 			$this->checkfile($filepath);
 			//获取文件后缀
 			$suffix = $this->suffix($filepath);
 
 			if($suffix == 'md'){
-				$myfile = fopen($filepath, "r") or die("Unable to open file!");
-				$content = fread($myfile,filesize($filepath));
-				fclose($myfile);
-
+				@$content = file_get_contents($filepath) or die('文件不存在！');
 				return $content;
 			}
 			else{
@@ -408,7 +425,23 @@
 		fclose($file);
 		return $file;
 	}
-	
+	function con_coding($str,$type = TRUE){
+		$os = PHP_OS;
+		//如果是Windows系统则转换编码
+		if( stristr($os,'WINNT') ){
+			if($type === TRUE) {
+				//GB2312转UTF-8
+				$str = iconv('gb2312' , 'utf-8' , $str );
+			}
+			else if($type === FALSE) {
+				//UTF-8转GB2312
+				@$str = iconv('utf-8' , 'gb2312' , $str );
+			}
+			
+			//echo 'dsdsd';
+		}
+		return $str;
+	}
 
 	$zdir = new Zdir;
 ?>

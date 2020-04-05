@@ -42,16 +42,16 @@
 	    curl_close($curl);
 	    
 		
-		$myfile = fopen($cachefile,"w") or die("Unable to open file!");
-		fwrite($myfile, $html);
-		fclose($myfile);
-
-		$cache = file_get_contents($cachefile);
+		//$myfile = fopen($cachefile,"w") or die("Unable to open file!");
+		//fwrite($myfile, $html);
+		//fclose($myfile);
+		$cache = @file_get_contents($cachefile) or die("Unable to open file!");
 	}
 	else{
 		$cache = file_get_contents($cachefile);
 	}
 
+	$cache = con_coding($cache);
 
 	//获取页面URL
 	function get_url(){

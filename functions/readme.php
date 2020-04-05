@@ -23,19 +23,12 @@
 	<link rel="stylesheet" href="https://libs.xiaoz.top/layui-v2.2.5/layui/css/layui.css">
 	<link rel="stylesheet" href="../static/md.css">
 </head>
-<body>
-	<div id="container" class = "layui-bg-gray">
-		<div class="layui-container">
-			<div class="layui-row">
-				<div class="layui-col-lg8 layui-col-sm12 layui-col-xs12 layui-col-md12 layui-col-md-offset2">
-					<div class="md-html">
-						<?php echo $content; ?>
-					</div>
-				</div>
-			</div>
-		</div>
+<body style = "background-color:#FFFFFF;">
+	<div class="md-html" style = "margin-right:1em;margin-top:-1em;box-shadow:none;">
+		<?php echo $content; ?>
 	</div>
 	<div class="footer">
+		<hr />
 		<p>&copy;2020 本文档使用 <a href="https://markdown.win/" target = "_blank">MDtoHTML</a> 构建 | The author <a href="https://www.xiaoz.me/" target = "_blank" title = "小z博客">xiaoz</a></p>
 	</div>
 	<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>

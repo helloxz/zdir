@@ -62,7 +62,7 @@ function copy(url){
             return url;
         },
         afterCopy: function() {
-			layer.msg('复制成功！');
+			layer.msg('链接已复制！');
         }
     });
 }
@@ -125,7 +125,7 @@ function viewmd(url){
 	url = 'https://markdown.win/api.php?url=' + url;
 	layer.open({
 	  	type: 2, 
-	  	area: ['80%', '80%'],
+	  	area: ['100%', '100%'],
 	  	content: url //这里content是一个普通的String
 	});
 }
@@ -135,7 +135,7 @@ function newmd(url){
 	layer.open({
 		title:'MarkDown查看器',
 	  	type: 2, 
-	  	area: ['80%', '80%'],
+	  	area: ['100%', '100%'],
 	  	content: url //这里content是一个普通的String
 	});
 }
@@ -145,9 +145,20 @@ function video(url){
 	var videourl = "./functions/video.php?url=" + url;
 	//layer.msg(videourl);
 	layer.open({
-		title:url,
+		title:false,
 	  	type: 2, 
-	  	area: ['1300px', '83%'],
+	  	area: ['68%', '78%'],
+	  	content: videourl //这里content是一个普通的String
+	});
+}
+//播放音频
+function music(url){
+	var videourl = "./functions/music.php?url=" + url;
+	//layer.msg(videourl);
+	layer.open({
+		title:false,
+	  	type: 2, 
+	  	area: ['60%', '88px'],
 	  	content: videourl //这里content是一个普通的String
 	});
 }
@@ -158,7 +169,7 @@ function viewtext(url){
 	layer.open({
 		title:'Zdir文本查看器',
 	  	type: 2, 
-	  	area: ['80%', '80%'],
+	  	area: ['100%', '100%'],
 	  	content: url //这里content是一个普通的String
 	});
 }
@@ -180,7 +191,7 @@ function office(url){
 	layer.open({
 		title:filename,
 	  	type: 2, 
-	  	area: ['80%', '80%'],
+	  	area: ['100%', '100%'],
 	  	content: apiurl //这里content是一个普通的String
 	});
 }

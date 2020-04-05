@@ -3,28 +3,40 @@
 ini_set('max_execution_time', '600');
 //载入配置文件
 include_once("../config.php");
+$base_dir = str_replace("functions","",__DIR__);
+$zdir_config = $config;
 //Default Configuration
-$CONFIG = '{"lang":"ch","error_reporting":false,"show_hidden":false}';
-
+//$CONFIG = '{"lang":"en","error_reporting":false,"show_hidden":false,"hide_Cols":false,"calc_folder":false}';
+$CONFIG = '{"lang":"zh-CN","error_reporting":false,"show_hidden":false,"hide_Cols":false,"calc_folder":false}';
 /**
- * H3K | Tiny File Manager V2.3.4
+ * H3K | Tiny File Manager V2.4.1
  * CCP Programmers | ccpprogrammers@gmail.com
  * https://tinyfilemanager.github.io
  */
 
 //TFM version
-define('VERSION', '2.3.4');
+define('VERSION', '2.4.1');
 
-// Auth with login/password (set true/false to enable/disable it)
+//Application Title
+define('APP_TITLE', '文件管理器');
+
+// --- EDIT BELOW CONFIGURATION CAREFULLY ---
+
+
+// Auth with login/password 
+// set true/false to enable/disable it
+// Is independent from IP white- and blacklisting
 $use_auth = true;
 
+// Login user name and password
 // Users: array('Username' => 'Password', 'Username2' => 'Password2', ...)
 // Generate secure password hash - https://tinyfilemanager.github.io/docs/pwd.html
 $auth_users = array(
-    'admin' => password_hash($config['password'], PASSWORD_DEFAULT) //admin@123
+    'zdir' => password_hash($config['password'], PASSWORD_DEFAULT)
 );
 
-// Readonly users (username array)
+// Readonly users 
+// e.g. array('users', 'guest', ...)
 $readonly_users = array(
     'user'
 );
@@ -42,11 +54,13 @@ $highlightjs_style = 'vs';
 // Enable ace.js (https://ace.c9.io/) on view's page
 $edit_files = true;
 
-// Default timezone for date() and time() - http://php.net/manual/en/timezones.php
-$default_timezone = 'Etc/UTC'; // UTC
+// Default timezone for date() and time()
+// Doc - http://php.net/manual/en/timezones.php
+$default_timezone = 'UTC/GMT+08:00'; // UTC
 
 // Root path for file manager
-$root_path = $_SERVER['DOCUMENT_ROOT'];
+// use absolute path of directory i.e: '/var/www/folder' or $_SERVER['DOCUMENT_ROOT'].'/folder'
+$root_path = $base_dir;
 
 // Root url for links in file manager.Relative to $http_host. Variants: '', 'path/to/subfolder'
 // Will not working if $root_path will be outside of server document root
@@ -56,32 +70,75 @@ $root_url = '';
 $http_host = $_SERVER['HTTP_HOST'];
 
 // input encoding for iconv
-$iconv_input_encoding = 'UTF-8';
+$iconv_input_encoding = 'gb2312';
 
 // date() format for file modification date
-$datetime_format = 'd.m.y H:i';
+// Doc - https://www.php.net/manual/en/function.date.php
+$datetime_format = 'Y/m/d H:i';
 
-// allowed file extensions for upload and rename
-$allowed_extensions = ''; // 'gif,png,jpg'
+// Allowed file extensions for create and rename files
+// e.g. 'txt,html,css,js'
+$allowed_file_extensions = '';
 
-// Array of files and folders excluded from listing
-$GLOBALS['exclude_items'] = array();
+// Allowed file extensions for upload files
+// e.g. 'gif,png,jpg,html,txt'
+$allowed_upload_extensions = '';
 
-// Google Docs Viewer
-$GLOBALS['online_viewer'] = true;
+// Favicon path. This can be either a full url to an .PNG image, or a path based on the document root.
+// full path, e.g http://example.com/favicon.png
+// local path, e.g images/icons/favicon.png
+$favicon_path = '?img=favicon';
 
-//Sticky Nav bar
+// Files and folders to excluded from listing
+// e.g. array('myfile.html', 'personal-folder', '*.php', ...)
+$exclude_items = $ignore;
+
+// Online office Docs Viewer
+// Availabe rules are 'google', 'microsoft' or false
+// google => View documents using Google Docs Viewer
+// microsoft => View documents using Microsoft Web Apps Viewer
+// false => disable online doc viewer
+$online_viewer = 'google';
+
+// Sticky Nav bar
+// true => enable sticky header
+// false => disable sticky header
 $sticky_navbar = true;
 
-//max upload file size
+// Maximum file upload size
+// Increase the following values in php.ini to work properly
+// memory_limit, upload_max_filesize, post_max_size
 define('MAX_UPLOAD_SIZE', '2048');
+
+// Possible rules are 'OFF', 'AND' or 'OR'
+// OFF => Don't check connection IP, defaults to OFF
+// AND => Connection must be on the whitelist, and not on the blacklist
+// OR => Connection must be on the whitelist, or not on the blacklist
+$ip_ruleset = 'OFF';
+
+// Should users be notified of their block?
+$ip_silent = true;
+
+// IP-addresses, both ipv4 and ipv6
+$ip_whitelist = array(
+    '127.0.0.1',    // local ipv4
+    '::1'           // local ipv6
+);
+
+// IP-addresses, both ipv4 and ipv6
+$ip_blacklist = array(
+    '0.0.0.0',      // non-routable meta ipv4
+    '::'            // non-routable meta ipv6
+);
+
+// --- EDIT BELOW CAREFULLY OR DO NOT EDIT AT ALL ---
 
 // private key and session name to store to the session
 if ( !defined( 'FM_SESSION_ID')) {
     define('FM_SESSION_ID', 'filemanager');
 }
 
-//Configuration
+// Configuration
 $cfg = new FM_Config();
 
 // Default language
@@ -93,12 +150,16 @@ $show_hidden_files = isset($cfg->data['show_hidden']) ? $cfg->data['show_hidden'
 // PHP error reporting - false = Turns off Errors, true = Turns on Errors
 $report_errors = isset($cfg->data['error_reporting']) ? $cfg->data['error_reporting'] : true;
 
+// Hide Permissions and Owner cols in file-listing
+$hide_Cols = isset($cfg->data['hide_Cols']) ? $cfg->data['hide_Cols'] : true;
+
+// Show Dirsize: true or speedup output: false
+$calc_folder = isset($cfg->data['calc_folder']) ? $cfg->data['calc_folder'] : true;
+
 //available languages
 $lang_list = array(
     'en' => 'English'
 );
-
-//--- EDIT BELOW CAREFULLY OR DO NOT EDIT AT ALL
 
 if ($report_errors == true) {
     @ini_set('error_reporting', E_ALL);
@@ -107,9 +168,6 @@ if ($report_errors == true) {
     @ini_set('error_reporting', E_ALL);
     @ini_set('display_errors', 0);
 }
-
-// Set Cookie
-setcookie('fm_cache', true, 2147483647, "/");
 
 // if fm included
 if (defined('FM_EMBED')) {
@@ -163,6 +221,39 @@ if (isset($_GET['img'])) {
     fm_show_image($_GET['img']);
 }
 
+// Validate connection IP
+if($ip_ruleset != 'OFF'){
+    $clientIp = $_SERVER['REMOTE_ADDR'];
+
+    $proceed = false;
+
+    $whitelisted = in_array($clientIp, $ip_whitelist);
+    $blacklisted = in_array($clientIp, $ip_blacklist);
+
+    if($ip_ruleset == 'AND'){
+        if($whitelisted == true && $blacklisted == false){
+            $proceed = true;
+        }
+    } else
+    if($ip_ruleset == 'OR'){
+         if($whitelisted == true || $blacklisted == false){
+            $proceed = true;
+        }
+    }
+
+    if($proceed == false){
+        trigger_error('User connection denied from: ' . $clientIp, E_USER_WARNING);
+
+        if($ip_silent == false){
+            fm_set_msg('Access denied. IP restriction applicable', 'error');
+            fm_show_header_login();
+            fm_show_message();
+        }
+
+        exit();
+    }
+}
+
 // Auth
 if ($use_auth) {
     if (isset($_SESSION[FM_SESSION_ID]['logged'], $auth_users[$_SESSION[FM_SESSION_ID]['logged']])) {
@@ -187,26 +278,23 @@ if ($use_auth) {
         // Form
         unset($_SESSION[FM_SESSION_ID]['logged']);
         fm_show_header_login();
-        fm_show_message();
         ?>
         <section class="h-100">
             <div class="container h-100">
                 <div class="row justify-content-md-center h-100">
                     <div class="card-wrapper">
-                        <div class="brand">
-                            <svg version="1.0" xmlns="http://www.w3.org/2000/svg" M1008 width="100%" height="121px" viewBox="0 0 238.000000 140.000000" aria-label="H3K Tiny File Manager">
-                                <g transform="translate(0.000000,140.000000) scale(0.100000,-0.100000)" fill="#000000" stroke="none">
-                                    <path d="M160 700 l0 -600 110 0 110 0 0 260 0 260 70 0 70 0 0 -260 0 -260 110 0 110 0 0 600 0 600 -110 0 -110 0 0 -260 0 -260 -70 0 -70 0 0 260 0 260 -110 0 -110 0 0 -600z"/>
-                                    <path fill="#003500" d="M1008 1227 l-108 -72 0 -117 0 -118 110 0 110 0 0 110 0 110 70 0 70 0 0 -180 0 -180 -125 0 c-69 0 -125 -3 -125 -6 0 -3 23 -39 52 -80 l52 -74 73 0 73 0 0 -185 0 -185 -70 0 -70 0 0 115 0 115 -110 0 -110 0 0 -190 0 -190 181 0 181 0 109 73 108 72 1 181 0 181 -69 48 -68 49 68 50 69 49 0 249 0 248 -182 -1 -183 0 -107 -72z"/>
-                                    <path d="M1640 700 l0 -600 110 0 110 0 0 208 0 208 35 34 35 34 35 -34 35 -34 0 -208 0 -208 110 0 110 0 0 212 0 213 -87 87 -88 88 88 88 87 87 0 213 0 212 -110 0 -110 0 0 -208 0 -208 -70 -69 -70 -69 0 277 0 277 -110 0 -110 0 0 -600z"/></g>
-                            </svg>
-                        </div>
-                        <div class="text-center">
-                            <h1 class="card-title"><?php echo lng('AppName'); ?></h1>
-                        </div>
                         <div class="card fat">
                             <div class="card-body">
                                 <form class="form-signin" action="" method="post" autocomplete="off">
+                                    <div class="form-group">
+                                       <div class="brand">
+                                            <h1>Zdir</h1>
+                                        </div>
+                                        <div class="text-center">
+                                            <h1 class="card-title"><?php echo APP_TITLE; ?></h1>
+                                        </div>
+                                    </div>
+                                    <hr />
                                     <div class="form-group">
                                         <label for="fm_usr"><?php echo lng('Username'); ?></label>
                                         <input type="text" class="form-control" id="fm_usr" name="fm_usr" required autofocus>
@@ -218,14 +306,11 @@ if ($use_auth) {
                                     </div>
 
                                     <div class="form-group">
-                                        <div class="custom-checkbox custom-control">
-                                            <input type="checkbox" name="remember" id="remember" class="custom-control-input">
-                                            <label for="remember" class="custom-control-label"><?php echo lng('RememberMe'); ?></label>
-                                        </div>
+                                        <?php fm_show_message(); ?>
                                     </div>
 
                                     <div class="form-group">
-                                        <button type="submit" class="btn btn-success btn-block" role="button">
+                                        <button type="submit" class="btn btn-success btn-block mt-4" role="button">
                                             <?php echo lng('Login'); ?>
                                         </button>
                                     </div>
@@ -234,7 +319,6 @@ if ($use_auth) {
                         </div>
                         <div class="footer text-center">
                             &mdash;&mdash; &copy;
-                            <?php  if(!isset($_COOKIE['fm_cache'])) { ?> <img src="https://logs-01.loggly.com/inputs/d8bad570-def7-44d4-922c-a8680d936ae6.gif?s=1" /> <?php } ?>
                             <a href="https://tinyfilemanager.github.io/" target="_blank" class="text-muted" data-version="<?php echo VERSION; ?>">CCP Programmers</a> &mdash;&mdash;
                         </div>
                     </div>
@@ -264,7 +348,10 @@ if (!@is_dir($root_path)) {
 defined('FM_SHOW_HIDDEN') || define('FM_SHOW_HIDDEN', $show_hidden_files);
 defined('FM_ROOT_PATH') || define('FM_ROOT_PATH', $root_path);
 defined('FM_LANG') || define('FM_LANG', $lang);
-defined('FM_EXTENSION') || define('FM_EXTENSION', $allowed_extensions);
+defined('FM_FILE_EXTENSION') || define('FM_FILE_EXTENSION', $allowed_file_extensions);
+defined('FM_UPLOAD_EXTENSION') || define('FM_UPLOAD_EXTENSION', $allowed_upload_extensions);
+defined('FM_EXCLUDE_ITEMS') || define('FM_EXCLUDE_ITEMS', $exclude_items);
+defined('FM_DOC_VIEWER') || define('FM_DOC_VIEWER', $online_viewer);
 define('FM_READONLY', $use_auth && !empty($readonly_users) && isset($_SESSION[FM_SESSION_ID]['logged']) && in_array($_SESSION[FM_SESSION_ID]['logged'], $readonly_users));
 define('FM_IS_WIN', DIRECTORY_SEPARATOR == '\\');
 
@@ -278,6 +365,10 @@ $p = isset($_GET['p']) ? $_GET['p'] : (isset($_POST['p']) ? $_POST['p'] : '');
 
 // clean path
 $p = fm_clean_path($p);
+
+// for ajax request - save
+$input = file_get_contents('php://input');
+$_POST = (strpos($input, 'ajax') != FALSE && strpos($input, 'save') != FALSE) ? json_decode($input, true) : $_POST;
 
 // instead globals vars
 define('FM_PATH', $p);
@@ -295,6 +386,42 @@ unset($p, $use_auth, $iconv_input_encoding, $use_highlightjs, $highlightjs_style
 // AJAX Request
 if (isset($_POST['ajax']) && !FM_READONLY) {
 
+    // save
+    if (isset($_POST['type']) && $_POST['type'] == "save") {
+        // get current path
+        $path = FM_ROOT_PATH;
+        if (FM_PATH != '') {
+            $path .= '/' . FM_PATH;
+        }
+        // check path
+        if (!is_dir($path)) {
+            fm_redirect(FM_SELF_URL . '?p=');
+        }
+        $file = $_GET['edit'];
+        $file = fm_clean_path($file);
+        $file = str_replace('/', '', $file);
+        if ($file == '' || !is_file($path . '/' . $file)) {
+            fm_set_msg('File not found', 'error');
+            fm_redirect(FM_SELF_URL . '?p=' . urlencode(FM_PATH));
+        }
+        header('X-XSS-Protection:0'); 
+        $file_path = $path . '/' . $file;
+        
+        $writedata = $_POST['content'];
+        $fd = fopen($file_path, "w");
+        @fwrite($fd, $writedata);
+        fclose($fd);
+        die(true);
+    }
+
+    //search : get list of files from the current folder
+    if(isset($_POST['type']) && $_POST['type']=="search") {
+        $dir = FM_ROOT_PATH;
+        $response = scan($_POST['path'], $_POST['content']);
+        echo json_encode($response);
+        exit();
+    }
+    
     // backup files
     if (isset($_POST['type']) && $_POST['type'] == "backup") {
         $file = $_POST['file'];
@@ -307,7 +434,7 @@ if (isset($_POST['ajax']) && !FM_READONLY) {
 
     // Save Config
     if (isset($_POST['type']) && $_POST['type'] == "settings") {
-        global $cfg, $lang, $report_errors, $show_hidden_files, $lang_list;
+        global $cfg, $lang, $report_errors, $show_hidden_files, $lang_list, $hide_Cols, $calc_folder;
         $newLng = $_POST['js-language'];
         fm_get_translations([]);
         if (!array_key_exists($newLng, $lang_list)) {
@@ -316,6 +443,8 @@ if (isset($_POST['ajax']) && !FM_READONLY) {
 
         $erp = isset($_POST['js-error-report']) && $_POST['js-error-report'] == "true" ? true : false;
         $shf = isset($_POST['js-show-hidden']) && $_POST['js-show-hidden'] == "true" ? true : false;
+        $hco = isset($_POST['js-hide-cols']) && $_POST['js-hide-cols'] == "true" ? true : false;
+        $caf = isset($_POST['js-calc-folder']) && $_POST['js-calc-folder'] == "true" ? true : false;
 
         if ($cfg->data['lang'] != $newLng) {
             $cfg->data['lang'] = $newLng;
@@ -328,6 +457,18 @@ if (isset($_POST['ajax']) && !FM_READONLY) {
         if ($cfg->data['show_hidden'] != $shf) {
             $cfg->data['show_hidden'] = $shf;
             $show_hidden_files = $shf;
+        }
+        if ($cfg->data['show_hidden'] != $shf) {
+            $cfg->data['show_hidden'] = $shf;
+            $show_hidden_files = $shf;
+        }
+        if ($cfg->data['hide_Cols'] != $hco) {
+            $cfg->data['hide_Cols'] = $hco;
+            $hide_Cols = $hco;
+        }
+        if ($cfg->data['calc_folder'] != $caf) {
+            $cfg->data['calc_folder'] = $caf;
+            $calc_folder = $caf;
         }
         $cfg->save();
         echo true;
@@ -352,6 +493,10 @@ if (isset($_POST['ajax']) && !FM_READONLY) {
         $fileinfo = new stdClass();
         $fileinfo->name = trim(basename($url), ".\x00..\x20");
 
+        $allowed = (FM_UPLOAD_EXTENSION) ? explode(',', FM_UPLOAD_EXTENSION) : false;
+        $ext = strtolower(pathinfo($fileinfo->name, PATHINFO_EXTENSION));
+        $isFileAllowed = ($allowed) ? in_array($ext, $allowed) : true;
+        
         function event_callback ($message) {
             global $callback;
             echo json_encode($message);
@@ -363,6 +508,13 @@ if (isset($_POST['ajax']) && !FM_READONLY) {
         }
 
         $err = false;
+
+        if(!$isFileAllowed) {
+            $err = array("message" => "File extension is not allowed");
+            event_callback(array("fail" => $err));
+            exit();
+        }
+
         if (!$url) {
             $success = false;
         } else if ($use_curl) {
@@ -423,7 +575,7 @@ if (isset($_GET['del']) && !FM_READONLY) {
             fm_set_msg(sprintf($msg, fm_enc($del)), 'error');
         }
     } else {
-        fm_set_msg('Wrong file or folder name', 'error');
+        fm_set_msg('Invalid file or folder name', 'error');
     }
     fm_redirect(FM_SELF_URL . '?p=' . urlencode(FM_PATH));
 }
@@ -432,15 +584,19 @@ if (isset($_GET['del']) && !FM_READONLY) {
 if (isset($_GET['new']) && isset($_GET['type']) && !FM_READONLY) {
     $type = $_GET['type'];
     $new = str_replace( '/', '', fm_clean_path( strip_tags( $_GET['new'] ) ) );
-    if ($new != '' && $new != '..' && $new != '.') {
+    if (fm_isvalid_filename($new) && $new != '' && $new != '..' && $new != '.') {
         $path = FM_ROOT_PATH;
         if (FM_PATH != '') {
             $path .= '/' . FM_PATH;
         }
         if ($_GET['type'] == "file") {
             if (!file_exists($path . '/' . $new)) {
-                @fopen($path . '/' . $new, 'w') or die('Cannot open file:  ' . $new);
-                fm_set_msg(sprintf('File <b>%s</b> created', fm_enc($new)));
+                if(fm_is_valid_ext($new)) {
+                    @fopen($path . '/' . $new, 'w') or die('Cannot open file:  ' . $new);
+                    fm_set_msg(sprintf('File <b>%s</b> created', fm_enc($new)));
+                } else {
+                    fm_set_msg('File extension is not allowed', 'error');
+                }
             } else {
                 fm_set_msg(sprintf('File <b>%s</b> already exists', fm_enc($new)), 'alert');
             }
@@ -454,7 +610,7 @@ if (isset($_GET['new']) && isset($_GET['type']) && !FM_READONLY) {
             }
         }
     } else {
-        fm_set_msg('Wrong folder name', 'error');
+        fm_set_msg('Invalid characters in file or folder name', 'error');
     }
     fm_redirect(FM_SELF_URL . '?p=' . urlencode(FM_PATH));
 }
@@ -493,7 +649,7 @@ if (isset($_GET['copy'], $_GET['finish']) && !FM_READONLY) {
             }
         } else {
             if (fm_rcopy($from, $dest)) {
-                fm_set_msg(sprintf('Copyied from <b>%s</b> to <b>%s</b>', fm_enc($copy), fm_enc($msg_from)));
+                fm_set_msg(sprintf('Copied from <b>%s</b> to <b>%s</b>', fm_enc($copy), fm_enc($msg_from)));
             } else {
                 fm_set_msg(sprintf('Error while copying from <b>%s</b> to <b>%s</b>', fm_enc($copy), fm_enc($msg_from)), 'error');
             }
@@ -573,7 +729,7 @@ if (isset($_GET['ren'], $_GET['to']) && !FM_READONLY) {
     $old = str_replace('/', '', $old);
     // new name
     $new = $_GET['to'];
-    $new = fm_clean_path($new);
+    $new = fm_clean_path(strip_tags($new));
     $new = str_replace('/', '', $new);
     // path
     $path = FM_ROOT_PATH;
@@ -581,14 +737,14 @@ if (isset($_GET['ren'], $_GET['to']) && !FM_READONLY) {
         $path .= '/' . FM_PATH;
     }
     // rename
-    if ($old != '' && $new != '') {
+    if (fm_isvalid_filename($new) && $old != '' && $new != '') {
         if (fm_rename($path . '/' . $old, $path . '/' . $new)) {
             fm_set_msg(sprintf('Renamed from <b>%s</b> to <b>%s</b>', fm_enc($old), fm_enc($new)));
         } else {
             fm_set_msg(sprintf('Error while renaming from <b>%s</b> to <b>%s</b>', fm_enc($old), fm_enc($new)), 'error');
         }
     } else {
-        fm_set_msg('Names not set', 'error');
+        fm_set_msg('Invalid characters in file name', 'error');
     }
     fm_redirect(FM_SELF_URL . '?p=' . urlencode(FM_PATH));
 }
@@ -623,6 +779,7 @@ if (isset($_GET['dl'])) {
 
 // Upload
 if (!empty($_FILES) && !FM_READONLY) {
+    $override_file_name = false;
     $f = $_FILES;
     $path = FM_ROOT_PATH;
     $ds = DIRECTORY_SEPARATOR;
@@ -632,36 +789,58 @@ if (!empty($_FILES) && !FM_READONLY) {
 
     $errors = 0;
     $uploads = 0;
-    $total = count($f['file']['name']);
-    $allowed = (FM_EXTENSION) ? explode(',', FM_EXTENSION) : false;
+    $allowed = (FM_UPLOAD_EXTENSION) ? explode(',', FM_UPLOAD_EXTENSION) : false;
 
     $filename = $f['file']['name'];
     $tmp_name = $f['file']['tmp_name'];
-    $ext = pathinfo($filename, PATHINFO_EXTENSION);
+    $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
     $isFileAllowed = ($allowed) ? in_array($ext, $allowed) : true;
 
     $targetPath = $path . $ds;
-    $fullPath = $path . '/' . $_REQUEST['fullpath'];
-    $folder = substr($fullPath, 0, strrpos($fullPath, "/"));
+    if ( is_writable($targetPath) ) {
+        $fullPath = $path . '/' . $_REQUEST['fullpath'];
+        $folder = substr($fullPath, 0, strrpos($fullPath, "/"));
 
-    if(file_exists ($fullPath)) {
-        $ext_1 = $ext ? '.'.$ext : '';
-        $fullPath = str_replace($ext_1, '', $fullPath) .'_'. date('ymdHis'). $ext_1;
-    }
-
-    if (!is_dir($folder)) {
-        $old = umask(0);
-        mkdir($folder, 0777, true);
-        umask($old);
-    }
-
-    if (empty($f['file']['error']) && !empty($tmp_name) && $tmp_name != 'none' && $isFileAllowed) {
-        if (move_uploaded_file($tmp_name, $fullPath)) {
-            die('Successfully uploaded');
-        } else {
-            die(sprintf('Error while uploading files. Uploaded files: %s', $uploads));
+        if(file_exists ($fullPath) && !$override_file_name) {
+            $ext_1 = $ext ? '.'.$ext : '';
+            $fullPath = str_replace($ext_1, '', $fullPath) .'_'. date('ymdHis'). $ext_1;
         }
+
+        if (!is_dir($folder)) {
+            $old = umask(0);
+            mkdir($folder, 0777, true);
+            umask($old);
+        }
+
+        if (empty($f['file']['error']) && !empty($tmp_name) && $tmp_name != 'none' && $isFileAllowed) {
+            if (move_uploaded_file($tmp_name, $fullPath)) {
+                // Be sure that the file has been uploaded
+                if ( file_exists($fullPath) ) {
+                    $response = array (
+                        'status'    => 'success',
+                        'info' => "file upload successful"
+                    );
+                } else {
+                    $response = array (
+                        'status' => 'error',
+                        'info'   => 'Couldn\'t upload the requested file.'
+                    );
+                }
+            } else {
+                $response = array (
+                    'status'    => 'error',
+                    'info'      => "Error while uploading files. Uploaded files $uploads",
+                );
+            }
+        }
+    } else {
+        $response = array (
+            'status' => 'error',
+            'info'   => 'The specified folder for upload isn\'t writeable.'
+        );
     }
+    // Return the response
+    echo json_encode($response);
     exit();
 }
 
@@ -684,12 +863,12 @@ if (isset($_POST['group'], $_POST['delete']) && !FM_READONLY) {
             }
         }
         if ($errors == 0) {
-            fm_set_msg('选中的文件和文件夹已删除！');
+            fm_set_msg('Selected files and folder deleted');
         } else {
-            fm_set_msg('删除文件出错！', 'error');
+            fm_set_msg('Error while deleting items', 'error');
         }
     } else {
-        fm_set_msg('未选择任何内容！', 'alert');
+        fm_set_msg('Nothing selected', 'alert');
     }
 
     fm_redirect(FM_SELF_URL . '?p=' . urlencode(FM_PATH));
@@ -872,18 +1051,19 @@ $parent = fm_get_parent_path(FM_PATH);
 $objects = is_readable($path) ? scandir($path) : array();
 $folders = array();
 $files = array();
-if (is_array($objects)) {
+$current_path = array_slice(explode("/",$path), -1)[0];
+if (is_array($objects) && fm_is_exclude_items($current_path)) {
     foreach ($objects as $file) {
-        if ($file == '.' || $file == '..' && in_array($file, $GLOBALS['exclude_items'])) {
+        if ($file == '.' || $file == '..') {
             continue;
         }
         if (!FM_SHOW_HIDDEN && substr($file, 0, 1) === '.') {
             continue;
         }
         $new_path = $path . '/' . $file;
-        if (@is_file($new_path) && !in_array($file, $GLOBALS['exclude_items'])) {
+        if (@is_file($new_path) && fm_is_exclude_items($file)) {
             $files[] = $file;
-        } elseif (@is_dir($new_path) && $file != '.' && $file != '..' && !in_array($file, $GLOBALS['exclude_items'])) {
+        } elseif (@is_dir($new_path) && $file != '.' && $file != '..' && fm_is_exclude_items($file)) {
             $folders[] = $file;
         }
     }
@@ -900,9 +1080,18 @@ if (!empty($folders)) {
 if (isset($_GET['upload']) && !FM_READONLY) {
     fm_show_header(); // HEADER
     fm_show_nav_path(FM_PATH); // current path
+    //get the allowed file extensions
+    function getUploadExt() {
+        $extArr = explode(',', FM_UPLOAD_EXTENSION);
+        if(FM_UPLOAD_EXTENSION && $extArr) {
+            array_walk($extArr, function(&$x) {$x = ".$x";});
+            return implode(',', $extArr);
+        }
+        return '';
+    }
     ?>
 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.css" rel="stylesheet">
+    <link href="https://cdnjs.loli.net/ajax/libs/dropzone/5.5.1/min/dropzone.min.css" rel="stylesheet">
     <div class="path">
 
         <div class="card mb-2 fm-upload-wrapper">
@@ -942,22 +1131,26 @@ if (isset($_GET['upload']) && !FM_READONLY) {
             </div>
         </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.js"></script>
+    <script src="https://cdnjs.loli.net/ajax/libs/dropzone/5.5.1/min/dropzone.min.js"></script>
     <script>
         Dropzone.options.fileUploader = {
             timeout: 120000,
             maxFilesize: <?php echo MAX_UPLOAD_SIZE; ?>,
+            acceptedFiles : "<?php echo getUploadExt() ?>",
             init: function () {
                 this.on("sending", function (file, xhr, formData) {
                     let _path = (file.fullPath) ? file.fullPath : file.name;
                     document.getElementById("fullpath").value = _path;
                     xhr.ontimeout = (function() {
-                        alert('Error: Server Timeout');
+                        toast('Error: Server Timeout');
                     });
                 }).on("success", function (res) {
-                    console.log('Upload Status >> ', res.status);
+                    let _response = JSON.parse(res.xhr.response);
+                    if(_response.status == "error") {
+                        toast(_response.info);
+                    }
                 }).on("error", function(file, response) {
-                    alert(response);
+                    toast(response);
                 });
             }
         }
@@ -1128,6 +1321,34 @@ if (isset($_GET['settings']) && !FM_READONLY) {
                     </div>
 
                     <div class="form-group row">
+                        <label for="js-hid-1" class="col-sm-3 col-form-label"><?php echo lng('HideColumns') ?></label>
+                        <div class="col-sm-9">
+                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                <label class="btn btn-secondary <?php echo getChecked($hide_Cols, 1, 'active') ?>">
+                                    <input type="radio" name="js-hide-cols" id="js-hid-1" autocomplete="off" value="true" <?php echo getChecked($hide_Cols, 1, 'checked') ?> > ON
+                                </label>
+                                <label class="btn btn-secondary <?php echo getChecked($hide_Cols, '', 'active') ?>">
+                                    <input type="radio" name="js-hide-cols" id="js-hid-0" autocomplete="off" value="false" <?php echo getChecked($hide_Cols, '', 'checked') ?> > OFF
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="js-dir-1" class="col-sm-3 col-form-label"><?php echo lng('CalculateFolderSize') ?></label>
+                        <div class="col-sm-9">
+                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                <label class="btn btn-secondary <?php echo getChecked($calc_folder, 1, 'active') ?>">
+                                    <input type="radio" name="js-calc-folder" id="js-dir-1" autocomplete="off" value="true" <?php echo getChecked($calc_folder, 1, 'checked') ?> > ON
+                                </label>
+                                <label class="btn btn-secondary <?php echo getChecked($calc_folder, '', 'active') ?>">
+                                    <input type="radio" name="js-calc-folder" id="js-dir-0" autocomplete="off" value="false" <?php echo getChecked($calc_folder, '', 'checked') ?> > OFF
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
                         <div class="col-sm-10">
                             <button type="submit" class="btn btn-success"> <i class="fa fa-check-circle"></i> <?php echo lng('Save'); ?></button>
                         </div>
@@ -1164,11 +1385,11 @@ if (isset($_GET['help'])) {
                     <div class="col-xs-12 col-sm-6">
                         <div class="card">
                             <ul class="list-group list-group-flush">
-                                <li class="list-group-item"><a href="https://tinyfilemanager.github.io/" target="_blank"><i class="fa fa-question-circle"></i> Help Documents</a> </li>
-                                <li class="list-group-item"><a href="https://github.com/prasathmani/tinyfilemanager/issues" target="_blank"><i class="fa fa-bug"></i> Report Issue</a></li>
-                                <li class="list-group-item"><a href="javascript:latest_release_info('<?php echo VERSION; ?>');" target="_blank"><i class="fa fa-link"></i> Check Latest Version</a></li>
+                                <li class="list-group-item"><a href="https://github.com/prasathmani/tinyfilemanager/wiki" target="_blank"><i class="fa fa-question-circle"></i> <?php echo lng('Help Documents') ?> </a> </li>
+                                <li class="list-group-item"><a href="https://github.com/prasathmani/tinyfilemanager/issues" target="_blank"><i class="fa fa-bug"></i> <?php echo lng('Report Issue') ?></a></li>
+                                <li class="list-group-item"><a href="javascript:latest_release_info('<?php echo VERSION; ?>');"><i class="fa fa-link"> </i> <?php echo lng('Check Latest Version') ?></a></li>
                                 <?php if(!FM_READONLY) { ?>
-                                <li class="list-group-item"><a href="javascript:show_new_pwd();" target="_blank"><i class="fa fa-lock"></i> Generate new password hash</a></li>
+                                <li class="list-group-item"><a href="javascript:show_new_pwd();"><i class="fa fa-lock"></i> <?php echo lng('Generate new password hash') ?></a></li>
                                 <?php } ?>
                             </ul>
                         </div>
@@ -1179,13 +1400,13 @@ if (isset($_GET['help'])) {
                         <form class="form-inline" onsubmit="return new_password_hash(this)" method="POST" action="">
                             <input type="hidden" name="type" value="pwdhash" aria-label="hidden" aria-hidden="true">
                             <div class="form-group mb-2">
-                                <label for="staticEmail2">Generate new password hash</label>
+                                <label for="staticEmail2"><?php echo lng('Generate new password hash') ?></label>
                             </div>
                             <div class="form-group mx-sm-3 mb-2">
-                                <label for="inputPassword2" class="sr-only">Password</label>
+                                <label for="inputPassword2" class="sr-only"><?php echo lng('Password') ?></label>
                                 <input type="text" class="form-control btn-sm" id="inputPassword2" name="inputPassword2" placeholder="Password" required>
                             </div>
-                            <button type="submit" class="btn btn-success btn-sm mb-2">Generate</button>
+                            <button type="submit" class="btn btn-success btn-sm mb-2"><?php echo lng('Generate') ?></button>
                         </form>
                         <textarea class="form-control" rows="2" readonly id="js-pwd-result"></textarea>
                     </div>
@@ -1202,9 +1423,9 @@ if (isset($_GET['help'])) {
 if (isset($_GET['view'])) {
     $file = $_GET['view'];
     $quickView = (isset($_GET['quickView']) && $_GET['quickView'] == 1) ? true : false;
-    $file = fm_clean_path($file);
+    $file = fm_clean_path($file, false);
     $file = str_replace('/', '', $file);
-    if ($file == '' || !is_file($path . '/' . $file)) {
+    if ($file == '' || !is_file($path . '/' . $file) || in_array($file, $GLOBALS['exclude_items'])) {
         fm_set_msg('File not found', 'error');
         fm_redirect(FM_SELF_URL . '?p=' . urlencode(FM_PATH));
     }
@@ -1232,8 +1453,9 @@ if (isset($_GET['view'])) {
     $view_title = 'File';
     $filenames = false; // for zip
     $content = ''; // for text
+    $online_viewer = strtolower(FM_DOC_VIEWER);
 
-    if($GLOBALS['online_viewer'] && in_array($ext, fm_get_onlineViewer_exts())){
+    if($online_viewer && $online_viewer !== 'false' && in_array($ext, fm_get_onlineViewer_exts())){
         $is_onlineViewer = true;
     }
     elseif ($ext == 'zip' || $ext == 'tar') {
@@ -1303,41 +1525,37 @@ if (isset($_GET['view'])) {
                     ?>
                 </p>
                 <p>
-                    <b><a href="?p=<?php echo urlencode(FM_PATH) ?>&amp;dl=<?php echo urlencode($file) ?>"><i
-                                    class="fa fa-cloud-download"></i> <?php echo lng('Download') ?></a></b> &nbsp;
-                    <b><a href="<?php echo fm_enc($file_url) ?>" target="_blank"><i
-                                    class="fa fa-external-link-square"></i> <?php echo lng('Open') ?></a></b>
+                    <b><a href="?p=<?php echo urlencode(FM_PATH) ?>&amp;dl=<?php echo urlencode($file) ?>"><i class="fa fa-cloud-download"></i> <?php echo lng('Download') ?></a></b> &nbsp;
+                    <b><a href="<?php echo fm_enc($file_url) ?>" target="_blank"><i class="fa fa-external-link-square"></i> <?php echo lng('Open') ?></a></b>
                     &nbsp;
                     <?php
                     // ZIP actions
                     if (!FM_READONLY && ($is_zip || $is_gzip) && $filenames !== false) {
                         $zip_name = pathinfo($file_path, PATHINFO_FILENAME);
                         ?>
-                        <b><a href="?p=<?php echo urlencode(FM_PATH) ?>&amp;unzip=<?php echo urlencode($file) ?>"><i
-                                        class="fa fa-check-circle"></i> <?php echo lng('UnZip') ?></a></b> &nbsp;
-                        <b><a href="?p=<?php echo urlencode(FM_PATH) ?>&amp;unzip=<?php echo urlencode($file) ?>&amp;tofolder=1"
-                              title="UnZip to <?php echo fm_enc($zip_name) ?>"><i class="fa fa-check-circle"></i>
+                        <b><a href="?p=<?php echo urlencode(FM_PATH) ?>&amp;unzip=<?php echo urlencode($file) ?>"><i class="fa fa-check-circle"></i> <?php echo lng('UnZip') ?></a></b> &nbsp;
+                        <b><a href="?p=<?php echo urlencode(FM_PATH) ?>&amp;unzip=<?php echo urlencode($file) ?>&amp;tofolder=1" title="UnZip to <?php echo fm_enc($zip_name) ?>"><i class="fa fa-check-circle"></i>
                                 <?php echo lng('UnZipToFolder') ?></a></b> &nbsp;
                         <?php
                     }
                     if ($is_text && !FM_READONLY) {
                         ?>
-                        <b><a href="?p=<?php echo urlencode(trim(FM_PATH)) ?>&amp;edit=<?php echo urlencode($file) ?>"
-                              class="edit-file"><i class="fa fa-pencil-square"></i> <?php echo lng('Edit') ?>
+                        <b><a href="?p=<?php echo urlencode(trim(FM_PATH)) ?>&amp;edit=<?php echo urlencode($file) ?>" class="edit-file"><i class="fa fa-pencil-square"></i> <?php echo lng('Edit') ?>
                             </a></b> &nbsp;
                         <b><a href="?p=<?php echo urlencode(trim(FM_PATH)) ?>&amp;edit=<?php echo urlencode($file) ?>&env=ace"
-                              class="edit-file"><i
-                                        class="fa fa-pencil-square-o"></i> <?php echo lng('AdvancedEditor') ?>
+                              class="edit-file"><i class="fa fa-pencil-square-o"></i> <?php echo lng('AdvancedEditor') ?>
                             </a></b> &nbsp;
                     <?php } ?>
-                    <b><a href="?p=<?php echo urlencode(FM_PATH) ?>"><i
-                                    class="fa fa-chevron-circle-left go-back"></i> <?php echo lng('Back') ?></a></b>
+                    <b><a href="?p=<?php echo urlencode(FM_PATH) ?>"><i class="fa fa-chevron-circle-left go-back"></i> <?php echo lng('Back') ?></a></b>
                 </p>
                 <?php
             }
             if($is_onlineViewer) {
-                // Google docs viewer
-                echo '<iframe src="https://docs.google.com/viewer?embedded=true&hl=en&url=' . fm_enc($file_url) . '" frameborder="no" style="width:100%;min-height:460px"></iframe>';
+                if($online_viewer == 'google') {
+                    echo '<iframe src="https://docs.google.com/viewer?embedded=true&hl=en&url=' . fm_enc($file_url) . '" frameborder="no" style="width:100%;min-height:460px"></iframe>';
+                } else if($online_viewer == 'microsoft') {
+                    echo '<iframe src="https://view.officeapps.live.com/op/embed.aspx?src=' . fm_enc($file_url) . '" frameborder="no" style="width:100%;min-height:460px"></iframe>';
+                }
             } elseif ($is_zip) {
                 // ZIP content
                 if ($filenames !== false) {
@@ -1400,7 +1618,7 @@ if (isset($_GET['view'])) {
 // file editor
 if (isset($_GET['edit'])) {
     $file = $_GET['edit'];
-    $file = fm_clean_path($file);
+    $file = fm_clean_path($file, false);
     $file = str_replace('/', '', $file);
     if ($file == '' || !is_file($path . '/' . $file)) {
         fm_set_msg('File not found', 'error');
@@ -1427,7 +1645,7 @@ if (isset($_GET['edit'])) {
         $fd = fopen($file_path, "w");
         @fwrite($fd, $writedata);
         fclose($fd);
-        fm_set_msg('File Saved Successfully', 'alert');
+        fm_set_msg('File Saved Successfully');
     }
 
     $ext = strtolower(pathinfo($file_path, PATHINFO_EXTENSION));
@@ -1456,6 +1674,7 @@ if (isset($_GET['edit'])) {
                             <button data-cmd="none" data-option="help" class="btn btn-sm btn-outline-secondary" id="js-ace-goLine" title="Help"><i class="fa fa-question" title="Help"></i></button>
                             <select id="js-ace-mode" data-type="mode" title="Select Document Type" class="btn-outline-secondary border-left-0 d-none d-md-block"><option>-- Select Mode --</option></select>
                             <select id="js-ace-theme" data-type="theme" title="Select Theme" class="btn-outline-secondary border-left-0 d-none d-lg-block"><option>-- Select Theme --</option></select>
+                            <select id="js-ace-fontSize" data-type="fontSize" title="Selct Font Size" class="btn-outline-secondary border-left-0 d-none d-lg-block"><option>-- Select Font Size --</option></select>
                         </div>
                     <?php } ?>
                 </div>
@@ -1591,7 +1810,7 @@ $all_files_size = 0;
                 <th><?php echo lng('Name') ?></th>
                 <th><?php echo lng('Size') ?></th>
                 <th><?php echo lng('Modified') ?></th>
-                <?php if (!FM_IS_WIN): ?>
+                <?php if (!FM_IS_WIN && !$hide_Cols): ?>
                     <th><?php echo lng('Perms') ?></th>
                     <th><?php echo lng('Owner') ?></th><?php endif; ?>
                 <th><?php echo lng('Actions') ?></th>
@@ -1607,7 +1826,7 @@ $all_files_size = 0;
                     <td class="border-0"></td>
                     <td class="border-0"></td>
                     <td class="border-0"></td>
-                    <?php if (!FM_IS_WIN) { ?>
+                    <?php if (!FM_IS_WIN && !$hide_Cols) { ?>
                         <td class="border-0"></td>
                         <td class="border-0"></td>
                     <?php } ?>
@@ -1637,12 +1856,12 @@ $all_files_size = 0;
                         </div>
                         </td><?php endif; ?>
                     <td>
-                        <div class="filename"><a href="?p=<?php echo urlencode(trim(FM_PATH . '/' . $f, '/')) ?>"><i class="<?php echo $img ?>"></i> <?php echo fm_convert_win($f) ?>
+                        <div class="filename"><a href="?p=<?php echo urlencode(trim(FM_PATH . '/' . $f, '/')) ?>"><i class="<?php echo $img ?>"></i> <?php echo fm_convert_win($f); ?>
                             </a><?php echo($is_link ? ' &rarr; <i>' . readlink($path . '/' . $f) . '</i>' : '') ?></div>
                     </td>
-                    <td><?php echo lng('Folder') ?></td>
+                    <td><?php if ($calc_folder) { echo fm_get_directorysize($path . '/' . $f); } else { echo lng('Folder'); } ?></td>
                     <td><?php echo $modif ?></td>
-                    <?php if (!FM_IS_WIN): ?>
+                    <?php if (!FM_IS_WIN && !$hide_Cols): ?>
                         <td><?php if (!FM_READONLY): ?><a title="Change Permissions" href="?p=<?php echo urlencode(FM_PATH) ?>&amp;chmod=<?php echo urlencode($f) ?>"><?php echo $perms ?></a><?php else: ?><?php echo $perms ?><?php endif; ?>
                         </td>
                         <td><?php echo $owner['name'] . ':' . $group['name'] ?></td>
@@ -1686,20 +1905,32 @@ $all_files_size = 0;
                         </div>
                         </td><?php endif; ?>
                     <td>
-                        <div class="filename"><a href="<?php echo $filelink ?>" title="File info"><i class="<?php echo $img ?>"></i> <?php echo fm_convert_win($f) ?>
-                            </a><?php echo($is_link ? ' &rarr; <i>' . readlink($path . '/' . $f) . '</i>' : '') ?></div>
+                        <div class="filename"> 
+                        <?php
+                           if (in_array(strtolower(pathinfo($f, PATHINFO_EXTENSION)), array('gif', 'jpg', 'jpeg', 'png', 'bmp', 'ico', 'svg'))): ?>
+                                <?php $imagePreview = fm_enc(FM_ROOT_URL . (FM_PATH != '' ? '/' . FM_PATH : '') . '/' . $f); ?>
+                                <a href="<?php echo $filelink ?>" data-preview-image="<?php echo $imagePreview ?>" title="<?php echo $f ?>">
+                           <?php else: ?>
+                                <a href="<?php echo $filelink ?>" title="<?php echo $f ?>">
+                            <?php endif; ?>
+                                    <i class="<?php echo $img ?>"></i> <?php echo fm_convert_win($f) ?>
+                                </a>
+                                <?php echo($is_link ? ' &rarr; <i>' . readlink($path . '/' . $f) . '</i>' : '') ?>
+                        </div>
                     </td>
-                    <td><span title="<?php printf('%s bytes', $filesize_raw) ?>"><?php echo $filesize ?></span></td>
+                    <td><span title="<?php printf('%s bytes', $filesize_raw) ?>">
+                        <?php echo $filesize; ?>
+                        </span></td>
                     <td><?php echo $modif ?></td>
-                    <?php if (!FM_IS_WIN): ?>
+                    <?php if (!FM_IS_WIN && !$hide_Cols): ?>
                         <td><?php if (!FM_READONLY): ?><a title="<?php echo 'Change Permissions' ?>" href="?p=<?php echo urlencode(FM_PATH) ?>&amp;chmod=<?php echo urlencode($f) ?>"><?php echo $perms ?></a><?php else: ?><?php echo $perms ?><?php endif; ?>
                         </td>
                         <td><?php echo fm_enc($owner['name'] . ':' . $group['name']) ?></td>
                     <?php endif; ?>
                     <td class="inline-actions">
+                        <a title="<?php echo lng('Preview') ?>" href="<?php echo $filelink.'&quickView=1'; ?>" data-toggle="lightbox" data-gallery="tiny-gallery" data-title="<?php echo fm_convert_win($f) ?>" data-max-width="100%" data-width="100%"><i class="fa fa-eye"></i></a>
                         <?php if (!FM_READONLY): ?>
-                            <a title="<?php echo lng('Preview') ?>" href="<?php echo $filelink.'&quickView=1'; ?>" data-toggle="lightbox" data-gallery="tiny-gallery" data-title="<?php echo fm_convert_win($f) ?>" data-max-width="100%" data-width="100%"><i class="fa fa-eye"></i></a>
-                            <a title="<?php echo lng('Delete') ?>" href="?p=<?php echo urlencode(FM_PATH) ?>&amp;del=<?php echo urlencode($f) ?>" onclick="return confirm('Delete file?');"><i class="fa fa-trash-o"></i></a>
+                            <a title="<?php echo lng('Delete') ?>" href="?p=<?php echo urlencode(FM_PATH) ?>&amp;del=<?php echo urlencode($f) ?>" onclick="return confirm('<?php echo lng('Delete').' '.lng('File').'?'; ?>');"><i class="fa fa-trash-o"></i></a>
                             <a title="<?php echo lng('Rename') ?>" href="#" onclick="rename('<?php echo fm_enc(FM_PATH) ?>', '<?php echo fm_enc(addslashes($f)) ?>');return false;"><i class="fa fa-pencil-square-o"></i></a>
                             <a title="<?php echo lng('CopyTo') ?>..."
                                href="?p=<?php echo urlencode(FM_PATH) ?>&amp;copy=<?php echo urlencode(trim(FM_PATH . '/' . $f, '/')) ?>"><i class="fa fa-files-o"></i></a>
@@ -1718,7 +1949,7 @@ $all_files_size = 0;
                 <tfoot>
                     <tr><?php if (!FM_READONLY): ?>
                             <td></td><?php endif; ?>
-                        <td colspan="<?php echo !FM_IS_WIN ? '6' : '4' ?>"><em><?php echo 'Folder is empty' ?></em></td>
+                        <td colspan="<?php echo (!FM_IS_WIN && !$hide_Cols) ? '6' : '4' ?>"><em><?php echo 'Folder is empty' ?></em></td>
                     </tr>
                 </tfoot>
                 <?php
@@ -1727,12 +1958,12 @@ $all_files_size = 0;
                 <tfoot>
                     <tr><?php if (!FM_READONLY): ?>
                             <td class="gray"></td><?php endif; ?>
-                        <td class="gray" colspan="<?php echo !FM_IS_WIN ? '6' : '4' ?>">
-                            Full size: <span title="<?php printf('%s bytes', $all_files_size) ?>"><?php echo '<span class="badge badge-light">'.fm_get_filesize($all_files_size).'</span>' ?></span>,
-                            <?php echo lng('File').': <span class="badge badge-light">'.$num_files.'</span>' ?>,
-                            <?php echo lng('Folder').': <span class="badge badge-light">'.$num_folders.'</span>' ?>,
-                            <?php echo lng('MemoryUsed').': <span class="badge badge-light">'.fm_get_filesize(@memory_get_usage(true)).'</span>' ?>,
-                            <?php echo lng('PartitionSize').': <span class="badge badge-light">'.fm_get_filesize(@disk_free_space($path)) .'</span> free of <span class="badge badge-light">'.fm_get_filesize(@disk_total_space($path)).'</span>'; ?>
+                        <td class="gray" colspan="<?php echo (!FM_IS_WIN && !$hide_Cols) ? '6' : '4' ?>">
+                            <?php echo lng('FullSize').': <span class="badge badge-light">'.fm_get_filesize($all_files_size).'</span>' ?>
+                            <?php echo lng('File').': <span class="badge badge-light">'.$num_files.'</span>' ?>
+                            <?php echo lng('Folder').': <span class="badge badge-light">'.$num_folders.'</span>' ?>
+                            <?php echo lng('MemoryUsed').': <span class="badge badge-light">'.fm_get_filesize(@memory_get_usage(true)).'</span>' ?>
+                            <?php echo lng('PartitionSize').': <span class="badge badge-light">'.fm_get_filesize(@disk_free_space($path)) .'</span> '.lng('FreeOf').' <span class="badge badge-light">'.fm_get_filesize(@disk_total_space($path)).'</span>'; ?>
                         </td>
                     </tr>
                 </tfoot>
@@ -1773,6 +2004,27 @@ fm_show_footer();
 //--- END
 
 // Functions
+
+/**
+ * Check if the filename is allowed.
+ * @param string $filename
+ * @return bool
+ */
+function fm_is_file_allowed($filename)
+{
+    // By default, no file is allowed
+    $allowed = false;
+
+    if (FM_EXTENSION) {
+        $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+
+        if (in_array($ext, explode(',', strtolower(FM_EXTENSION)))) {
+            $allowed = true;
+        }
+    }
+
+    return $allowed;
+}
 
 /**
  * Delete  file or folder (recursively)
@@ -1836,6 +2088,21 @@ function fm_rchmod($path, $filemode, $dirmode)
 }
 
 /**
+ * Check the file extension which is allowed or not
+ * @param string $filename
+ * @return bool
+ */
+function fm_is_valid_ext($filename)
+{
+    $allowed = (FM_FILE_EXTENSION) ? explode(',', FM_FILE_EXTENSION) : false;
+
+    $ext = pathinfo($filename, PATHINFO_EXTENSION);
+    $isFileAllowed = ($allowed) ? in_array($ext, $allowed) : true;
+
+    return ($isFileAllowed) ? true : false;
+}
+
+/**
  * Safely rename
  * @param string $old
  * @param string $new
@@ -1843,10 +2110,7 @@ function fm_rchmod($path, $filemode, $dirmode)
  */
 function fm_rename($old, $new)
 {
-    $allowed = (FM_EXTENSION) ? explode(',', FM_EXTENSION) : false;
-
-    $ext = pathinfo($new, PATHINFO_EXTENSION);
-    $isFileAllowed = ($allowed) ? in_array($ext, $allowed) : true;
+    $isFileAllowed = fm_is_valid_ext($new);
 
     if(!$isFileAllowed) return false;
 
@@ -1962,15 +2226,37 @@ function fm_redirect($url, $code = 302)
 }
 
 /**
+ * Path traversal prevention and clean the url
+ * It replaces (consecutive) occurrences of / and \\ with whatever is in DIRECTORY_SEPARATOR, and processes /. and /.. fine.
+ * @param $path
+ * @return string
+ */
+function get_absolute_path($path) {
+    $path = str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, $path);
+    $parts = array_filter(explode(DIRECTORY_SEPARATOR, $path), 'strlen');
+    $absolutes = array();
+    foreach ($parts as $part) {
+        if ('.' == $part) continue;
+        if ('..' == $part) {
+            array_pop($absolutes);
+        } else {
+            $absolutes[] = $part;
+        }
+    }
+    return implode(DIRECTORY_SEPARATOR, $absolutes);
+}
+
+/**
  * Clean path
  * @param string $path
  * @return string
  */
-function fm_clean_path($path)
+function fm_clean_path($path, $trim = true)
 {
-    $path = trim($path);
+    $path = $trim ? trim($path) : $path;
     $path = trim($path, '\\/');
     $path = str_replace(array('../', '..\\'), '', $path);
+    $path =  get_absolute_path($path);
     if ($path == '..') {
         $path = '';
     }
@@ -1996,7 +2282,20 @@ function fm_get_parent_path($path)
     return false;
 }
 
-/*
+/**
+ * Check file is in exclude list
+ * @param string $file
+ * @return bool
+ */
+function fm_is_exclude_items($file) {
+    $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+    if(!in_array($file, FM_EXCLUDE_ITEMS) && !in_array("*.$ext", FM_EXCLUDE_ITEMS)) {
+        return true;
+    }
+    return false;
+}
+
+/**
  * get language translations from json file
  * @param int $tr
  * @return array
@@ -2032,8 +2331,12 @@ function fm_get_translations($tr) {
 function fm_get_size($file)
 {
     static $iswin;
+    static $isdarwin;
     if (!isset($iswin)) {
         $iswin = (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN');
+    } 
+    if (!isset($isdarwin)) {
+        $isdarwin = (strtoupper(substr(PHP_OS, 0)) == "DARWIN");
     }
 
     static $exec_works;
@@ -2043,7 +2346,8 @@ function fm_get_size($file)
 
     // try a shell command
     if ($exec_works) {
-        $cmd = ($iswin) ? "for %F in (\"$file\") do @echo %~zF" : "stat -c%s \"$file\"";
+        $arg = escapeshellarg($file);
+        $cmd = ($iswin) ? "for %F in (\"$file\") do @echo %~zF" : ($isdarwin ? "stat -f%z $arg" : "stat -c%s $arg");
         @exec($cmd, $output);
         if (is_array($output) && ctype_digit($size = trim(implode("\n", $output)))) {
             return $size;
@@ -2086,6 +2390,27 @@ function fm_get_filesize($size)
     } else {
         return sprintf('%s TB', round(($size / 1024 / 1024 / 1024 / 1024), 2));
     }
+}
+
+/**
+ * Get director total size
+ * @param string $directory
+ * @return string
+ */
+function fm_get_directorysize($directory) {
+    global $calc_folder;
+    if ($calc_folder==true) { //  Slower output
+      $size = 0;  $count= 0;  $dirCount= 0;
+    foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($directory)) as $file)
+    if ($file->isFile())
+        {   $size+=$file->getSize();
+            $count++;
+        }
+    else if ($file->isDir()) { $dirCount++; }
+    // return [$size, $count, $dirCount];
+    return fm_get_filesize($size);
+    }
+    else return 'Folder'; //  Quick output
 }
 
 /**
@@ -2141,6 +2466,15 @@ function fm_get_zif_info($path, $ext) {
 function fm_enc($text)
 {
     return htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
+}
+
+/**
+ * Prevent XSS attacks
+ * @param string $text
+ * @return string
+ */
+function fm_isvalid_filename($text) {
+    return (strpbrk($text, '/?%*:|"<>') === FALSE) ? true : false;
 }
 
 /**
@@ -2318,6 +2652,7 @@ function fm_get_file_icon_class($path)
             break;
         case 'xls':
         case 'xlsx':
+        case 'ods':
             $img = 'fa fa-file-excel-o';
             break;
         case 'csv':
@@ -2328,6 +2663,7 @@ function fm_get_file_icon_class($path)
             break;
         case 'doc':
         case 'docx':
+        case 'odt':
             $img = 'fa fa-file-word-o';
             break;
         case 'ppt':
@@ -2382,7 +2718,7 @@ function fm_get_image_exts()
  */
 function fm_get_video_exts()
 {
-    return array('webm', 'mp4', 'm4v', 'ogm', 'ogv', 'mov');
+    return array('avi', 'webm', 'wmv', 'mp4', 'm4v', 'ogm', 'ogv', 'mov', 'mkv');
 }
 
 /**
@@ -2404,7 +2740,7 @@ function fm_get_text_exts()
         'txt', 'css', 'ini', 'conf', 'log', 'htaccess', 'passwd', 'ftpquota', 'sql', 'js', 'json', 'sh', 'config',
         'php', 'php4', 'php5', 'phps', 'phtml', 'htm', 'html', 'shtml', 'xhtml', 'xml', 'xsl', 'm3u', 'm3u8', 'pls', 'cue',
         'eml', 'msg', 'csv', 'bat', 'twig', 'tpl', 'md', 'gitignore', 'less', 'sass', 'scss', 'c', 'cpp', 'cs', 'py',
-        'map', 'lock', 'dtd', 'svg',
+        'map', 'lock', 'dtd', 'svg', 'scss', 'asp', 'aspx', 'asx', 'asmx', 'ashx', 'jsx', 'jsp', 'jspx', 'cfm', 'cgi'
     );
 }
 
@@ -2444,7 +2780,32 @@ function fm_get_text_names()
  */
 function fm_get_onlineViewer_exts()
 {
-    return array('doc', 'docx', 'xls', 'xlsx', 'pdf', 'ppt', 'pptx', 'ai', 'psd', 'dxf', 'xps', 'rar');
+    return array('doc', 'docx', 'xls', 'xlsx', 'pdf', 'ppt', 'pptx', 'ai', 'psd', 'dxf', 'xps', 'rar', 'odt', 'ods');
+}
+
+/**
+ * This function scans the files and folder recursively, and return matching files
+ * @param string $dir
+ * @return json
+ */
+ function scan($dir, $filter = '') {
+    $path = FM_ROOT_PATH.'/'.$dir;
+    $ite = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path));
+    $rii = new RegexIterator($ite, "/(".$filter.")/i");
+
+    $files = array(); 
+    foreach ($rii as $file) {
+        if (!$file->isDir()) {
+            $fileName = $file->getFilename();
+            $location = str_replace(FM_ROOT_PATH, '', $file->getPath());
+            $files[] = array(
+                    "name" => $fileName,
+                    "type" => "file",
+                    "path" => $location,
+                );           
+        }
+    }
+    return $files;
 }
 
 /**
@@ -2708,6 +3069,8 @@ class FM_Zipper_Tar
     }
 }
 
+
+
 //--- templates functions
 
 /**
@@ -2747,15 +3110,18 @@ function fm_show_nav_path($path)
 
             <div class="col-xs-6 col-sm-7 text-right">
                 <ul class="navbar-nav mr-auto float-right">
-                    <?php if (!FM_READONLY): ?>
                     <li class="nav-item mr-2">
                         <div class="input-group input-group-sm mr-1" style="margin-top:4px;">
                             <input type="text" class="form-control" placeholder="<?php echo lng('Search') ?>" aria-label="<?php echo lng('Search') ?>" aria-describedby="search-addon2" id="search-addon">
-                            <div class="input-group-append">
-                                <span class="input-group-text" id="search-addon2"><i class="fa fa-search"></i></span>
+                            <div class="input-group-append btn-group">
+                                <span class="input-group-text dropdown-toggle" id="search-addon2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
+                                  <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item" href="<?php echo $path2 = $path ? $path : '.'; ?>" id="js-search-modal" data-toggle="modal" data-target="#searchModal">Advanced Search</a>
+                                  </div>
                             </div>
                         </div>
                     </li>
+                    <?php if (!FM_READONLY): ?>
                     <li class="nav-item">
                         <a title="<?php echo lng('Upload') ?>" class="nav-link" href="?p=<?php echo urlencode(FM_PATH) ?>&amp;upload"><i class="fa fa-cloud-upload" aria-hidden="true"></i> <?php echo lng('Upload') ?></a>
                     </li>
@@ -2774,6 +3140,12 @@ function fm_show_nav_path($path)
                             <a title="<?php echo lng('Logout') ?>" class="dropdown-item nav-link" href="?logout=1"><i class="fa fa-sign-out" aria-hidden="true"></i> <?php echo lng('Logout') ?></a>
                         </div>
                     </li>
+                    <?php else: ?>
+                        <?php if (!FM_READONLY): ?>
+                            <li class="nav-item">
+                                <a title="<?php echo lng('Settings') ?>" class="dropdown-item nav-link" href="?p=<?php echo urlencode(FM_PATH) ?>&amp;settings=1"><i class="fa fa-cog" aria-hidden="true"></i> <?php echo lng('Settings') ?></a>
+                            </li>
+                        <?php endif; ?>
                     <?php endif; ?>
                 </ul>
             </div>
@@ -2806,7 +3178,7 @@ header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
 header("Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0");
 header("Pragma: no-cache");
 
-global $lang, $root_url;
+global $lang, $root_url, $favicon_path;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -2817,31 +3189,31 @@ global $lang, $root_url;
     <meta name="author" content="CCP Programmers">
     <meta name="robots" content="noindex, nofollow">
     <meta name="googlebot" content="noindex">
-    <link rel="icon" href="<?php echo $root_url ?>?img=favicon" type="image/png">
-    <title>H3K | Tiny File Manager</title>
-    <link rel="stylesheet" href="https://lib.sinaapp.com/js/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="icon" href="<?php echo fm_enc($favicon_path) ?>" type="image/png">
+    <title><?php echo fm_enc(APP_TITLE) ?></title>
+    <link rel="stylesheet" href="https://lib.sinaapp.com/js/bootstrap/4.3.1/css/bootstrap.min.css">
     <style>
-        body.fm-login-page{background-color:#f7f9fb;font-size:14px}
-        .fm-login-page .brand{width:121px;overflow:hidden;margin:0 auto;margin:40px auto;margin-bottom:0;position:relative;z-index:1}
-        .fm-login-page .brand img{width:100%}
-        .fm-login-page .card-wrapper{width:360px}
-        .fm-login-page .card{border-color:transparent;box-shadow:0 4px 8px rgba(0,0,0,.05)}
-        .fm-login-page .card-title{margin-bottom:1.5rem;font-size:24px;font-weight:300;letter-spacing:-.5px}
-        .fm-login-page .form-control{border-width:2.3px}
-        .fm-login-page .form-group label{width:100%}
-        .fm-login-page .btn.btn-block{padding:12px 10px}
-        .fm-login-page .footer{margin:40px 0;color:#888;text-align:center}
-        @media screen and (max-width: 425px) {
-            .fm-login-page .card-wrapper{width:90%;margin:0 auto}
+        body.fm-login-page{ background-color:#f7f9fb;font-size:14px;background-color:#f7f9fb;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 304 304' width='304' height='304'%3E%3Cpath fill='%23e2e9f1' fill-opacity='0.4' d='M44.1 224a5 5 0 1 1 0 2H0v-2h44.1zm160 48a5 5 0 1 1 0 2H82v-2h122.1zm57.8-46a5 5 0 1 1 0-2H304v2h-42.1zm0 16a5 5 0 1 1 0-2H304v2h-42.1zm6.2-114a5 5 0 1 1 0 2h-86.2a5 5 0 1 1 0-2h86.2zm-256-48a5 5 0 1 1 0 2H0v-2h12.1zm185.8 34a5 5 0 1 1 0-2h86.2a5 5 0 1 1 0 2h-86.2zM258 12.1a5 5 0 1 1-2 0V0h2v12.1zm-64 208a5 5 0 1 1-2 0v-54.2a5 5 0 1 1 2 0v54.2zm48-198.2V80h62v2h-64V21.9a5 5 0 1 1 2 0zm16 16V64h46v2h-48V37.9a5 5 0 1 1 2 0zm-128 96V208h16v12.1a5 5 0 1 1-2 0V210h-16v-76.1a5 5 0 1 1 2 0zm-5.9-21.9a5 5 0 1 1 0 2H114v48H85.9a5 5 0 1 1 0-2H112v-48h12.1zm-6.2 130a5 5 0 1 1 0-2H176v-74.1a5 5 0 1 1 2 0V242h-60.1zm-16-64a5 5 0 1 1 0-2H114v48h10.1a5 5 0 1 1 0 2H112v-48h-10.1zM66 284.1a5 5 0 1 1-2 0V274H50v30h-2v-32h18v12.1zM236.1 176a5 5 0 1 1 0 2H226v94h48v32h-2v-30h-48v-98h12.1zm25.8-30a5 5 0 1 1 0-2H274v44.1a5 5 0 1 1-2 0V146h-10.1zm-64 96a5 5 0 1 1 0-2H208v-80h16v-14h-42.1a5 5 0 1 1 0-2H226v18h-16v80h-12.1zm86.2-210a5 5 0 1 1 0 2H272V0h2v32h10.1zM98 101.9V146H53.9a5 5 0 1 1 0-2H96v-42.1a5 5 0 1 1 2 0zM53.9 34a5 5 0 1 1 0-2H80V0h2v34H53.9zm60.1 3.9V66H82v64H69.9a5 5 0 1 1 0-2H80V64h32V37.9a5 5 0 1 1 2 0zM101.9 82a5 5 0 1 1 0-2H128V37.9a5 5 0 1 1 2 0V82h-28.1zm16-64a5 5 0 1 1 0-2H146v44.1a5 5 0 1 1-2 0V18h-26.1zm102.2 270a5 5 0 1 1 0 2H98v14h-2v-16h124.1zM242 149.9V160h16v34h-16v62h48v48h-2v-46h-48v-66h16v-30h-16v-12.1a5 5 0 1 1 2 0zM53.9 18a5 5 0 1 1 0-2H64V2H48V0h18v18H53.9zm112 32a5 5 0 1 1 0-2H192V0h50v2h-48v48h-28.1zm-48-48a5 5 0 0 1-9.8-2h2.07a3 3 0 1 0 5.66 0H178v34h-18V21.9a5 5 0 1 1 2 0V32h14V2h-58.1zm0 96a5 5 0 1 1 0-2H137l32-32h39V21.9a5 5 0 1 1 2 0V66h-40.17l-32 32H117.9zm28.1 90.1a5 5 0 1 1-2 0v-76.51L175.59 80H224V21.9a5 5 0 1 1 2 0V82h-49.59L146 112.41v75.69zm16 32a5 5 0 1 1-2 0v-99.51L184.59 96H300.1a5 5 0 0 1 3.9-3.9v2.07a3 3 0 0 0 0 5.66v2.07a5 5 0 0 1-3.9-3.9H185.41L162 121.41v98.69zm-144-64a5 5 0 1 1-2 0v-3.51l48-48V48h32V0h2v50H66v55.41l-48 48v2.69zM50 53.9v43.51l-48 48V208h26.1a5 5 0 1 1 0 2H0v-65.41l48-48V53.9a5 5 0 1 1 2 0zm-16 16V89.41l-34 34v-2.82l32-32V69.9a5 5 0 1 1 2 0zM12.1 32a5 5 0 1 1 0 2H9.41L0 43.41V40.6L8.59 32h3.51zm265.8 18a5 5 0 1 1 0-2h18.69l7.41-7.41v2.82L297.41 50H277.9zm-16 160a5 5 0 1 1 0-2H288v-71.41l16-16v2.82l-14 14V210h-28.1zm-208 32a5 5 0 1 1 0-2H64v-22.59L40.59 194H21.9a5 5 0 1 1 0-2H41.41L66 216.59V242H53.9zm150.2 14a5 5 0 1 1 0 2H96v-56.6L56.6 162H37.9a5 5 0 1 1 0-2h19.5L98 200.6V256h106.1zm-150.2 2a5 5 0 1 1 0-2H80v-46.59L48.59 178H21.9a5 5 0 1 1 0-2H49.41L82 208.59V258H53.9zM34 39.8v1.61L9.41 66H0v-2h8.59L32 40.59V0h2v39.8zM2 300.1a5 5 0 0 1 3.9 3.9H3.83A3 3 0 0 0 0 302.17V256h18v48h-2v-46H2v42.1zM34 241v63h-2v-62H0v-2h34v1zM17 18H0v-2h16V0h2v18h-1zm273-2h14v2h-16V0h2v16zm-32 273v15h-2v-14h-14v14h-2v-16h18v1zM0 92.1A5.02 5.02 0 0 1 6 97a5 5 0 0 1-6 4.9v-2.07a3 3 0 1 0 0-5.66V92.1zM80 272h2v32h-2v-32zm37.9 32h-2.07a3 3 0 0 0-5.66 0h-2.07a5 5 0 0 1 9.8 0zM5.9 0A5.02 5.02 0 0 1 0 5.9V3.83A3 3 0 0 0 3.83 0H5.9zm294.2 0h2.07A3 3 0 0 0 304 3.83V5.9a5 5 0 0 1-3.9-5.9zm3.9 300.1v2.07a3 3 0 0 0-1.83 1.83h-2.07a5 5 0 0 1 3.9-3.9zM97 100a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0-16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-48 32a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm32 48a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-16 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm32-16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0-32a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16 32a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm32 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0-16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-16-64a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16 96a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16-144a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 32a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16-32a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16-16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-96 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16-32a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm96 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-16-64a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16-16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-32 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0-16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-16 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-16 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-16 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM49 36a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-32 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm32 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM33 68a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16-48a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 240a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16 32a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-16-64a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-16-32a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm80-176a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-16-16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm32 48a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16-16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0-32a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm112 176a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-16 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM17 180a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0-32a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM17 84a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm32 64a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16-16a3 3 0 1 0 0-6 3 3 0 0 0 0 6z'%3E%3C/path%3E%3C/svg%3E");}
+        .fm-login-page .brand{ width:121px;overflow:hidden;margin:0 auto;position:relative;z-index:1}
+        .fm-login-page .brand img{ width:100%}
+        .fm-login-page .card-wrapper{ width:360px;margin-top:10%;}
+        .fm-login-page .card{ border-color:transparent;box-shadow:0 4px 8px rgba(0,0,0,.05)}
+        .fm-login-page .card-title{ margin-bottom:1.5rem;font-size:24px;font-weight:400;}
+        .fm-login-page .form-control{ border-width:2.3px}
+        .fm-login-page .form-group label{ width:100%}
+        .fm-login-page .btn.btn-block{ padding:12px 10px}
+        .fm-login-page .footer{ margin:40px 0;color:#888;text-align:center}
+        @media screen and (max-width:425px){ 
+            .fm-login-page .card-wrapper{ width:90%;margin:0 auto;margin-top:10%;}
         }
-        @media screen and (max-width: 320px) {
-            .fm-login-page .card.fat{padding:0}
-            .fm-login-page .card.fat .card-body{padding:15px}
+        @media screen and (max-width:320px){ 
+            .fm-login-page .card.fat{ padding:0}
+            .fm-login-page .card.fat .card-body{ padding:15px}
         }
-        .message{padding:4px 7px;border:1px solid #ddd;background-color:#fff}
-        .message.ok{border-color:green;color:green}
-        .message.error{border-color:red;color:red}
-        .message.alert{border-color:orange;color:orange}
+        .message{ padding:4px 7px;border:1px solid #ddd;background-color:#fff}
+        .message.ok{ border-color:green;color:green}
+        .message.error{ border-color:red;color:red}
+        .message.alert{ border-color:orange;color:orange}
     </style>
 </head>
 <body class="fm-login-page">
@@ -2857,8 +3229,8 @@ global $lang, $root_url;
     {
     ?>
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.slim.min.js"></script>
-<script src="https://lib.sinaapp.com/js/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="https://lib.sinaapp.com/js/jquery/3.1.0/jquery-3.1.0.slim.min.js"></script>
+<script src="https://lib.sinaapp.com/js/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>
 <?php
@@ -2875,7 +3247,7 @@ header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
 header("Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0");
 header("Pragma: no-cache");
 
-global $lang, $root_url, $sticky_navbar;
+global $lang, $root_url, $sticky_navbar, $favicon_path;
 $isStickyNavBar = $sticky_navbar ? 'navbar-fixed' : 'navbar-normal';
 ?>
 <!DOCTYPE html>
@@ -2887,276 +3259,130 @@ $isStickyNavBar = $sticky_navbar ? 'navbar-fixed' : 'navbar-normal';
     <meta name="author" content="CCP Programmers">
     <meta name="robots" content="noindex, nofollow">
     <meta name="googlebot" content="noindex">
-    <link rel="icon" href="<?php echo $root_url ?>?img=favicon" type="image/png">
-    <title>H3K | Tiny File Manager</title>
-    <link rel="stylesheet" href="https://lib.sinaapp.com/js/bootstrap/4.0.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css">
-    <link rel="stylesheet" href="https://cdn.bootcss.com/ekko-lightbox/5.3.0/ekko-lightbox.css" />
+    <link rel="icon" href="<?php echo fm_enc($favicon_path) ?>" type="image/png">
+    <title><?php echo fm_enc(APP_TITLE) ?></title>
+    <link rel="stylesheet" href="https://lib.sinaapp.com/js/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.css" />
     <?php if (FM_USE_HIGHLIGHTJS): ?>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/<?php echo FM_HIGHLIGHTJS_STYLE ?>.min.css">
+    <link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/9.15.10/styles/<?php echo FM_HIGHLIGHTJS_STYLE ?>.min.css">
     <?php endif; ?>
     <style>
-        body {
-            font-size: 14px;
-            color: #222;
-            background: #F7F7F7;
+        body { font-size:14px;color:#222;background:#F7F7F7; }
+        body.navbar-fixed { margin-top:55px; }
+        a:hover, a:visited, a:focus { text-decoration:none !important; }
+        * { -webkit-border-radius:0 !important;-moz-border-radius:0 !important;border-radius:0 !important; }
+        .filename, td, th { white-space:nowrap  }
+        .navbar-brand { font-weight:bold; }
+        .nav-item.avatar a { cursor:pointer;text-transform:capitalize; }
+        .nav-item.avatar a > i { font-size:15px; }
+        .nav-item.avatar .dropdown-menu a { font-size:13px; }
+        #search-addon { font-size:12px;border-right-width:0; }
+        #search-addon2 { background:transparent;border-left:0; }
+        .bread-crumb { color:#cccccc;font-style:normal; }
+        #main-table .filename a { color:#222222; }
+        .table td, .table th { vertical-align:middle !important; }
+        .table .custom-checkbox-td .custom-control.custom-checkbox, .table .custom-checkbox-header .custom-control.custom-checkbox { min-width:18px; }
+        .table-sm td, .table-sm th { padding:.4rem; }
+        .table-bordered td, .table-bordered th { border:1px solid #f1f1f1; }
+        .hidden { display:none  }
+        pre.with-hljs { padding:0  }
+        pre.with-hljs code { margin:0;border:0;overflow:visible  }
+        code.maxheight, pre.maxheight { max-height:512px  }
+        .fa.fa-caret-right { font-size:1.2em;margin:0 4px;vertical-align:middle;color:#ececec  }
+        .fa.fa-home { font-size:1.3em;vertical-align:bottom  }
+        .path { margin-bottom:10px  }
+        form.dropzone { min-height:200px;border:2px dashed #007bff;line-height:6rem; }
+        .right { text-align:right  }
+        .center, .close, .login-form { text-align:center  }
+        .message { padding:4px 7px;border:1px solid #ddd;background-color:#fff  }
+        .message.ok { border-color:green;color:green  }
+        .message.error { border-color:red;color:red  }
+        .message.alert { border-color:orange;color:orange  }
+        .preview-img { max-width:100%;background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAKklEQVR42mL5//8/Azbw+PFjrOJMDCSCUQ3EABZc4S0rKzsaSvTTABBgAMyfCMsY4B9iAAAAAElFTkSuQmCC)  }
+        .inline-actions > a > i { font-size:1em;margin-left:5px;background:#3785c1;color:#fff;padding:3px;border-radius:3px  }
+        .preview-video { position:relative;max-width:100%;height:0;padding-bottom:62.5%;margin-bottom:10px  }
+        .preview-video video { position:absolute;width:100%;height:100%;left:0;top:0;background:#000  }
+        .compact-table { border:0;width:auto  }
+        .compact-table td, .compact-table th { width:100px;border:0;text-align:center  }
+        .compact-table tr:hover td { background-color:#fff  }
+        .filename { max-width:420px;overflow:hidden;text-overflow:ellipsis  }
+        .break-word { word-wrap:break-word;margin-left:30px  }
+        .break-word.float-left a { color:#7d7d7d  }
+        .break-word + .float-right { padding-right:30px;position:relative  }
+        .break-word + .float-right > a { color:#7d7d7d;font-size:1.2em;margin-right:4px  }
+        #editor { position:absolute;right:15px;top:100px;bottom:15px;left:15px  }
+        @media (max-width:481px) { 
+            #editor { top:150px; }
         }
-        body.navbar-fixed {
-            margin-top: 55px;
+        #normal-editor { border-radius:3px;border-width:2px;padding:10px;outline:none; }
+        .btn-2 { border-radius:0;padding:3px 6px;font-size:small; }
+        li.file:before,li.folder:before { font:normal normal normal 14px/1 FontAwesome;content:"\f016";margin-right:5px }
+        li.folder:before { content:"\f114" }
+        i.fa.fa-folder-o { color:#0157b3 }
+        i.fa.fa-picture-o { color:#26b99a }
+        i.fa.fa-file-archive-o { color:#da7d7d }
+        .btn-2 i.fa.fa-file-archive-o { color:inherit }
+        i.fa.fa-css3 { color:#f36fa0 }
+        i.fa.fa-file-code-o { color:#007bff }
+        i.fa.fa-code { color:#cc4b4c }
+        i.fa.fa-file-text-o { color:#0096e6 }
+        i.fa.fa-html5 { color:#d75e72 }
+        i.fa.fa-file-excel-o { color:#09c55d }
+        i.fa.fa-file-powerpoint-o { color:#f6712e }
+        i.go-back { font-size:1.2em;color:#007bff; }
+        .main-nav { padding:0.2rem 1rem;box-shadow:0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12), 0 2px 4px -1px rgba(0, 0, 0, .2)  }
+        .dataTables_filter { display:none; }
+        table.dataTable thead .sorting { cursor:pointer;background-repeat:no-repeat;background-position:center right;background-image:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAQAAADYWf5HAAAAkElEQVQoz7XQMQ5AQBCF4dWQSJxC5wwax1Cq1e7BAdxD5SL+Tq/QCM1oNiJidwox0355mXnG/DrEtIQ6azioNZQxI0ykPhTQIwhCR+BmBYtlK7kLJYwWCcJA9M4qdrZrd8pPjZWPtOqdRQy320YSV17OatFC4euts6z39GYMKRPCTKY9UnPQ6P+GtMRfGtPnBCiqhAeJPmkqAAAAAElFTkSuQmCC'); }
+        table.dataTable thead .sorting_asc { cursor:pointer;background-repeat:no-repeat;background-position:center right;background-image:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAZ0lEQVQ4y2NgGLKgquEuFxBPAGI2ahhWCsS/gDibUoO0gPgxEP8H4ttArEyuQYxAPBdqEAxPBImTY5gjEL9DM+wTENuQahAvEO9DMwiGdwAxOymGJQLxTyD+jgWDxCMZRsEoGAVoAADeemwtPcZI2wAAAABJRU5ErkJggg=='); }
+        table.dataTable thead .sorting_desc { cursor:pointer;background-repeat:no-repeat;background-position:center right;background-image:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAZUlEQVQ4y2NgGAWjYBSggaqGu5FA/BOIv2PBIPFEUgxjB+IdQPwfC94HxLykus4GiD+hGfQOiB3J8SojEE9EM2wuSJzcsFMG4ttQgx4DsRalkZENxL+AuJQaMcsGxBOAmGvopk8AVz1sLZgg0bsAAAAASUVORK5CYII='); }
+        table.dataTable thead tr:first-child th.custom-checkbox-header:first-child { background-image:none; }
+        .footer-action li { margin-bottom:10px; }
+        .app-v-title { font-size:24px;font-weight:300;letter-spacing:-.5px;text-transform:uppercase; }
+        hr.custom-hr { border-top:1px dashed #8c8b8b;border-bottom:1px dashed #fff; }
+        .ekko-lightbox .modal-dialog { max-width:98%; }
+        .ekko-lightbox-item.fade.in.show .row { background:#fff; }
+        .ekko-lightbox-nav-overlay { display:flex !important;opacity:1 !important;height:auto !important;top:50%; }
+        .ekko-lightbox-nav-overlay a { opacity:1 !important;width:auto !important;text-shadow:none !important;color:#3B3B3B; }
+        .ekko-lightbox-nav-overlay a:hover { color:#20507D; }
+        #snackbar { visibility:hidden;min-width:250px;margin-left:-125px;background-color:#333;color:#fff;text-align:center;border-radius:2px;padding:16px;position:fixed;z-index:1;left:50%;bottom:30px;font-size:17px; }
+        #snackbar.show { visibility:visible;-webkit-animation:fadein 0.5s, fadeout 0.5s 2.5s;animation:fadein 0.5s, fadeout 0.5s 2.5s; }
+        @-webkit-keyframes fadein { from { bottom:0;opacity:0; }
+        to { bottom:30px;opacity:1; }
         }
-        a:hover, a:visited, a:focus {
-            text-decoration: none !important;
+        @keyframes fadein { from { bottom:0;opacity:0; }
+        to { bottom:30px;opacity:1; }
         }
-        * {
-            -webkit-border-radius: 0 !important;
-            -moz-border-radius: 0 !important;
-            border-radius: 0 !important;
+        @-webkit-keyframes fadeout { from { bottom:30px;opacity:1; }
+        to { bottom:0;opacity:0; }
         }
-        .filename, td, th {
-            white-space: nowrap
+        @keyframes fadeout { from { bottom:30px;opacity:1; }
+        to { bottom:0;opacity:0; }
         }
-        .navbar-brand {
-            font-weight: bold;
+        #main-table span.badge { border-bottom:2px solid #f8f9fa }
+        #main-table span.badge:nth-child(1) { border-color:#df4227 }
+        #main-table span.badge:nth-child(2) { border-color:#f8b600 }
+        #main-table span.badge:nth-child(3) { border-color:#00bd60 }
+        #main-table span.badge:nth-child(4) { border-color:#4581ff }
+        #main-table span.badge:nth-child(5) { border-color:#ac68fc }
+        #main-table span.badge:nth-child(6) { border-color:#45c3d2 }
+        @media only screen and (min-device-width:768px) and (max-device-width:1024px) and (orientation:landscape) and (-webkit-min-device-pixel-ratio:2) { .navbar-collapse .col-xs-6.text-right { padding:0; }
         }
-        .nav-item.avatar a {
-            cursor: pointer;
-            text-transform: capitalize;
+        .btn.active.focus,.btn.active:focus,.btn.focus,.btn.focus:active,.btn:active:focus,.btn:focus { outline:0!important;outline-offset:0!important;background-image:none!important;-webkit-box-shadow:none!important;box-shadow:none!important }
+        .lds-facebook { display:none;position:relative;width:64px;height:64px }
+        .lds-facebook div,.lds-facebook.show-me { display:inline-block }
+        .lds-facebook div { position:absolute;left:6px;width:13px;background:#007bff;animation:lds-facebook 1.2s cubic-bezier(0,.5,.5,1) infinite }
+        .lds-facebook div:nth-child(1) { left:6px;animation-delay:-.24s }
+        .lds-facebook div:nth-child(2) { left:26px;animation-delay:-.12s }
+        .lds-facebook div:nth-child(3) { left:45px;animation-delay:0 }
+        @keyframes lds-facebook { 0% { top:6px;height:51px }
+        100%,50% { top:19px;height:26px }
         }
-        .nav-item.avatar a > i {
-            font-size: 15px;
+        ul#search-wrapper { padding-left: 0;border: 1px solid #ecececcc; } ul#search-wrapper li { list-style: none; padding: 5px;border-bottom: 1px solid #ecececcc; }
+        ul#search-wrapper li:nth-child(odd){ background: #f9f9f9cc;}
+        .c-preview-img {
+            max-width: 300px;
         }
-        .nav-item.avatar .dropdown-menu a {
-            font-size: 13px;
-        }
-        #search-addon {
-            font-size: 12px;
-            border-right-width: 0;
-        }
-        #search-addon2 {
-            background: transparent;
-            border-left: 0;
-        }
-        .bread-crumb {
-            color: #cccccc;
-            font-style: normal;
-        }
-        #main-table .filename a {
-            color: #222222;
-        }
-        .table td, .table th {
-            vertical-align: middle !important;
-        }
-        .table .custom-checkbox-td .custom-control.custom-checkbox, .table .custom-checkbox-header .custom-control.custom-checkbox {
-            padding: 0;
-            min-width: 18px;
-        }
-        .hidden {
-            display: none
-        }
-        pre.with-hljs {
-            padding: 0
-        }
-        pre.with-hljs code {
-            margin: 0;
-            border: 0;
-            overflow: visible
-        }
-        code.maxheight, pre.maxheight {
-            max-height: 512px
-        }
-        .fa.fa-caret-right {
-            font-size: 1.2em;
-            margin: 0 4px;
-            vertical-align: middle;
-            color: #ececec
-        }
-        .fa.fa-home {
-            font-size: 1.3em;
-            vertical-align: bottom
-        }
-        .path {
-            margin-bottom: 10px
-        }
-        form.dropzone {
-            min-height: 200px;
-            border: 2px dashed #007bff;
-            line-height: 6rem;
-        }
-        .right {
-            text-align: right
-        }
-        .center, .close, .login-form {
-            text-align: center
-        }
-        .message {
-            padding: 4px 7px;
-            border: 1px solid #ddd;
-            background-color: #fff
-        }
-        .message.ok {
-            border-color: green;
-            color: green
-        }
-        .message.error {
-            border-color: red;
-            color: red
-        }
-        .message.alert {
-            border-color: orange;
-            color: orange
-        }
-        .preview-img {
-            max-width: 100%;
-            background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAKklEQVR42mL5//8/Azbw+PFjrOJMDCSCUQ3EABZc4S0rKzsaSvTTABBgAMyfCMsY4B9iAAAAAElFTkSuQmCC)
-        }
-        .inline-actions > a > i {
-            font-size: 1em;
-            margin-left: 5px;
-            background: #3785c1;
-            color: #fff;
-            padding: 3px;
-            border-radius: 3px
-        }
-        .preview-video {
-            position: relative;
-            max-width: 100%;
-            height: 0;
-            padding-bottom: 62.5%;
-            margin-bottom: 10px
-        }
-        .preview-video video {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            left: 0;
-            top: 0;
-            background: #000
-        }
-        .compact-table {
-            border: 0;
-            width: auto
-        }
-        .compact-table td, .compact-table th {
-            width: 100px;
-            border: 0;
-            text-align: center
-        }
-        .compact-table tr:hover td {
-            background-color: #fff
-        }
-        .filename {
-            max-width: 420px;
-            overflow: hidden;
-            text-overflow: ellipsis
-        }
-        .break-word {
-            word-wrap: break-word;
-            margin-left: 30px
-        }
-        .break-word.float-left a {
-            color: #7d7d7d
-        }
-        .break-word + .float-right {
-            padding-right: 30px;
-            position: relative
-        }
-        .break-word + .float-right > a {
-            color: #7d7d7d;
-            font-size: 1.2em;
-            margin-right: 4px
-        }
-        #editor {
-            position: absolute;
-            right: 15px;
-            top: 100px;
-            bottom: 15px;
-            left: 15px
-        }
-        @media (max-width:481px) {
-            #editor {
-                top: 150px;
-            }
-        }
-        #normal-editor {
-            border-radius: 3px;
-            border-width: 2px;
-            padding: 10px;
-            outline: none;
-        }
-        .btn-2 {
-            border-radius: 0;
-            padding: 3px 6px;
-            font-size: small;
-        }
-        li.file:before,li.folder:before{font:normal normal normal 14px/1 FontAwesome;content:"\f016";margin-right:5px}li.folder:before{content:"\f114"}i.fa.fa-folder-o{color:#0157b3}i.fa.fa-picture-o{color:#26b99a}i.fa.fa-file-archive-o{color:#da7d7d}.btn-2 i.fa.fa-file-archive-o{color:inherit}i.fa.fa-css3{color:#f36fa0}i.fa.fa-file-code-o{color:#007bff}i.fa.fa-code{color:#cc4b4c}i.fa.fa-file-text-o{color:#0096e6}i.fa.fa-html5{color:#d75e72}i.fa.fa-file-excel-o{color:#09c55d}i.fa.fa-file-powerpoint-o{color:#f6712e}
-        i.go-back {
-            font-size: 1.2em;
-            color: #007bff;
-        }
-        .main-nav {
-            padding: 0.2rem 1rem;
-            box-shadow: 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12), 0 2px 4px -1px rgba(0, 0, 0, .2)
-        }
-        .dataTables_filter {
-            display: none;
-        }
-        table.dataTable thead .sorting {
-            cursor: pointer;
-            background-repeat: no-repeat;
-            background-position: center right;
-            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAQAAADYWf5HAAAAkElEQVQoz7XQMQ5AQBCF4dWQSJxC5wwax1Cq1e7BAdxD5SL+Tq/QCM1oNiJidwox0355mXnG/DrEtIQ6azioNZQxI0ykPhTQIwhCR+BmBYtlK7kLJYwWCcJA9M4qdrZrd8pPjZWPtOqdRQy320YSV17OatFC4euts6z39GYMKRPCTKY9UnPQ6P+GtMRfGtPnBCiqhAeJPmkqAAAAAElFTkSuQmCC');
-        }
-        table.dataTable thead .sorting_asc {
-            cursor: pointer;
-            background-repeat: no-repeat;
-            background-position: center right;
-            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAZ0lEQVQ4y2NgGLKgquEuFxBPAGI2ahhWCsS/gDibUoO0gPgxEP8H4ttArEyuQYxAPBdqEAxPBImTY5gjEL9DM+wTENuQahAvEO9DMwiGdwAxOymGJQLxTyD+jgWDxCMZRsEoGAVoAADeemwtPcZI2wAAAABJRU5ErkJggg==');
-        }
-        table.dataTable thead .sorting_desc {
-            cursor: pointer;
-            background-repeat: no-repeat;
-            background-position: center right;
-            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAZUlEQVQ4y2NgGAWjYBSggaqGu5FA/BOIv2PBIPFEUgxjB+IdQPwfC94HxLykus4GiD+hGfQOiB3J8SojEE9EM2wuSJzcsFMG4ttQgx4DsRalkZENxL+AuJQaMcsGxBOAmGvopk8AVz1sLZgg0bsAAAAASUVORK5CYII=');
-        }
-        table.dataTable thead tr:first-child th.custom-checkbox-header:first-child{
-            background-image: none;
-        }
-        .footer-action li {
-            margin-bottom: 10px;
-        }
-        .app-v-title {
-            font-size: 24px;
-            font-weight: 300;
-            letter-spacing: -.5px;
-            text-transform: uppercase;
-        }
-        hr.custom-hr {
-            border-top: 1px dashed #8c8b8b;
-            border-bottom: 1px dashed #fff;
-        }
-        .ekko-lightbox .modal-dialog { max-width: 98%; }
-        .ekko-lightbox-item.fade.in.show .row { background: #fff; }
-        .ekko-lightbox-nav-overlay{
-            display: flex !important;
-            opacity: 1 !important;
-            height: auto !important;
-            top: 50%;
-        }
-
-        .ekko-lightbox-nav-overlay a{
-            opacity: 1 !important;
-            width: auto !important;
-            text-shadow: none !important;
-            color: #3B3B3B;
-        }
-
-        .ekko-lightbox-nav-overlay a:hover{
-            color: #20507D;
-        }
-
-        @media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : landscape) and (-webkit-min-device-pixel-ratio: 2) { .navbar-collapse .col-xs-6.text-right { padding: 0; } }
-        .btn.active.focus,.btn.active:focus,.btn.focus,.btn.focus:active,.btn:active:focus,.btn:focus{outline:0!important;outline-offset:0!important;background-image:none!important;-webkit-box-shadow:none!important;box-shadow:none!important}
-        .lds-facebook{display:none;position:relative;width:64px;height:64px}.lds-facebook div,.lds-facebook.show-me{display:inline-block}.lds-facebook div{position:absolute;left:6px;width:13px;background:#007bff;animation:lds-facebook 1.2s cubic-bezier(0,.5,.5,1) infinite}.lds-facebook div:nth-child(1){left:6px;animation-delay:-.24s}.lds-facebook div:nth-child(2){left:26px;animation-delay:-.12s}.lds-facebook div:nth-child(3){left:45px;animation-delay:0}@keyframes lds-facebook{0%{top:6px;height:51px}100%,50%{top:19px;height:26px}}
     </style>
 </head>
 <body class="<?php echo $isStickyNavBar; ?>">
@@ -3197,6 +3423,33 @@ $isStickyNavBar = $sticky_navbar ? 'navbar-fixed' : 'navbar-normal';
     </div>
 
     <!-- Modal -->
+    <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title col-10" id="searchModalLabel">
+                <div class="input-group input-group">
+                    <input type="text" class="form-control" placeholder="<?php echo lng('Search') ?> a files" aria-label="<?php echo lng('Search') ?>" aria-describedby="search-addon3" id="advanced-search" autofocus required>
+                    <div class="input-group-append">
+                        <span class="input-group-text" id="search-addon3"><i class="fa fa-search"></i></span>
+                    </div>
+                </div>
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form action="" method="post">
+                <div class="lds-facebook"><div></div><div></div><div></div></div>
+                <ul id="search-wrapper">
+                    <p class="m-2">Search file in folder and subfolders...</p>
+                </ul>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
     <script type="text/html" id="js-tpl-modal">
         <div class="modal fade" id="js-ModalCenter-<%this.id%>" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -3229,23 +3482,20 @@ $isStickyNavBar = $sticky_navbar ? 'navbar-fixed' : 'navbar-normal';
     {
     ?>
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js"></script>
+<script src="https://lib.sinaapp.com/js/jquery/3.1.0/jquery-3.1.0.min.js"></script>
+<script src="https://lib.sinaapp.com/js/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="https://cdnjs.loli.net/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js"></script>
 <?php if (FM_USE_HIGHLIGHTJS): ?>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+    <script src="https://cdnjs.loli.net/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
     <script>hljs.initHighlightingOnLoad(); var isHighlightingEnabled = true;</script>
 <?php endif; ?>
 <script>
     $(document).on('click', '[data-toggle="lightbox"]', function(event) {
         event.preventDefault();
-        var reInitHighlight = function() { if(typeof isHighlightingEnabled !== "undefined" && isHighlightingEnabled) { setTimeout(function () { $('.ekko-lightbox-container pre code').each(function (i, e) { hljs.highlightBlock(e) }); }, 111); } };
+        var reInitHighlight = function() { if(typeof isHighlightingEnabled !== "undefined" && isHighlightingEnabled) { setTimeout(function () { $('.ekko-lightbox-container pre code').each(function (i, e) { hljs.highlightBlock(e) }); }, 555); } };
         $(this).ekkoLightbox({
-            alwaysShowClose: true,
-            showArrows: true,
-            onShown: function() { reInitHighlight(); },
-            onNavigate: function(direction, itemIndex) { reInitHighlight(); }
+            alwaysShowClose: true, showArrows: true, onShown: function() { reInitHighlight(); }, onNavigate: function(direction, itemIndex) { reInitHighlight(); }
         });
     });
     //TFM Config
@@ -3271,19 +3521,38 @@ $isStickyNavBar = $sticky_navbar ? 'navbar-fixed' : 'navbar-normal';
         var n = new XMLHttpRequest,
             a = "path=" + e + "&file=" + t + "&type=backup&ajax=true";
         return n.open("POST", "", !0), n.setRequestHeader("Content-type", "application/x-www-form-urlencoded"), n.onreadystatechange = function () {
-            4 == n.readyState && 200 == n.status && alert(n.responseText)
+            4 == n.readyState && 200 == n.status && toast(n.responseText)
         }, n.send(a), !1
     }
+    // Toast message
+    function toast(txt) { var x = document.getElementById("snackbar");x.innerHTML=txt;x.className = "show";setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000); }
     //Save file
     function edit_save(e, t) {
         var n = "ace" == t ? editor.getSession().getValue() : document.getElementById("normal-editor").value;
         if (n) {
-            var a = document.createElement("form");
-            a.setAttribute("method", "POST"), a.setAttribute("action", "");
-            var o = document.createElement("textarea");
-            o.setAttribute("type", "textarea"), o.setAttribute("name", "savedata");
-            var c = document.createTextNode(n);
-            o.appendChild(c), a.appendChild(o), document.body.appendChild(a), a.submit()
+            if(true){
+                var data = {ajax: true, content: n, type: 'save'};
+                
+                $.ajax({
+                    type: "POST",
+                    url: window.location,
+                    // The key needs to match your method's input parameter (case-sensitive).
+                    data: JSON.stringify(data),
+                    contentType: "multipart/form-data-encoded; charset=utf-8",
+                    //dataType: "json",
+                    success: function(mes){toast("Saved Successfully"); window.onbeforeunload = function() {return}},
+                    failure: function(mes) {toast("Error: try again");}
+                });
+                
+            }
+            else{
+                var a = document.createElement("form");
+                a.setAttribute("method", "POST"), a.setAttribute("action", "");
+                var o = document.createElement("textarea");
+                o.setAttribute("type", "textarea"), o.setAttribute("name", "savedata");
+                var c = document.createTextNode(n);
+                o.appendChild(c), a.appendChild(o), document.body.appendChild(a), a.submit()
+            }
         }
     }
     //Check latest version
@@ -3292,7 +3561,7 @@ $isStickyNavBar = $sticky_navbar ? 'navbar-fixed' : 'navbar-normal';
         if(window.config.version!=v){tplObj.content=window.config.newUpdate;}else{tplObj.content=window.config.noUpdate;}
         $('#wrapper').append(template(tpl,tplObj));$("#js-ModalCenter-1024").modal('show');}else{fm_get_config();}
     }
-    function show_new_pwd() { $(".js-new-pwd").toggleClass('hidden'); window.open("https://tinyfilemanager.github.io/docs/pwd.html", '_blank'); }
+    function show_new_pwd() { $(".js-new-pwd").toggleClass('hidden'); }
     //Save Settings
     function save_settings($this) {
         let form = $($this);
@@ -3329,6 +3598,45 @@ $isStickyNavBar = $sticky_navbar ? 'navbar-fixed' : 'navbar-normal';
             }
         }); return false;
     }
+    //Search template
+    function search_template(data) {
+        var response = "";
+        $.each(data, function (key, val) {
+            response += `<li><a href="?p=${val.path}&view=${val.name}">${val.path}/${val.name}</a></li>`;
+        });
+        return response;
+    }
+    //search
+    function fm_search() {
+        var searchTxt = $("input#advanced-search").val(), searchWrapper = $("ul#search-wrapper"), path = $("#js-search-modal").attr("href"), _html = "", $loader = $("div.lds-facebook");
+        if(!!searchTxt && searchTxt.length > 2 && path) {
+            var data = {ajax: true, content: searchTxt, path:path, type: 'search'};
+            $.ajax({
+                type: "POST",
+                url: window.location,
+                data: data,
+                beforeSend: function() {
+                    searchWrapper.html('');
+                    $loader.addClass('show-me');
+                },
+                success: function(data){
+                    $loader.removeClass('show-me');
+                    data = JSON.parse(data);
+                    if(data && data.length) {
+                        _html = search_template(data);
+                        searchWrapper.html(_html);
+                    } else { searchWrapper.html('<p class="m-2">No result found!<p>'); }
+                },
+                error: function(xhr) { $loader.removeClass('show-me'); searchWrapper.html('<p class="m-2">ERROR: Try again later!</p>'); },
+                failure: function(mes) { $loader.removeClass('show-me'); searchWrapper.html('<p class="m-2">ERROR: Try again later!</p>');}
+            });
+        } else { searchWrapper.html("OOPS: minimum 3 characters required!"); }
+    }
+
+    //on mouse hover image preview
+    !function(s){s.previewImage=function(e){var o=s(document),t=".previewImage",a=s.extend({xOffset:20,yOffset:-20,fadeIn:"fast",css:{padding:"5px",border:"1px solid #cccccc","background-color":"#fff"},eventSelector:"[data-preview-image]",dataKey:"previewImage",overlayId:"preview-image-plugin-overlay"},e);return o.off(t),o.on("mouseover"+t,a.eventSelector,function(e){s("p#"+a.overlayId).remove();var o=s("<p>").attr("id",a.overlayId).css("position","absolute").css("display","none").append(s('<img class="c-preview-img">').attr("src",s(this).data(a.dataKey)));a.css&&o.css(a.css),s("body").append(o),o.css("top",e.pageY+a.yOffset+"px").css("left",e.pageX+a.xOffset+"px").fadeIn(a.fadeIn)}),o.on("mouseout"+t,a.eventSelector,function(){s("#"+a.overlayId).remove()}),o.on("mousemove"+t,a.eventSelector,function(e){s("#"+a.overlayId).css("top",e.pageY+a.yOffset+"px").css("left",e.pageX+a.xOffset+"px")}),this},s.previewImage()}(jQuery);
+
+
     // Dom Ready Event
     $(document).ready( function () {
         //load config
@@ -3339,9 +3647,14 @@ $isStickyNavBar = $sticky_navbar ? 'navbar-fixed' : 'navbar-normal';
             _targets = (tableLng && tableLng == 7 ) ? [0, 4,5,6] : tableLng == 5 ? [0,4] : [3],
             mainTable = $('#main-table').DataTable({"paging":   false, "info":     false, "columnDefs": [{"targets": _targets, "orderable": false}]
         });
-        $('#search-addon').on( 'keyup', function () { //Search using custom input box
+        //search
+        $('#search-addon').on( 'keyup', function () {
             mainTable.search( this.value ).draw();
         });
+        $("input#advanced-search").on('keyup', function (e) {
+            if (e.keyCode === 13) { fm_search(); }
+        });
+        $('#search-addon3').on( 'click', function () { fm_search(); });
         //upload nav tabs
         $(".fm-upload-wrapper .card-header-tabs").on("click", 'a', function(e){
             e.preventDefault();let target=$(this).data('target');
@@ -3350,11 +3663,14 @@ $isStickyNavBar = $sticky_navbar ? 'navbar-fixed' : 'navbar-normal';
         });
     });
 </script>
-<?php if (isset($_GET['edit']) && isset($_GET['env']) && FM_EDIT_FILE): ?>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.1/ace.js"></script>
+<?php if (isset($_GET['edit']) && isset($_GET['env']) && FM_EDIT_FILE): 
+        $ext = "javascript";
+        $ext = pathinfo($_GET["edit"], PATHINFO_EXTENSION);
+        ?>
+    <script src="https://cdnjs.loli.net/ajax/libs/ace/1.4.1/ace.js"></script>
     <script>
         var editor = ace.edit("editor");
-        editor.getSession().setMode("ace/mode/javascript");
+        editor.getSession().setMode( {path:"ace/mode/<?php echo $ext; ?>", inline:true} );
         //editor.setTheme("ace/theme/twilight"); //Dark Theme
         function ace_commend (cmd) { editor.commands.exec(cmd, editor); }
         editor.commands.addCommands([{
@@ -3362,9 +3678,12 @@ $isStickyNavBar = $sticky_navbar ? 'navbar-fixed' : 'navbar-normal';
             exec: function(editor) { edit_save(this, 'ace'); }
         }]);
         function renderThemeMode() {
-            var $modeEl = $("select#js-ace-mode"), $themeEl = $("select#js-ace-theme"), optionNode = function(type, arr){ var $Option = ""; $.each(arr, function(i, val) { $Option += "<option value='"+type+i+"'>" + val + "</option>"; }); return $Option; };
-            if(window.config && window.config.aceMode) { $modeEl.html(optionNode("ace/mode/", window.config.aceMode)); }
-            if(window.config && window.config.aceTheme) { var lightTheme = optionNode("ace/theme/", window.config.aceTheme.bright), darkTheme = optionNode("ace/theme/", window.config.aceTheme.dark); $themeEl.html("<optgroup label=\"Bright\">"+lightTheme+"</optgroup><optgroup label=\"Dark\">"+darkTheme+"</optgroup>");}
+            var $modeEl = $("select#js-ace-mode"), $themeEl = $("select#js-ace-theme"), $fontSizeEl = $("select#js-ace-fontSize"), optionNode = function(type, arr){ var $Option = ""; $.each(arr, function(i, val) { $Option += "<option value='"+type+i+"'>" + val + "</option>"; }); return $Option; },
+                _data = {"aceTheme":{"bright":{"chrome":"Chrome","clouds":"Clouds","crimson_editor":"Crimson Editor","dawn":"Dawn","dreamweaver":"Dreamweaver","eclipse":"Eclipse","github":"GitHub","iplastic":"IPlastic","solarized_light":"Solarized Light","textmate":"TextMate","tomorrow":"Tomorrow","xcode":"XCode","kuroir":"Kuroir","katzenmilch":"KatzenMilch","sqlserver":"SQL Server"},"dark":{"ambiance":"Ambiance","chaos":"Chaos","clouds_midnight":"Clouds Midnight","dracula":"Dracula","cobalt":"Cobalt","gruvbox":"Gruvbox","gob":"Green on Black","idle_fingers":"idle Fingers","kr_theme":"krTheme","merbivore":"Merbivore","merbivore_soft":"Merbivore Soft","mono_industrial":"Mono Industrial","monokai":"Monokai","pastel_on_dark":"Pastel on dark","solarized_dark":"Solarized Dark","terminal":"Terminal","tomorrow_night":"Tomorrow Night","tomorrow_night_blue":"Tomorrow Night Blue","tomorrow_night_bright":"Tomorrow Night Bright","tomorrow_night_eighties":"Tomorrow Night 80s","twilight":"Twilight","vibrant_ink":"Vibrant Ink"}},"aceMode":{"javascript":"JavaScript","abap":"ABAP","abc":"ABC","actionscript":"ActionScript","ada":"ADA","apache_conf":"Apache Conf","asciidoc":"AsciiDoc","asl":"ASL","assembly_x86":"Assembly x86","autohotkey":"AutoHotKey","apex":"Apex","batchfile":"BatchFile","bro":"Bro","c_cpp":"C and C++","c9search":"C9Search","cirru":"Cirru","clojure":"Clojure","cobol":"Cobol","coffee":"CoffeeScript","coldfusion":"ColdFusion","csharp":"C#","csound_document":"Csound Document","csound_orchestra":"Csound","csound_score":"Csound Score","css":"CSS","curly":"Curly","d":"D","dart":"Dart","diff":"Diff","dockerfile":"Dockerfile","dot":"Dot","drools":"Drools","edifact":"Edifact","eiffel":"Eiffel","ejs":"EJS","elixir":"Elixir","elm":"Elm","erlang":"Erlang","forth":"Forth","fortran":"Fortran","fsharp":"FSharp","fsl":"FSL","ftl":"FreeMarker","gcode":"Gcode","gherkin":"Gherkin","gitignore":"Gitignore","glsl":"Glsl","gobstones":"Gobstones","golang":"Go","graphqlschema":"GraphQLSchema","groovy":"Groovy","haml":"HAML","handlebars":"Handlebars","haskell":"Haskell","haskell_cabal":"Haskell Cabal","haxe":"haXe","hjson":"Hjson","html":"HTML","html_elixir":"HTML (Elixir)","html_ruby":"HTML (Ruby)","ini":"INI","io":"Io","jack":"Jack","jade":"Jade","java":"Java","json":"JSON","jsoniq":"JSONiq","jsp":"JSP","jssm":"JSSM","jsx":"JSX","julia":"Julia","kotlin":"Kotlin","latex":"LaTeX","less":"LESS","liquid":"Liquid","lisp":"Lisp","livescript":"LiveScript","logiql":"LogiQL","lsl":"LSL","lua":"Lua","luapage":"LuaPage","lucene":"Lucene","makefile":"Makefile","markdown":"Markdown","mask":"Mask","matlab":"MATLAB","maze":"Maze","mel":"MEL","mixal":"MIXAL","mushcode":"MUSHCode","mysql":"MySQL","nix":"Nix","nsis":"NSIS","objectivec":"Objective-C","ocaml":"OCaml","pascal":"Pascal","perl":"Perl","perl6":"Perl 6","pgsql":"pgSQL","php_laravel_blade":"PHP (Blade Template)","php":"PHP","puppet":"Puppet","pig":"Pig","powershell":"Powershell","praat":"Praat","prolog":"Prolog","properties":"Properties","protobuf":"Protobuf","python":"Python","r":"R","razor":"Razor","rdoc":"RDoc","red":"Red","rhtml":"RHTML","rst":"RST","ruby":"Ruby","rust":"Rust","sass":"SASS","scad":"SCAD","scala":"Scala","scheme":"Scheme","scss":"SCSS","sh":"SH","sjs":"SJS","slim":"Slim","smarty":"Smarty","snippets":"snippets","soy_template":"Soy Template","space":"Space","sql":"SQL","sqlserver":"SQLServer","stylus":"Stylus","svg":"SVG","swift":"Swift","tcl":"Tcl","terraform":"Terraform","tex":"Tex","text":"Text","textile":"Textile","toml":"Toml","tsx":"TSX","twig":"Twig","typescript":"Typescript","vala":"Vala","vbscript":"VBScript","velocity":"Velocity","verilog":"Verilog","vhdl":"VHDL","visualforce":"Visualforce","wollok":"Wollok","xml":"XML","xquery":"XQuery","yaml":"YAML","django":"Django"},"fontSize":{8:8,10:10,11:11,12:12,13:13,14:14,15:15,16:16,17:17,18:18,20:20,22:22,24:24,26:26,30:30}};
+            if(_data && _data.aceMode) { $modeEl.html(optionNode("ace/mode/", _data.aceMode)); }
+            if(_data && _data.aceTheme) { var lightTheme = optionNode("ace/theme/", _data.aceTheme.bright), darkTheme = optionNode("ace/theme/", _data.aceTheme.dark); $themeEl.html("<optgroup label=\"Bright\">"+lightTheme+"</optgroup><optgroup label=\"Dark\">"+darkTheme+"</optgroup>");}
+            if(_data && _data.fontSize) { $fontSizeEl.html(optionNode("", _data.fontSize)); }
+            $fontSizeEl.val(12).change(); //set default font size in drop down
         }
 
         $(function(){
@@ -3386,18 +3705,21 @@ $isStickyNavBar = $sticky_navbar ? 'navbar-fixed' : 'navbar-normal';
                     }
                 }
             });
-            $("select#js-ace-mode, select#js-ace-theme").on("change", function(e){
+            $("select#js-ace-mode, select#js-ace-theme, select#js-ace-fontSize").on("change", function(e){
                 e.preventDefault();
                 let selectedValue = $(this).val(), selectionType = $(this).attr("data-type");
                 if(selectedValue && selectionType == "mode") {
                     editor.getSession().setMode(selectedValue);
                 } else if(selectedValue && selectionType == "theme") {
                     editor.setTheme(selectedValue);
+                }else if(selectedValue && selectionType == "fontSize") {
+                    editor.setFontSize(parseInt(selectedValue)); 
                 }
             });
         });
     </script>
 <?php endif; ?>
+<div id="snackbar"></div>
 </body>
 </html>
 <?php
@@ -3451,37 +3773,43 @@ function fm_show_image($img)
 function lng($txt) {
     global $lang;
 
-    // Chinese (Simplified)
-    $tr['ch']['AppName']        = 'Zdir';                $tr['ch']['AppTitle']           = 'Zdir';
-    $tr['ch']['Login']          = '登录';                 $tr['ch']['Username']           = '账号';
-    $tr['ch']['Password']       = '密码';                 $tr['ch']['Logout']             = '注销';
-    $tr['ch']['Move']           = '移动';                 $tr['ch']['Copy']               = '复制';
-    $tr['ch']['Save']           = '保存';                 $tr['ch']['SelectAll']          = '全选';
-    $tr['ch']['UnSelectAll']    = '取消全选';             $tr['ch']['File']               = '文件';
-    $tr['ch']['Back']           = '返回';                 $tr['ch']['Size']               = '大小';
-    $tr['ch']['Perms']          = '权限';                 $tr['ch']['Modified']           = '修改时间';
-    $tr['ch']['Owner']          = '所有人';               $tr['ch']['Search']             = '搜索';
-    $tr['ch']['NewItem']        = '新文件';               $tr['ch']['Folder']             = '文件夹';
-    $tr['ch']['Delete']         = '删除';                 $tr['ch']['Rename']             = '重命名';
-    $tr['ch']['CopyTo']         = '复制到';               $tr['ch']['DirectLink']         = '直链';
-    $tr['ch']['UploadingFiles'] = '上传文件';             $tr['ch']['ChangePermissions']  = '修改权限';
-    $tr['ch']['Copying']        = '复制';                 $tr['ch']['CreateNewItem']      = '创建新文件';
-    $tr['ch']['Name']           = '文件名';               $tr['ch']['AdvancedEditor']     = '高级编辑';
-    $tr['ch']['RememberMe']     = '记住我';               $tr['ch']['Actions']            = '动作';
-    $tr['ch']['Upload']         = '上传';                 $tr['ch']['Cancel']             = '取消';
-    $tr['ch']['InvertSelection']= '反选';                 $tr['ch']['DestinationFolder']  = '目标文件夹';
-    $tr['ch']['ItemType']       = '文件类型';             $tr['ch']['ItemName']           = '文件名称';
-    $tr['ch']['CreateNow']      = '创建';                 $tr['ch']['Download']           = '下载';
-    $tr['ch']['Open']           = '打开';                 $tr['ch']['UnZip']              = '解压';
-    $tr['ch']['UnZipToFolder']  = '解压至文件夹';          $tr['ch']['Edit']               = '编辑';
-    $tr['ch']['NormalEditor']   = '普通编辑';              $tr['ch']['BackUp']            = '备份';
-    $tr['ch']['SourceFolder']   = '源文件夹';              $tr['ch']['Files']              = '文件';
-    $tr['ch']['Move']           = '移动';                  $tr['ch']['Change']            = '修改';
-    $tr['ch']['Settings']       = '设置';                  $tr['ch']['Language']          = '语言';
-    $tr['ch']['MemoryUsed']     = '使用的内存';            $tr['ch']['PartitionSize']     = '分区大小';
-    $tr['ch']['ErrorReporting'] = '错误报告';              $tr['ch']['ShowHiddenFiles']   = '显示隐藏文件';
-    $tr['ch']['FreeOf']         = '免费的';                $tr['ch']['FullSize']             = '全尺寸';
-    $tr['ch']['Zip']            = 'Zip';                  $tr['ch']['Tar']                 = 'Tar';
+    // English Language
+    $tr['en']['AppName']        = 'Tiny File Manager';      $tr['en']['AppTitle']           = 'File Manager';
+    $tr['en']['Login']          = 'Sign in';                $tr['en']['Username']           = 'Username';
+    $tr['en']['Password']       = 'Password';               $tr['en']['Logout']             = 'Sign Out';
+    $tr['en']['Move']           = 'Move';                   $tr['en']['Copy']               = 'Copy';
+    $tr['en']['Save']           = 'Save';                   $tr['en']['SelectAll']          = 'Select all';
+    $tr['en']['UnSelectAll']    = 'Unselect all';           $tr['en']['File']               = 'File';
+    $tr['en']['Back']           = 'Back';                   $tr['en']['Size']               = 'Size';
+    $tr['en']['Perms']          = 'Perms';                  $tr['en']['Modified']           = 'Modified';
+    $tr['en']['Owner']          = 'Owner';                  $tr['en']['Search']             = 'Search';
+    $tr['en']['NewItem']        = 'New Item';               $tr['en']['Folder']             = 'Folder';
+    $tr['en']['Delete']         = 'Delete';                 $tr['en']['Rename']             = 'Rename';
+    $tr['en']['CopyTo']         = 'Copy to';                $tr['en']['DirectLink']         = 'Direct link';
+    $tr['en']['UploadingFiles'] = 'Upload Files';           $tr['en']['ChangePermissions']  = 'Change Permissions';
+    $tr['en']['Copying']        = 'Copying';                $tr['en']['CreateNewItem']      = 'Create New Item';
+    $tr['en']['Name']           = 'Name';                   $tr['en']['AdvancedEditor']     = 'Advanced Editor';
+    $tr['en']['RememberMe']     = 'Remember Me';            $tr['en']['Actions']            = 'Actions';
+    $tr['en']['Upload']         = 'Upload';                 $tr['en']['Cancel']             = 'Cancel';
+    $tr['en']['InvertSelection']= 'Invert Selection';       $tr['en']['DestinationFolder']  = 'Destination Folder';
+    $tr['en']['ItemType']       = 'Item Type';              $tr['en']['ItemName']           = 'Item Name';
+    $tr['en']['CreateNow']      = 'Create Now';             $tr['en']['Download']           = 'Download';
+    $tr['en']['Open']           = 'Open';                   $tr['en']['UnZip']              = 'UnZip';
+    $tr['en']['UnZipToFolder']  = 'UnZip to folder';        $tr['en']['Edit']               = 'Edit';
+    $tr['en']['NormalEditor']   = 'Normal Editor';          $tr['en']['BackUp']             = 'Back Up';
+    $tr['en']['SourceFolder']   = 'Source Folder';          $tr['en']['Files']              = 'Files';
+    $tr['en']['Move']           = 'Move';                   $tr['en']['Change']             = 'Change';
+    $tr['en']['Settings']       = 'Settings';               $tr['en']['Language']           = 'Language';
+    $tr['en']['MemoryUsed']     = 'Memory used';            $tr['en']['PartitionSize']      = 'Partition size';
+    $tr['en']['ErrorReporting'] = 'Error Reporting';        $tr['en']['ShowHiddenFiles']    = 'Show Hidden Files';
+    $tr['en']['Full size']      = 'Full size';              $tr['en']['Help']               = 'Help';
+    $tr['en']['Free of']        = 'Free of';                $tr['en']['Preview']            = 'Preview';
+    $tr['en']['Help Documents'] = 'Help Documents';         $tr['en']['Report Issue']       = 'Report Issue';
+    $tr['en']['Generate']       = 'Generate';               $tr['en']['FullSize']           = 'Full Size';
+    $tr['en']['FreeOf']         = 'free of';                $tr['en']['CalculateFolderSize']= 'Calculate folder size';
+    $tr['en']['ProcessID']      = 'Process ID';
+    $tr['en']['HideColumns']    = 'Hide Perms/Owner columns';
+    $tr['en']['Check Latest Version']= 'Check Latest Version'; $tr['en']['Generate new password hash'] = 'Generate new password hash';
 
     $i18n = fm_get_translations($tr);
     $tr = $i18n ? $i18n : $tr;

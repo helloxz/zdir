@@ -9,9 +9,11 @@
 
 	//获取目录
 	$dir = $_GET['dir'];
+	$dir = con_coding($dir,FALSE);
 	$dir = strip_tags($dir);
 	$dir = str_replace("\\","/",$dir);
 	$rel_path = $thedir."/".$dir;
+	
 	//获取markdown文件地址
 	//判断是否是首页
 	function is_home(){
@@ -23,6 +25,7 @@
 			return FALSE;
 		}
 	}
+	
 	
 	//echo $readme;
 	//对目录进行过滤
@@ -124,27 +127,36 @@
 						<!--遍历导航-->
 						<?php foreach( $navigation as $menu )
 						{
+							$menu = con_coding($menu);
 							$remenu = $remenu.'/'.$menu;
 							
 							if($remenu == '/'){
 								$remenu = $menu;
 							}
 						?>
+						
 						<a href="./index.php?dir=<?php echo $remenu; ?>"><?php echo $menu; ?></a> / 
 						<?php } ?>
 					</p>
 				</div>
 				<!--使用说明-->
-				<!--<div class="layui-col-lg12" style = "margin-top:1em;">
+				<?php 
+				//判断readme文件是否存在
+					$readme_dir = $fullpath = $thedir.'/'.$dir.'/'.$showdir;
+					if( is_file($readme_dir.'/readme.md') || (is_file($readme_dir.'/README.md')) )	{	
+					$readme = con_coding($readme);
+				?>
+				<div class="layui-col-lg12" style = "margin-top:1em;">
 					<div class="layui-collapse">
 					  <div class="layui-colla-item">
 					    <h2 class="layui-colla-title">使用说明（必看）</h2>
 					    <div class="layui-colla-content">
-						    <iframe src="<?php echo './functions/viewmd.php?file='.$readme; ?>" width="100%" height="600px" name="" frameborder = "0" align="middle"></iframe>
+						    <iframe src="<?php echo './functions/readme.php?file='.$readme; ?>" width="100%" height="600px" name="" frameborder = "0" align="middle"></iframe>
 					    </div>
 					  </div>
 					</div>
-				</div>-->
+				</div>
+				<?php } ?>
 				<!--使用说明END-->
 			</div>
 		</div>
@@ -175,22 +187,24 @@
 					  <tbody>
 					    <?php foreach( $listdir as $showdir ) {
 						    //防止中文乱码
-						    //$showdir = iconv('gb2312' , 'utf-8' , $showdir );
+						    //$showdir = con_coding($showdir);
 						    $fullpath = $thedir.'/'.$dir.'/'.$showdir;
+						    
 						    $fullpath = str_replace("\\","\/",$fullpath);
 						    $fullpath = str_replace("//","/",$fullpath);
+						    //$fullpath = con_coding($fullpath,FALSE);
 						    
+						    //var_dump($fullpath);
 						    //获取文件修改时间
 						    $ctime = filemtime($fullpath);
 						    $ctime = date("Y-m-d H:i",$ctime);
 
-						    
 						    //搜索忽略的目录，如果包含.php 一并排除
 						    if( strripos($showdir,".php") ) {
 							    continue;
 						    }
 						    //判读文件是否是目录,当前路径 + 获取到的路径 + 遍历后的目录
-						    if(is_dir($thedir.'/'.$dir.'/'.$showdir)){
+						    if(is_dir($fullpath)){
 							    $suffix = '';
 							    //设置上级目录
 							    if($showdir == '..'){
@@ -222,10 +236,16 @@
 							    $fsize = ceil ($fsize / 1024);
 							    if($fsize >= 1024) {
 								    $fsize = $fsize / 1024;
-								    $fsize = round($fsize,2).'MB';
+								    if( $fsize >= 1024 ) {
+									    $fsize = $fsize / 1024;
+									    $fsize = round($fsize,2).'Gb';
+								    }
+								    else{
+									    $fsize = round($fsize,2).'Mb';
+								    }
 							    }
 							    else{
-								    $fsize = $fsize.'KB';
+								    $fsize = $fsize.'Kb';
 							    }
 							    $type = 'file';
 							    #$info = "<a href = ''><i class='fa fa-info-circle' aria-hidden='true'></i></a>";
@@ -247,8 +267,14 @@
 							}
 						    $i++;
 						?>
+						
 					    <tr id = "id<?php echo $i; ?>">
 						    <td>
+							    <?php
+							    	$showdir = con_coding($showdir);
+							    	$fullpath = con_coding($fullpath);
+							    	$url = con_coding($url);
+							    ?>
 							    <!--判断文件是否是图片-->
 							    <?php if(($suffix == 'jpg') || ($suffix == 'jpeg') || ($suffix == 'png') || ($suffix == 'gif') || ($suffix == 'bmp')){
 
@@ -264,24 +290,6 @@
 							    <?php } ?>
 						    </td>
 						    <td id = "info" class = "layui-hide-xs">
-							    <!--如果是readme.md-->
-							    <?php if(($showdir == 'README.md') || ($showdir == 'readme.md')){ ?>
-								<a class = "layui-btn layui-btn-xs" href="javascript:;" onclick = "newmd('<?php echo $fullpath; ?>')" title = "点此查看使用说明">使用说明</a>
-								<!--视频播放器-->
-							    <?php }elseif($zdir->video($url)){
-
-							    ?>
-								<a class = "layui-btn layui-btn-xs" href="javascript:;" onclick = "video('<?php echo $url ?>')">播放</a>
-								<!-- office在线预览 -->
-								<?php }elseif($zdir->office($url)){
-
-								?>
-								<a class = "layui-btn layui-btn-xs" href="javascript:;" onclick = "office('<?php echo $url ?>')">预览</a>
-								<!--文档查看器-->
-							    <?php }elseif($zdir->is_text($url)){
-							    ?>
-								<a class = "layui-btn layui-btn-xs" href="javascript:;" onclick = "viewtext('<?php echo $fullpath; ?>')">查看</a>
-							    <?php } ?>
 							    <!--如果是文件-->
 							    <?php if($type == 'file'){ ?>
 									<a href="javascript:;" title = "查看文件hash" onclick = "filehash('<?php echo $showdir; ?>','<?php echo $fullpath; ?>')"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
@@ -291,14 +299,28 @@
 						    <td class = "layui-hide-xs"><?php echo $ctime; ?></td>
 						    <td><?php echo $fsize; ?></td>
 						    <td class = "layui-hide-xs">
+							    <!--复制链接-->
 							    <?php if($fsize != '-'){ ?>
-								<a href="javascript:;" class = "layui-btn layui-btn-xs" onclick = "copy('<?php echo $url ?>')">复制</a>
+								<a href="javascript:;" class = "layui-btn layui-btn-xs layui-btn-normal" title = "复制链接" onclick = "copy('<?php echo $url ?>')"><i class="fa fa-copy"></i></a>
+								<a download href="<?php echo $url ?>" class = "layui-btn layui-btn-xs layui-btn-normal" title = "点击下载"><i class="fa fa-download"></i></a>
 							    <?php } ?>
-							    <!--如果是管理模式-->
-							    <!--管理模式END-->
+							    <!--如果是音乐文件-->
+							    <?php if( $zdir->music($url) ) { ?>
+								<a class = "layui-btn layui-btn-xs layui-btn-normal" title = "点此播放" href="javascript:;" onclick = "music('<?php echo $url ?>')"><i class="fa fa-play-circle"></i></a>
+							    <?php } ?>
+							    <!--音乐文件END-->
 							    <!--如果是markdown文件-->
 							    <?php if(($suffix == 'md') && ($suffix != null)){ ?>
-								&nbsp;&nbsp;<a href="javascript:;" onclick = "newmd('<?php echo $fullpath; ?>')" title = "点击查看"><i class="fa fa-eye fa-lg"></i></a> 
+								<a href="javascript:;" class = "layui-btn layui-btn-xs layui-btn-normal" onclick = "newmd('<?php echo $fullpath; ?>')" title = "点击查看"><i class="fa fa-eye"></i></a> 
+							    <?php }else if( $zdir->video($url) ){ ?>
+								<a class = "layui-btn layui-btn-xs layui-btn-normal" title = "点此播放" href="javascript:;" onclick = "video('<?php echo $url ?>')"><i class="fa fa-play-circle"></i></a>
+								<!--文本查看器-->
+							    <?php }
+							    else if( $zdir->is_text($url) ){ ?>
+								<a class = "layui-btn layui-btn-xs layui-btn-normal" title = "点此查看" href="javascript:;" onclick = "viewtext('<?php echo $fullpath; ?>')"><i class="fa fa-eye"></i></a>
+							    <?php }else if( $zdir->office($url) ) { ?>
+							    <!--查看Office-->
+								<a class = "layui-btn layui-btn-xs layui-btn-normal" href="javascript:;" title = "点此查看" onclick = "office('<?php echo $url ?>')"><i class="fa fa-eye"></i></a>
 							    <?php } ?>
 						    </td>
 					    </tr>

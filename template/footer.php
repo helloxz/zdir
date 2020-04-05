@@ -3,7 +3,7 @@
 		<div class = "layui-container">
 			<div class = "layui-row">
 				<div class = "layui-col-lg12">
-				Copyright © 2017-2019 Powered by <a href="https://github.com/helloxz/zdir" target = "_blank">Zdir</a> | Author <a href="https://www.xiaoz.me/" target = "_blank">xiaoz.me</a>
+				Copyright © 2017-2020 Powered by <a href="https://github.com/helloxz/zdir" target = "_blank">Zdir</a> | Author <a href="https://www.xiaoz.me/" target = "_blank">xiaoz.me</a>
 				</div>
 			</div>
 		</div>

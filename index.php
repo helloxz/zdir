@@ -13,7 +13,11 @@ $c = strip_tags($c);
 //读取版本号
 $version = @file_get_contents("./functions/version.txt");
 //载入配置文件
-include_once("./config.php");
+if( !file_exists('./config.php') ) {
+	exit('<h3>配置文件不存在，请将config.simple.php复制一份并命名为config.php</h3>');
+}
+
+require("./config.php");
 //载入zdir类
 include_once("./functions/zdir.class.php");
 //获取密码

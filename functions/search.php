@@ -9,6 +9,7 @@
 	$html = file_get_contents("./functions/caches/indexes.html");
 
 	$s = @$_GET['s'];
+	$s = con_coding($s,FALSE);
 	$s = trim($s);
 	$s = strip_tags($s);
 	$s = strtolower($s);
@@ -28,7 +29,7 @@
 			}
 		}
 	}
-	
+	$s = con_coding($s);
 ?>
 <?php
 	//载入页头
@@ -81,6 +82,7 @@
 						    else{
 							    $fsize = $fsize.'KB';
 						    }
+						    $name = con_coding($name);
 						?>
 					    <tr id = "id<?php echo $i; ?>">
 						    <td>
