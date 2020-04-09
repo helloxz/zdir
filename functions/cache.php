@@ -42,9 +42,9 @@
 	    curl_close($curl);
 	    
 		
-		//$myfile = fopen($cachefile,"w") or die("Unable to open file!");
-		//fwrite($myfile, $html);
-		//fclose($myfile);
+		$myfile = fopen($cachefile,"w") or die("Unable to open file!");
+		fwrite($myfile, $html);
+		fclose($myfile);
 		$cache = @file_get_contents($cachefile) or die("Unable to open file!");
 	}
 	else{
