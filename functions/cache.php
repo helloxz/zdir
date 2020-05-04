@@ -41,10 +41,9 @@
 	    $html = curl_exec($curl);
 	    curl_close($curl);
 	    
-		
-		$myfile = fopen($cachefile,"w") or die("Unable to open file!");
-		fwrite($myfile, $html);
-		fclose($myfile);
+		#索引数据写入文件
+		file_put_contents($cachefile,$html);
+		#读取索引
 		$cache = @file_get_contents($cachefile) or die("Unable to open file!");
 	}
 	else{
