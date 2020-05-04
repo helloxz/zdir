@@ -27,7 +27,6 @@
 		$url = str_replace("\\","/",$url);
 		$curl = curl_init($url);
 
-		//echo $url;
 
 	    curl_setopt($curl, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36");
 	    curl_setopt($curl, CURLOPT_FAILONERROR, true);
@@ -83,7 +82,7 @@
 		
 		//$uri = str_replace("cache.php","",$uri);
 		//组合为完整的URL
-		$domain = $protocol.$_SERVER['SERVER_NAME'].$port.$uri;
+		$domain = $protocol.$_SERVER['HTTP_HOST'].$port.$uri;
 		return $domain;
 	}
 ?>
