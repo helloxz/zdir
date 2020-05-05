@@ -22,6 +22,7 @@ function check_docker(){
 				sh get-docker.sh
 			else
 				echo '放弃安装！'
+				echo '-------------------------------------------'
 				exit
 		fi
 	fi
