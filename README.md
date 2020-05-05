@@ -19,6 +19,16 @@ Zdir是一款使用PHP开发的目录列表程序，无需数据库，体积小�
 * 如果需要排除某个目录，再次修改`config.php` ，里面有说明
 * 更多说明请查看帮助文档：[https://dwz.ovh/zdir](https://dwz.ovh/zdir)
 
+### Docker方式部署
+
+Docker for Zdir一键部署脚本：
+
+```bash
+bash <(curl -Lsk https://raw.githubusercontent.com/helloxz/zdir/master/zdir-install.sh)
+```
+
+更多说明可参考：[https://www.xiaoz.me/archives/14809](https://www.xiaoz.me/archives/14809)
+
 ### 主要功能
 - [x] 目录浏览
 - [x] MarkDown文件预览
