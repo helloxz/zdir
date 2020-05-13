@@ -31,5 +31,7 @@
 		),
 		"password"	=>	"xiaoz.me",
 		"auth"		=>	FALSE
-	);	
+	);
+	//设置上传目录,以网站根目录开始
+	$uploadDir = "/upload";
 ?>
