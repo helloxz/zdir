@@ -1,9 +1,17 @@
 <?php
 	@$admin = $_GET['admin'];
-	//获取当前目录
-	$thedir = __DIR__;
-	$thedir = str_replace("\\",'/',$thedir);
-	$thedir = str_replace("functions",'',$thedir);
+	/**
+	获取需要读取的目录
+	*/
+	//如果没有设置thedir，则默认读取当前路径
+	if( $config['thedir'] == '' ) {
+		$thedir = __DIR__;
+		$thedir = str_replace("\\",'/',$thedir);
+		$thedir = str_replace("functions",'',$thedir);
+	}
+	else{
+		$thedir = $config['thedir'];
+	}
 	
 	$i = 0;
 

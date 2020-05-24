@@ -3,7 +3,14 @@
 ini_set('max_execution_time', '600');
 //载入配置文件
 include_once("../config.php");
-$base_dir = str_replace("functions","",__DIR__);
+//需要读取的目录
+if( $config['thedir'] != '' ){
+	$base_dir = $config['thedir'];
+}
+else{
+	$base_dir = str_replace("functions","",__DIR__);
+}
+
 $zdir_config = $config;
 //Default Configuration
 //$CONFIG = '{"lang":"en","error_reporting":false,"show_hidden":false,"hide_Cols":false,"calc_folder":false}';

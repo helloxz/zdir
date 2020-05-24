@@ -37,10 +37,22 @@ if((!isset($c)) || ($c == '')){
 	//载入主页
 	include_once("./functions/home.php");
 }
-//不允许放的控制器
+//不允许访问的控制器
 else if($c == 'indexes'){
 	echo '非法请求！';
 	exit;
+}
+//如果是文件管理器
+else if($c == 'admin') {
+	//如果当前目录存在
+	if( file_exists('./functions/admin.php') ) {
+		header("Location: ./zdir/functions/admin.php");
+		exit;
+	}
+	else{
+		header("Location: ./functions/admin.php");
+		exit;
+	}
 }
 else{
 	include_once("./functions/".$c.'.php');
