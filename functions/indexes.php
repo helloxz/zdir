@@ -47,7 +47,7 @@ function tree($directory,$ignore) {
 //开始运行
 //如果是子目录运行
 if( $config['thedir'] != '' ) {
-    tree($config['thedir'],$ignore); 
+    tree('../',$ignore); 
 }
 //如果是顶级目录运行
 else{
