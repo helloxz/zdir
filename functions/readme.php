@@ -1,7 +1,7 @@
 <?php
 //载入文件
 	if ( $config['thedir'] == '' ){
-		include_once("./Parsedown.php");
+		include_once(__DIR__."./Parsedown.php");
 	}
 	else{
 		include_once($config['thedir']."/zdir/functions/Parsedown.php");

@@ -4,7 +4,7 @@
 	@$del = $_GET['del'];
 	//缓存文件夹路径
 	if ( $config['thedir'] == '' ){
-		$cachefile = "./functions/caches/indexes.html";
+		$cachefile = __DIR__."/caches/indexes.html";
 	}
 	else{
 		$cachefile = $config['thedir']."/zdir/functions/caches/indexes.html";

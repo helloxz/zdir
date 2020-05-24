@@ -31,6 +31,7 @@ function tree($directory,$ignore) {
 	            $url = $uri.'/'.$directory.'/'.$file;
                 $url = str_replace("../","",$url);
                 $url = str_replace("\/","/",$url);
+                $url = str_replace("//","/",$url);
                 echo "<li><i class='fa fa-file-text-o'></i> <a href = '$url' target = '_blank'>$url</a></li>\n";
             }
 
@@ -44,4 +45,11 @@ function tree($directory,$ignore) {
 
 } 
 //开始运行
-tree("..",$ignore); 
+//如果是子目录运行
+if( $config['thedir'] != '' ) {
+    tree($config['thedir'],$ignore); 
+}
+//如果是顶级目录运行
+else{
+    tree('./',$ignore);
+}
