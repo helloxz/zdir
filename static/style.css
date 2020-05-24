@@ -119,3 +119,30 @@
 #msg a{
 	color:#5FB878;
 }
+/*ad css*/
+#gg-left{
+    position:fixed;
+    left:10px;
+    top:80px;
+    width:100%;
+    max-width: 120px;
+}
+#gg-left img{
+    width:100%;
+    max-width: 120px;
+}
+#gg-right{
+    position:fixed;
+    top:80px;
+    right:10px; 
+}
+#gg-right img{
+    width:100%;
+    max-width: 120px;
+}
+@media screen and (max-width: 1366px) {
+    #gg-left,#gg-right{
+        display: none;
+    }
+}
+/*ad css end*/

@@ -12,8 +12,23 @@
 	<link rel="stylesheet" href="./static/layui/css/layui.css">
 	<link rel='stylesheet' href='./static/style.css?v=<?php echo $version; ?>'>
 	<link rel="stylesheet" href="./static/font-awesome/css/font-awesome.min.css">
+	<?php
+		//判断统计代码是否存在
+		if( file_exists('./static/tongji.js') ) {
+	?>
+	<script type="text/javascript" src="./static/tongji.js"></script>
+	<?php } ?>
 </head>
 <body>
+	<!--全站两侧广告位-->
+	<?php if( file_exists('./config.json') ){
+		$gg = @file_get_contents('./config.json');
+		$gg = json_decode($gg);
+	?>
+	<div id="gg-left"><?php echo $gg->gg->gg_left; ?></div>
+    <div id="gg-right"><?php echo $gg->gg->gg_right; ?></div>
+    <?php } ?>
+    <!--全站两侧广告位END-->
 	<!--顶部导航栏-->
 	<div class = "header">
         <div class = "layui-container">
