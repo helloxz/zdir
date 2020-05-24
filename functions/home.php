@@ -51,7 +51,7 @@
 	//如果目录不存在
 	else if(!is_dir($rel_path)){
 		echo '目录不存在，3s后返回首页！';
-		header("Refresh:3;url=index.php");
+		header("Refresh:3;url=/");
 		exit;
 	}
 	else{
@@ -97,7 +97,7 @@
 		
 		#var_dump($dirarr);
 		if($dirnum == 2) {
-			$updir = 'index.php';
+			$updir = '/';
 		}
 		else{
 			$updir = '';
@@ -107,7 +107,7 @@
 				$updir = $updir.'/'.$dirarr[$i];
 				
 			}
-			$updir = 'index.php?dir='.$updir;
+			$updir = '/?dir='.$updir;
 		}
 		return $updir;
 	}
@@ -143,7 +143,7 @@
 							}
 						?>
 						
-						<a href="./index.php?dir=<?php echo $remenu; ?>"><?php echo $menu; ?></a> / 
+						<a href="./?dir=<?php echo $remenu; ?>"><?php echo $menu; ?></a> / 
 						<?php } ?>
 					</p>
 				</div>
@@ -220,7 +220,7 @@
 								    $url = $updir;
 							    }
 							    else{
-								    $url = "./index.php?dir=".$dir.'/'.$showdir;
+								    $url = "./?dir=".$dir.'/'.$showdir;
 							    }
 							    
 							    $ico = "fa fa-folder-open";
@@ -267,7 +267,7 @@
 								    $url = $updir;
 							    }
 							    else{
-								    $url = "./index.php?dir=".$dir.'/'.$showdir;
+								    $url = "./?dir=".$dir.'/'.$showdir;
 							    }
 							    
 							    $ico = "fa fa-folder-open";
