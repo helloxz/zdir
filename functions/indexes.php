@@ -32,7 +32,8 @@ function tree($directory,$ignore) {
                 $url = str_replace("../","",$url);
                 $url = str_replace("\/","/",$url);
                 $url = str_replace("//","/",$url);
-                echo "<li><i class='fa fa-file-text-o'></i> <a href = '$url' target = '_blank'>$url</a></li>\n";
+                $url = str_replace("//","/",$url);
+                echo "<li><i class='fa fa-file-text-o'></i> <a href = '.$url' target = '_blank'>$url</a></li>\n";
             }
 
         }
