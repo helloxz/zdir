@@ -19,7 +19,8 @@
 		"LICENSE",
 		"template",
 		"cache.php",
-		"indexes.php"
+		"indexes.php",
+		"zdir"
 	);
 	//设置参数
 	$config = array(
@@ -31,7 +32,8 @@
 			"127.0.0.1",
 			"192.168.1."
 		),
-		"password"	=>	"xiaoz.me",
+		"username"	=>	"zdir",			//用户名
+		"password"	=>	"xiaoz.me",		//密码
 		"auth"		=>	FALSE
 	);	
 ?>

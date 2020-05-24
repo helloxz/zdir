@@ -194,6 +194,7 @@
 			$thedir = __DIR__;
 			$thedir = str_replace("\\","/",$thedir);
 			$thedir = str_replace("/functions","",$thedir);
+			$thedir = str_replace("/zdir","",$thedir);
 			#$thedir = str_replace("");
 
 			//如果文件不存在

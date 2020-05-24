@@ -1,5 +1,4 @@
 <?php
-	require("./zdir.class.php");
 	//获取视频播放地址
 	@$url = $_GET['url'];
 	$url = con_coding($url,FALSE);

@@ -1,6 +1,12 @@
 <?php
-	include_once("./zdir.class.php");
-	include_once("./Parsedown.php");
+	//载入文件
+	if ( $config['thedir'] == '' ){
+		include_once("./Parsedown.php");
+	}
+	else{
+		include_once($config['thedir']."/zdir/functions/Parsedown.php");
+	}
+	//exit;
 	$Parsedown = new Parsedown();
 	@$file = $_GET['file'];
 

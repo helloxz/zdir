@@ -131,7 +131,7 @@ function viewmd(url){
 }
 //新版markdown查看器
 function newmd(url){
-	var url = "./functions/viewmd.php?file=" + url;
+	var url = "./?c=viewmd&file=" + url;
 	layer.open({
 		title:'MarkDown查看器',
 	  	type: 2, 
@@ -142,7 +142,7 @@ function newmd(url){
 //播放视频文件
 function video(url){
 	
-	var videourl = "./functions/video.php?url=" + url;
+	var videourl = "./?c=video&url=" + url;
 	//layer.msg(videourl);
 	layer.open({
 		title:false,
@@ -153,7 +153,7 @@ function video(url){
 }
 //播放音频
 function music(url){
-	var videourl = "./functions/music.php?url=" + url;
+	var videourl = "./?c=music&url=" + url;
 	//layer.msg(videourl);
 	layer.open({
 		title:false,
@@ -165,7 +165,7 @@ function music(url){
 
 //查看文本文档
 function viewtext(url){
-	var url = "./functions/viewtext.php?file=" + url;
+	var url = "./?c=viewtext&file=" + url;
 	layer.open({
 		title:'Zdir文本查看器',
 	  	type: 2, 
@@ -209,7 +209,7 @@ function filehash(name,path){
 	var file = path;
 	
 	//alert(file);
-	$.post("./functions/hash.php",{file:file},function(data,status){
+	$.post("./?c=hash",{file:file},function(data,status){
 		var fileinfo = eval('(' + data + ')');
 		if(fileinfo.code == 1){
 			layer.open({

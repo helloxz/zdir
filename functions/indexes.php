@@ -29,7 +29,8 @@ function tree($directory,$ignore) {
 				//exit;
 	            $filepath = "$directory/$file";
 	            $url = $uri.'/'.$directory.'/'.$file;
-	            $url = str_replace("../","",$url);
+                $url = str_replace("../","",$url);
+                $url = str_replace("\/","/",$url);
                 echo "<li><i class='fa fa-file-text-o'></i> <a href = '$url' target = '_blank'>$url</a></li>\n";
             }
 

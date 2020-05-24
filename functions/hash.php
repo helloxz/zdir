@@ -1,9 +1,16 @@
 <?php
-	require("./zdir.class.php");
+	//载入文件
+	if ( $config['thedir'] == '' ){
+		include_once("./zdir.class.php");
+	}
+	else{
+		include_once($config['thedir']."/zdir/functions/zdir.class.php");
+	}
 	//获取当前路径
 	$thedir = __DIR__;
 	$thedir = str_replace("\\","/",$thedir);
 	$thedir = str_replace("/functions","",$thedir);
+	$thedir = str_replace("/zdir","",$thedir);
 	#$thedir = str_replace("");
 	//获取文件路径
 	$filepath = $_POST['file'];

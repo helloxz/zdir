@@ -1,6 +1,4 @@
 <?php
-	include_once("./zdir.class.php");
-
 	@$file = $_GET['file'];
 	$file = con_coding($file,FALSE);
 

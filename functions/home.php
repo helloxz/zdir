@@ -159,7 +159,7 @@
 					  <div class="layui-colla-item">
 					    <h2 class="layui-colla-title">使用说明（必看）</h2>
 					    <div class="layui-colla-content">
-						    <iframe src="<?php echo './functions/readme.php?file='.$readme; ?>" width="100%" height="600px" name="" frameborder = "0" align="middle"></iframe>
+						    <iframe src="<?php echo './?c=readme&file='.$readme; ?>" width="100%" height="600px" name="" frameborder = "0" align="middle"></iframe>
 					    </div>
 					  </div>
 					</div>

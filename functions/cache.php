@@ -1,11 +1,16 @@
 <?php
 	error_reporting(E_ALL^E_NOTICE^E_WARNING^E_DEPRECATED);
-	include_once("./config.php");
 	//载入zdir类
-	include_once("./functions/zdir.class.php");
 	@$del = $_GET['del'];
 	//缓存文件夹路径
-	$cachefile = "./functions/caches/indexes.html";
+	if ( $config['thedir'] == '' ){
+		$cachefile = "./functions/caches/indexes.html";
+	}
+	else{
+		$cachefile = $config['thedir']."/zdir/functions/caches/indexes.html";
+	}
+	
+	//echo $cachefile;
 	//获取文件修改时间
 	@$ftime = filemtime($cachefile);
 	@$cachetime = date('Y-m-d H:i:s',$ftime);
@@ -17,13 +22,13 @@
 	//删除缓存文件
 	if($del == 'cache') {
 		unlink($cachefile);
-		header("location:./index.php?c=cache");
+		header("location:./?c=cache");
 		exit;
 	}
 	//判断缓存文件是否存在
 	if((!file_exists($cachefile)) || ($diff > 24)){
 		$url = get_url();
-		$url = $url."functions/indexes.php";
+		$url = $url."?c=indexes";
 		$url = str_replace("\\","/",$url);
 		$curl = curl_init($url);
 
