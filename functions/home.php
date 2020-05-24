@@ -169,10 +169,10 @@
 		    	<div class="layui-col-lg12">
 			    	<table class="layui-table" lay-skin="line">
 					  	<colgroup>
-					    <col width="400">
-					    <col width="200">
-					    <col width="200">
-					    <col width="180">
+					    <col width="560">
+					    <col width="100">
+					    <col width="160">
+					    <col width="160">
 					    <col>
 					  </colgroup>
 					  <thead>
@@ -189,10 +189,11 @@
 						    //防止中文乱码
 						    //$showdir = con_coding($showdir);
 						    $fullpath = $thedir.'/'.$dir.'/'.$showdir;
-						    
+						    //去掉多余的斜杠
 						    $fullpath = str_replace("\\","\/",$fullpath);
 						    $fullpath = str_replace("//","/",$fullpath);
-						    //$fullpath = con_coding($fullpath,FALSE);
+						    $fullpath = str_replace("//","/",$fullpath);
+						    //$fullpath = con_coding($fullpath);
 						    
 						    //var_dump($fullpath);
 						    //获取文件修改时间
@@ -273,20 +274,21 @@
 							    <?php
 							    	$showdir = con_coding($showdir);
 							    	$fullpath = con_coding($fullpath);
+							    	//echo $fullpath;
 							    	$url = con_coding($url);
 							    ?>
 							    <!--判断文件是否是图片-->
 							    <?php if(($suffix == 'jpg') || ($suffix == 'jpeg') || ($suffix == 'png') || ($suffix == 'gif') || ($suffix == 'bmp')){
 
 							   	?>
-							   	<a href="<?php echo $url ?>" id = "url<?php echo $i; ?>" onmouseover = "showimg(<?php echo $i; ?>,'<?php echo $url; ?>')" onmouseout = "hideimg(<?php echo $i; ?>)"><i class="<?php echo $ico; ?>"></i> <?php echo $showdir; ?></a>
+							   	<a class = "fname1" href="<?php echo $url ?>" id = "url<?php echo $i; ?>" onmouseover = "showimg(<?php echo $i; ?>,'<?php echo $url; ?>')" onmouseout = "hideimg(<?php echo $i; ?>)"><i class="<?php echo $ico; ?>"></i> <?php echo $showdir; ?></a>
 							   	<div class = "showimg" id = "show<?php echo $i; ?>"><img src="" id = "imgid<?php echo $i; ?>"></div>
 							   	<!--如果是.exe文件-->
 							   	<?php }elseif($zdir->is_exe($fullpath)){ ?>
-								<a href="<?php echo $url ?>" id = "url<?php echo $i; ?>"><i class="<?php echo $ico; ?>"></i> <?php echo $showdir; ?></a>
+								<a class = "fname1" href="<?php echo $url ?>" id = "url<?php echo $i; ?>"><i class="<?php echo $ico; ?>"></i> <?php echo $showdir; ?></a>
 							   	<!--.exe文件END-->
 							   	<?php }else{ ?>
-							    <a href="<?php echo $url ?>" id = "url<?php echo $i; ?>"><i class="<?php echo $ico; ?>"></i> <?php echo $showdir; ?></a>
+							    <a class = "fname1" href="<?php echo $url ?>" id = "url<?php echo $i; ?>"><i class="<?php echo $ico; ?>"></i> <?php echo $showdir; ?></a>
 							    <?php } ?>
 						    </td>
 						    <td id = "info" class = "layui-hide-xs">
