@@ -189,7 +189,7 @@
 					      <th class = "layui-hide-xs"></th>
 					      <th class = "layui-hide-xs">修改时间</th>
 					      <th>文件大小</th>
-					      <th class = "layui-hide-xs">操作</th>
+					      <th class = "layui-hide-xs layui-hide-sm layui-show-md-block">操作</th>
 					    </tr> 
 					  </thead>
 					  <tbody>
@@ -299,6 +299,7 @@
 							    <a class = "fname1" href="<?php echo $url ?>" id = "url<?php echo $i; ?>"><i class="<?php echo $ico; ?>"></i> <?php echo $showdir; ?></a>
 							    <?php } ?>
 						    </td>
+							<!-- 查看HASH例 -->
 						    <td id = "info" class = "layui-hide-xs">
 							    <!--如果是文件-->
 							    <?php if($type == 'file'){ ?>
@@ -308,7 +309,8 @@
 						    </td>
 						    <td class = "layui-hide-xs"><?php echo $ctime; ?></td>
 						    <td><?php echo $fsize; ?></td>
-						    <td class = "layui-hide-xs">
+							<!-- 操作例 -->
+						    <td class = "layui-hide-xs layui-hide-sm layui-show-md-block">
 							    <!--复制链接-->
 							    <?php if($fsize != '-'){ ?>
 								<a href="javascript:;" class = "layui-btn layui-btn-xs layui-btn-normal" title = "复制链接" onclick = "copy('<?php echo $url ?>')"><i class="fa fa-copy"></i></a>
@@ -333,6 +335,7 @@
 								<a class = "layui-btn layui-btn-xs layui-btn-normal" href="javascript:;" title = "点此查看" onclick = "office('<?php echo $url ?>')"><i class="fa fa-eye"></i></a>
 							    <?php } ?>
 						    </td>
+							<!-- 操作例END -->
 					    </tr>
 					    <?php } ?>
 						

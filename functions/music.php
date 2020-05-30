@@ -2,7 +2,9 @@
 	//获取视频播放地址
 	@$url = $_GET['url'];
 	$url = con_coding($url,FALSE);
-	$url = str_replace("./","../",$url);
+	if( $config['thedir'] != '' ){
+		$url = str_replace("./","../",$url);
+	}
 	
 	//判断文件是否存在
 	if(!file_exists($url)){
@@ -21,7 +23,7 @@
 	<meta name="author" content="" />
 	<meta name="keywords" content="" />
 	<meta name="description" content="" />
-	<link rel="stylesheet" href="../static/aplayer/APlayer.min.css" type="" media=""/>
+	<link rel="stylesheet" href="./static/aplayer/APlayer.min.css" type="" media=""/>
 </head>
 <body>
 	<!--音频播放容器-->
@@ -38,7 +40,7 @@
 	}
 	?>
   	</video>-->
-	<script src = "../static/aplayer/APlayer.min.js"></script>
+	<script src = "./static/aplayer/APlayer.min.js"></script>
 	<script type="text/javascript">
 		const ap = new APlayer({
 		    container: document.getElementById('aplayer'),
@@ -46,7 +48,7 @@
 			    name: '<?php echo $url; ?>',
 		        url: '<?php echo $url; ?>',
 		        artist: 'none',
-		        cover: '../static/music.png'
+		        cover: './static/music.png'
 		    }]
 		});
 	</script>

@@ -27,7 +27,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="https://libs.xiaoz.top/layui-v2.2.5/layui/css/layui.css">
-	<link rel="stylesheet" href="../static/md.css">
+	<link rel="stylesheet" href="./static/md.css">
 </head>
 <body>
 	<div id="container" class = "layui-bg-gray">

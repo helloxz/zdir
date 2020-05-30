@@ -11,6 +11,7 @@
 		".",
 		".git",
 		".user.ini",
+		".htaccess",
 		"favicon.ico",
 		"functions",
 		"config.php",
@@ -34,6 +35,6 @@
 		),
 		"username"	=>	"zdir",			//用户名
 		"password"	=>	"xiaoz.me",		//密码
-		"auth"		=>	FALSE
+		"auth"		=>	FALSE			//是否开启访问验证
 	);	
 ?>

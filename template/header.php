@@ -34,7 +34,7 @@
         <div class = "layui-container">
             <div class = "layui-row">
                 <div class = "layui-col-lg12">
-	                <div class="logo layui-hide-xs">
+	                <div class="logo layui-hide-xs layui-hide-sm layui-show-md-block">
 		                <h1 style="font-size:1.7em;font-weight:bold;"><a href="./">
 			                <?php
 			                	if( @$siteinfo['site_name'] ){
@@ -70,7 +70,7 @@
                             <li class="layui-nav-item"><a href="https://www.xiaoz.me/archives/10465" target = "_blank"><i class="layui-icon">&#xe60b;</i> 关于</a></li>
                         </ul>
                     </div>
-                    <div class = "layui-hide-xs" style = "width:260px;float:right;margin-top:10px;">
+                    <div class = "layui-hide-xs layui-hide-sm layui-show-md-block" style = "width:260px;float:right;margin-top:10px;">
                     	<form class="layui-form" action="./" method = "get">
 	                    	<input type="text" name="c" required lay-verify="required" autocomplete="off" class="layui-input" value = "search" style = "display: none;">
 	                    	<input style = "width:70%;float:left;border-right:0;border-radius:0;" type="text" name="s" required lay-verify="required" placeholder="请输入关键词" autocomplete="off" class="layui-input">
