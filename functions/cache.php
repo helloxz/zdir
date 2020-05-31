@@ -72,7 +72,7 @@
 				break;
 			default:
 				$protocol = "http://";
-				$port = ":".$port;
+				$port = "";
 				break;
 		}
 		
