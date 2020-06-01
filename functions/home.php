@@ -310,30 +310,32 @@
 						    <td class = "layui-hide-xs"><?php echo $ctime; ?></td>
 						    <td><?php echo $fsize; ?></td>
 							<!-- 操作例 -->
-						    <td class = "layui-hide-xs layui-hide-sm layui-show-md-block">
-							    <!--复制链接-->
-							    <?php if($fsize != '-'){ ?>
-								<a href="javascript:;" class = "layui-btn layui-btn-xs layui-btn-normal" title = "复制链接" onclick = "copy('<?php echo $url ?>')"><i class="fa fa-copy"></i></a>
-								<a download href="<?php echo $url ?>" class = "layui-btn layui-btn-xs layui-btn-normal" title = "点击下载"><i class="fa fa-download"></i></a>
-							    <?php } ?>
-							    <!--如果是音乐文件-->
-							    <?php if( $zdir->music($url) ) { ?>
-								<a class = "layui-btn layui-btn-xs layui-btn-normal" title = "点此播放" href="javascript:;" onclick = "music('<?php echo $url ?>')"><i class="fa fa-play-circle"></i></a>
-							    <?php } ?>
-							    <!--音乐文件END-->
-							    <!--如果是markdown文件-->
-							    <?php if(($suffix == 'md') && ($suffix != null)){ ?>
-								<a href="javascript:;" class = "layui-btn layui-btn-xs layui-btn-normal" onclick = "newmd('<?php echo $fullpath; ?>')" title = "点击查看"><i class="fa fa-eye"></i></a> 
-							    <?php }else if( $zdir->video($url) ){ ?>
-								<a class = "layui-btn layui-btn-xs layui-btn-normal" title = "点此播放" href="javascript:;" onclick = "video('<?php echo $url ?>')"><i class="fa fa-play-circle"></i></a>
-								<!--文本查看器-->
-							    <?php }
-							    else if( $zdir->is_text($url) ){ ?>
-								<a class = "layui-btn layui-btn-xs layui-btn-normal" title = "点此查看" href="javascript:;" onclick = "viewtext('<?php echo $fullpath; ?>')"><i class="fa fa-eye"></i></a>
-							    <?php }else if( $zdir->office($url) ) { ?>
-							    <!--查看Office-->
-								<a class = "layui-btn layui-btn-xs layui-btn-normal" href="javascript:;" title = "点此查看" onclick = "office('<?php echo $url ?>')"><i class="fa fa-eye"></i></a>
-							    <?php } ?>
+						    <td class = "layui-hide-xs">
+								<div class = "layui-hide-sm layui-show-md-block">
+									<!--复制链接-->
+									<?php if($fsize != '-'){ ?>
+									<a href="javascript:;" class = "layui-btn layui-btn-xs layui-btn-normal" title = "复制链接" onclick = "copy('<?php echo $url ?>')"><i class="fa fa-copy"></i></a>
+									<a download href="<?php echo $url ?>" class = "layui-btn layui-btn-xs layui-btn-normal" title = "点击下载"><i class="fa fa-download"></i></a>
+									<?php } ?>
+									<!--如果是音乐文件-->
+									<?php if( $zdir->music($url) ) { ?>
+									<a class = "layui-btn layui-btn-xs layui-btn-normal" title = "点此播放" href="javascript:;" onclick = "music('<?php echo $url ?>')"><i class="fa fa-play-circle"></i></a>
+									<?php } ?>
+									<!--音乐文件END-->
+									<!--如果是markdown文件-->
+									<?php if(($suffix == 'md') && ($suffix != null)){ ?>
+									<a href="javascript:;" class = "layui-btn layui-btn-xs layui-btn-normal" onclick = "newmd('<?php echo $fullpath; ?>')" title = "点击查看"><i class="fa fa-eye"></i></a> 
+									<?php }else if( $zdir->video($url) ){ ?>
+									<a class = "layui-btn layui-btn-xs layui-btn-normal" title = "点此播放" href="javascript:;" onclick = "video('<?php echo $url ?>')"><i class="fa fa-play-circle"></i></a>
+									<!--文本查看器-->
+									<?php }
+									else if( $zdir->is_text($url) ){ ?>
+									<a class = "layui-btn layui-btn-xs layui-btn-normal" title = "点此查看" href="javascript:;" onclick = "viewtext('<?php echo $fullpath; ?>')"><i class="fa fa-eye"></i></a>
+									<?php }else if( $zdir->office($url) ) { ?>
+									<!--查看Office-->
+									<a class = "layui-btn layui-btn-xs layui-btn-normal" href="javascript:;" title = "点此查看" onclick = "office('<?php echo $url ?>')"><i class="fa fa-eye"></i></a>
+									<?php } ?>
+								</div>
 						    </td>
 							<!-- 操作例END -->
 					    </tr>
