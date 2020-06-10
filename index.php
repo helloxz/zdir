@@ -48,11 +48,11 @@ if((!isset($c)) || ($c == '')){
 else if($c == 'admin') {
 	//如果当前目录存在
 	if( file_exists('./functions/admin.php') ) {
-		header("Location: ./functions/admin.php");
+		header("Location: ./zdir/functions/admin.php");
 		exit;
 	}
 	else{
-		header("Location: ./zdir/functions/admin.php");
+		header("Location: ./functions/admin.php");
 		exit;
 	}
 }
