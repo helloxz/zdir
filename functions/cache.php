@@ -8,6 +8,8 @@
 	}
 	else{
 		$cachefile = $config['thedir']."/zdir/functions/caches/indexes.html";
+		$cacheDir = $config['thedir']."/zdir/functions/caches";
+        !is_dir($cacheDir) &&  mkdir($cacheDir,0777,true);
 	}
 	
 	//echo $cachefile;
