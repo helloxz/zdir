@@ -46,13 +46,14 @@ if((!isset($c)) || ($c == '')){
 // }
 //如果是文件管理器
 else if($c == 'admin') {
-	//如果当前目录存在
-	if( file_exists('./functions/admin.php') ) {
-		header("Location: ./zdir/functions/admin.php");
+	//如果是放在顶级目录下
+	if( $config['thedir'] == '') {
+		header("Location: ./functions/admin.php");
 		exit;
 	}
+	
 	else{
-		header("Location: ./functions/admin.php");
+		header("Location: ./zdir/functions/admin.php");
 		exit;
 	}
 }

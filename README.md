@@ -21,10 +21,12 @@ Zdir是一款使用PHP开发的目录列表程序，无需数据库，体积小�
 
 ### Docker方式部署
 
-Docker for Zdir一键部署脚本：
-
 ```bash
-bash <(curl -Lsk https://raw.githubusercontent.com/helloxz/zdir/master/zdir-install.sh)
+docker run --name="zdir"  \
+    -d -p 1080:80 --restart=always \
+    -v /data/wwwroot/default:/data/wwwroot/default \
+    helloz/zdir \
+    /usr/sbin/run.sh
 ```
 
 更多说明可参考：[https://www.xiaoz.me/archives/14809](https://www.xiaoz.me/archives/14809)
