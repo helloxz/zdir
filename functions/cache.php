@@ -86,8 +86,14 @@
 		}
 		
 		//$uri = str_replace("cache.php","",$uri);
-		//组合为完整的URL
-		$domain = $protocol.$_SERVER['HTTP_HOST'].$port.$uri;
+		//如果主机名是localhost，则获取localhost
+		if( $_SERVER['SERVER_NAME'] == 'localhost' ) {
+			$domain = $protocol.$_SERVER['SERVER_NAME'].$port.$uri;
+		}
+		else {
+			$domain = $protocol.$_SERVER['HTTP_HOST'].$port.$uri;
+		}
+		
 		return $domain;
 	}
 ?>
