@@ -257,8 +257,8 @@ function qrcode(name,url){
 	url = protocol + '//' + host + '/' + url;
 
 	//二维码接口
-	qrcodeapi = "https://sapi.k780.com/?app=qr.get&level=L&size=5&data=" + url;
-	var qrimg = "<center><img src = '" + qrcodeapi + "' /></center>";
+	qrcodeapi = "https://qr.png.pub/v1/?text=" + url;
+	var qrimg = "<center class = 'qrcode'><img src = '" + qrcodeapi + "' /></center>";
 	layer.open({
 		type: 1,
 		area: '230px',

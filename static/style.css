@@ -146,3 +146,6 @@
     }
 }
 /*ad css end*/
+.qrcode img{
+	max-width:210px;
+}
