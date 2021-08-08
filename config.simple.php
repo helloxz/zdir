@@ -1,7 +1,6 @@
 <?php
 	#默认读取同级目录
-	$thedir = str_replace('/zdir','',__DIR__);
-	$thedir = str_replace('\zdir','',__DIR__);
+	$thedir = str_replace(['/zdir','\zdir'],'',__DIR__);
 	$siteinfo = array(
 		"site_name"	=>	"<i class='fa fa-sitemap' aria-hidden='true'></i> Zdir",
 		"title"		=>	"Zdir 实用的目录列表程序",
