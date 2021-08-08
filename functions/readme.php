@@ -7,6 +7,7 @@
 		include_once($config['thedir']."/zdir/functions/Parsedown.php");
 	}
 	
+	
 	$Parsedown = new Parsedown();
 	@$file = $_GET['file'];
 
@@ -35,7 +36,7 @@
 	</div>
 	<div class="footer">
 		<hr />
-		<p>&copy;2020 本文档使用 <a href="https://markdown.win/" target = "_blank">MDtoHTML</a> 构建 | The author <a href="https://www.xiaoz.me/" target = "_blank" title = "小z博客">xiaoz</a></p>
+		<p>&copy;2021 本文档使用 <a href="https://markdown.win/" target = "_blank">MDtoHTML</a> 构建 | The author <a href="https://www.xiaoz.me/" target = "_blank" title = "小z博客">xiaoz</a></p>
 	</div>
 	<script src = 'https://libs.xiaoz.top/highlight.js/9.12.0/highlight.min.js'></script>
 	<script src = 'https://libs.xiaoz.top/jquery/2.2.4/jquery.min.js'></script>

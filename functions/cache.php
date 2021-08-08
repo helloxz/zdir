@@ -110,6 +110,7 @@
 			
 			<?php
 				echo "<h1>文件索引 - 该数据缓存于$cachetime</h1><br />";
+				echo "<a href='/?c=cache&del=cache' class='layui-btn layui-btn-primary layui-border-blue'>清除缓存</a>";
 				echo $cache;
 			?>
 			</div>
