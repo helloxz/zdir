@@ -251,6 +251,11 @@ function hideimg(id){
 //显示二维码
 function qrcode(name,url){
 	url = url.replace("./","");
+	
+	//有中文的话中文进行处理,否则扫描后会被识别为文本而非链接.
+	url = encodeURIComponent(url)
+	url = url.replace(/%2F/g,"/")
+
 	//重组url
 	protocol = window.location.protocol;		//获取协议
 	host = window.location.host;				//获取主机
