@@ -14,6 +14,7 @@
 	<script type="text/javascript" src = "./static/jquery.min.js"></script>
 	<script src = 'https://libs.xiaoz.top/assets/zdir.js'></script>
 	<script type="text/javascript" src="./static/layui/layui.js"></script>
+	<script type="text/javascript" src="./static/qrcode.min.js"></script>
 	<script type="text/javascript" src="./static/embed.js?v=<?php echo $version; ?>"></script>
 	<script type="text/javascript" src="./static/clipBoard.min.js"></script>
 </body>
