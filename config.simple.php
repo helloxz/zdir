@@ -1,4 +1,6 @@
 <?php
+	#默认读取同级目录
+	$thedir = str_replace(['/zdir','\zdir'],'',__DIR__);
 	$siteinfo = array(
 		"site_name"	=>	"<i class='fa fa-sitemap' aria-hidden='true'></i> Zdir",
 		"title"		=>	"Zdir 实用的目录列表程序",
@@ -26,7 +28,7 @@
 	//设置参数
 	$config = array(
 		//thedir为需要读取的目录，如:/data/wwwroot/soft.xiaoz.org，仅将zdir放在子目录的情况下需要配置此项，其它请勿配置此选项
-		"thedir"	=>	'',
+		"thedir"	=>	$thedir,
 		"allowip"	=>	array(
 			//"0.0.0.0",			//注意设置为0.0.0.0则不限制IP，更多说明请参考帮助文档：https://doc.xiaoz.me/#/zdir/
 			"::1",

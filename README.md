@@ -1,4 +1,4 @@
-# zdir
+# Zdir
 Zdir是一款使用PHP开发的目录列表程序，无需数据库，体积小巧，功能完善。
 
 ![](https://imgurl.org/upload/1806/349f3b54028d58d6.png)
@@ -11,25 +11,9 @@ Zdir是一款使用PHP开发的目录列表程序，无需数据库，体积小�
 * 文件索引依赖于`curl`组件
 * 如果需要获得更高级的文件管理功能，依赖于Fileinfo, iconv, zip, tar and mbstring组件（非必须）
 
-### 使用方法
+### 安装
 
-* 下载源码放到站点根目录
-* 将`config.simple.php`修改为`config.php`
-* 修改`config.php`设置自己的网站标题/关键词/描述/密码等信息
-* 如果需要排除某个目录，再次修改`config.php` ，里面有说明
-* 更多说明请查看帮助文档：[https://dwz.ovh/zdir](https://dwz.ovh/zdir)
-
-### Docker方式部署
-
-```bash
-docker run --name="zdir"  \
-    -d -p 1080:80 --restart=always \
-    -v /data/wwwroot/default:/data/wwwroot/default \
-    helloz/zdir \
-    /usr/sbin/run.sh
-```
-
-更多说明可参考：[https://www.xiaoz.me/archives/14809](https://www.xiaoz.me/archives/14809)
+请参考帮助文档：[https://dwz.ovh/sqg1k](https://dwz.ovh/sqg1k)
 
 ### 主要功能
 - [x] 目录浏览
@@ -47,6 +31,7 @@ docker run --name="zdir"  \
 - [x] 文件搜索
 - [x] 密码验证
 - [x] 支持中文显示
+- [x] 支持Docker部署
 
 ### Demo
 * 演示地址：[http://soft.xiaoz.org/](http://soft.xiaoz.org/)
@@ -60,7 +45,7 @@ docker run --name="zdir"  \
 ### 联系我
 * Blog: [https://www.xiaoz.me/](https://www.xiaoz.me/)
 * QQ: 337003006
-* 社区支持： [https://ttt.sh/](https://ttt.sh/category/15/)
+* 社区支持： [https://dwz.ovh/x33ms](https://dwz.ovh/x33ms)
 * 帮助文档：[https://dwz.ovh/zdir](https://dwz.ovh/zdir)
 
 

@@ -251,20 +251,33 @@ function hideimg(id){
 //显示二维码
 function qrcode(name,url){
 	url = url.replace("./","");
+	
+	//有中文的话中文进行处理,否则扫描后会被识别为文本而非链接.
+	url = encodeURIComponent(url)
+	url = url.replace(/%2F/g,"/")
+
 	//重组url
 	protocol = window.location.protocol;		//获取协议
 	host = window.location.host;				//获取主机
 	url = protocol + '//' + host + '/' + url;
 
-	//二维码接口
-	qrcodeapi = "https://qr.png.pub/v1/?text=" + url;
-	var qrimg = "<center class = 'qrcode'><img src = '" + qrcodeapi + "' /></center>";
+	var qrimg = "<center style='margin:10px;' class ='qrcode'  ></center>";
 	layer.open({
 		type: 1,
 		area: '230px',
 	  	title: name,
-	  	content: qrimg
-	});   
+	  	content: qrimg,
+          success: function(layero, index){
+              var qrcode = new QRCode(document.getElementsByClassName("qrcode")[0], {
+              text: url,
+              width: 200,
+              height: 200,
+               colorDark : "#000000",
+                    colorLight : "#ffffff",
+              correctLevel: QRCode.CorrectLevel.H
+      });
+          }
+	});    
 }
 
 //删除文件

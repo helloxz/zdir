@@ -65,9 +65,9 @@
                             <li class="layui-nav-item"><a href="https://github.com/helloxz/zdir" target = "_blank" rel = "nofollow"><i class="fa fa-code" aria-hidden="true"></i> 源码</a></li>
                             <li class="layui-nav-item"><a href="https://dwz.ovh/zdir" target = "_blank" rel = "nofollow"><i class="fa fa-file-text-o" aria-hidden="true"></i> 帮助文档</a></li>
                             <li class="layui-nav-item"><a href="https://imgurl.org/" title = "免费图床ImgURL"><i class="layui-icon">&#xe64a;</i> 免费图床</a></li>
-                            
+                            <li class="layui-nav-item"><a href="https://dwz.ovh/8bai6" target = "_blank" rel = "nofollow" title = "前往社区寻求帮助"><i class="layui-icon">&#xe63a;</i> 社区支持</a></li>
                             <li class="layui-nav-item"><a href="./?c=admin" target = "_blank"><i class="layui-icon">&#xe665;</i> 文件管理</a></li>
-                            <li class="layui-nav-item"><a href="https://www.xiaoz.me/archives/10465" target = "_blank"><i class="layui-icon">&#xe60b;</i> 关于</a></li>
+                            <li class="layui-nav-item"><a href="https://dwz.ovh/3q2hj" rel = "nofollow" target = "_blank"><i class="layui-icon">&#xe60b;</i> 关于</a></li>
                         </ul>
                     </div>
                     <div class = "layui-hide-xs layui-hide-sm layui-show-md-block" style = "width:260px;float:right;margin-top:10px;">
