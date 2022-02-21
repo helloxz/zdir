@@ -1141,7 +1141,7 @@ if (isset($_GET['upload']) && !FM_READONLY) {
     <script src="https://cdnjs.loli.net/ajax/libs/dropzone/5.5.1/min/dropzone.min.js"></script>
     <script>
         Dropzone.options.fileUploader = {
-            timeout: 120000,
+            timeout: 1200000,
             maxFilesize: <?php echo MAX_UPLOAD_SIZE; ?>,
             acceptedFiles : "<?php echo getUploadExt() ?>",
             init: function () {
