@@ -33,10 +33,10 @@
 ```bash
 # CentOS系统
 yum -y install curl
-curl "http://soft.xiaoz.org/zdir/sh/zir.sh" | bash -s install
+curl -s "http://soft.xiaoz.org/zdir/sh/zir.sh" | bash -s install
 # Debian or Ubuntu系统
 apt-get install curl
-curl "http://soft.xiaoz.org/zdir/sh/zir.sh" | bash -s install
+curl -s "http://soft.xiaoz.org/zdir/sh/zir.sh" | bash -s install
 ```
 
 * 默认安装路径为：`/data/apps/zdir`
