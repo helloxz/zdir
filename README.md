@@ -26,7 +26,39 @@
 
 ## 快速开始
 
+**Linux一键安装：**
+
+如果您想快速安装Zdir，可以使用Zdir官方提供的一键安装脚本，只需要执行下面的命令：
+
+```bash
+# CentOS系统
+yum -y install curl
+curl "http://soft.xiaoz.org/zdir/sh/zir.sh" | bash -s install
+# Debian or Ubuntu系统
+apt-get install curl
+curl "http://soft.xiaoz.org/zdir/sh/zir.sh" | bash -s install
+```
+
+* 默认安装路径为：`/data/apps/zdir`
+* 需要公开的文件列表路径位于`/data/apps/zdir/data/public`
+
+安装完毕后访问`http://IP:6080`即可
+
+___
+
+一键安装脚本适合对Linux系统不太熟悉或者想快速体验Zdir的朋友，您可以参考帮助文档：[https://doc.xiaoz.me/books/zdir-3](https://doc.xiaoz.me/books/zdir-3) 获取更多安装方式。
+
+## 文档 & Demo
+
+* 帮助文档：[https://doc.xiaoz.me/books/zdir-3](https://doc.xiaoz.me/books/zdir-3)
+* Demo：[http://soft.xiaoz.org/](http://soft.xiaoz.org/)
+
+## 问题反馈
+
+* 论坛：[https://xiawen.cc/t/zdir](https://xiawen.cc/t/zdir)
+* QQ:446199062
+* QQ群：932795364
+* TG:xiaozme
 
 
-然后访问`http://IP:6080`即可。
 
