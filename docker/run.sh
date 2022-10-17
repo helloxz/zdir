@@ -16,7 +16,7 @@ check_dir() {
 
     if [ ! -f "/data/apps/zdir/data/config.ini" ]
     then
-        cp /root/zdir/config.simple.ini /data/apps/zdir/data/
+        cp /root/zdir/config.simple.ini /data/apps/zdir/data/config.ini
     fi
 }
 

@@ -33,6 +33,9 @@ download(){
     cp -ar /root/zdir/* /data/apps/zdir
     #添加执行权限
     chmod +x /data/apps/zdir/zdir
+    #删除压缩文件
+    rm -rf /root/zdir_3.0.0_linux_amd64.tar.gz
+    rm -rf /data/apps/zdir/*.tar.gz
 }
 
 
