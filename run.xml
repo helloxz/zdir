@@ -1,0 +1,12 @@
+<service>
+  <!-- ID of the service. It should be unique across the Windows system-->
+  <id>Zdir</id>
+  <!-- Display name of the service -->
+  <name>Zdir</name>
+  <!-- Service description -->
+  <description>Zdir是一款简洁的目录列表程序。</description>
+  <startmode>Automatic</startmode>
+  <!-- Path to the executable, which should be started -->
+  <executable>%BASE%\zdir.exe</executable>
+  <arguments>start</arguments>
+</service>
