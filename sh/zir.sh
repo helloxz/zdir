@@ -4,6 +4,15 @@
 #声明Zdir版本
 VERSION="3.0.0"
 
+#检查是否已经安装过
+is_install() {
+    if [ -f "/etc/systemd/system/zdir.service" ]
+    then
+        echo "Zir已经安装，无需重复安装！"
+        exit
+    fi
+}
+
 #初始化
 init() {
     if [ -e "/usr/bin/yum" ]
@@ -25,19 +34,19 @@ get_parameters() {
     #设置默认路径和端口
     if [ -z "${zdirpath}" ]
 	then
-		downpath='/data/apps/zdir'
+		zdirpath='/data/apps/zdir'
 	fi
 
     if [ -z "${zdirport}" ]
 	then
 		zdirport='6080'
 	fi
-
 }
 
 #下载Zdir
 download() {
     mkdir -p /tmp/zdir
+    cd /tmp/zdir
     wget http://soft.xiaoz.org/zdir/${VERSION}/zdir_${VERSION}_linux_amd64.tar.gz
     #解压
     tar -xvf zdir_${VERSION}_linux_amd64.tar.gz
@@ -51,47 +60,60 @@ chk_firewall(){
 		firewall-cmd --reload
 	elif [ -e "/etc/ufw/before.rules" ]
 	then
-		sudo ufw allow ${zdirport}/tcp
+		ufw allow ${zdirport}/tcp
 	fi
 }
 
 #安装Zddir
 install_zdir() {
+    #创建文件夹
+    mkdir -p ${zdirpath}
     # 复制zdir文件
     cp -ar /tmp/zdir/* ${zdirpath}
     # 初始化zdir
     cd ${zdirpath} && ./zdir init
     # 替换端口
-    sed -i "s/:6080/${zdirport}/g" ${zdirpath}/data/config.ini
+    sed -i "s/6080/${zdirport}/g" ${zdirpath}/data/config.ini
+    #删除临时文件
+    rm -rf /tmp/zdir
     # 启动服务
     systemctl start zdir
     # 获取访问地址
-    myip=$(curl ip.rss.ink)
-    echo "------------------------------------"
+    myip=$(curl -s ip.rss.ink)
+    echo "---------------------------------------------"
     echo "Zdir安装成功，请访问："
-    echo "${myip}:${zdirport} 或 http://IP:${zdirport}"
+    echo "http://${myip}:${zdirport}"
+    echo "或访问："
+    echo "http://IP:${zdirport}"
+    echo "---------------------------------------------"
 }
 
 # 卸载Zdir
 uninstall_zdir() {
     # 停止Zdir
     systemctl stop zdir
+    # 获取Zdir安装目录
+    zirpath=`grep "WorkingDirectory" /etc/systemd/system/zdir.service|sed 's/WorkingDirectory=//g'`
     # 删除服务
     rm -rf /etc/systemd/system/zdir.service
     # 重载服务
     systemctl daemon-reload
-    echo "Zdir卸载完成，请手动删除Zdir文件夹！"
+    echo "Zdir卸载完成，请手动执行:`rm -rf ${zirpath}`删除Zdir文件夹！"
 }
+
 
 # 获取参数
 case $1 in
     install) 
         #安装Zdir
-        init && get_parameters && download && chk_firewall && install_zdir
+        is_install && init && get_parameters && download && chk_firewall && install_zdir
     ;;
     uninstall)
         # 卸载Zdir
         uninstall_zdir
+    ;;
+    test)
+        get_parameters
     ;;
     *)
         echo "参数错误!"
