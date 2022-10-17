@@ -17,14 +17,14 @@ compile_linux() {
     upx -9 main
     #重命名程序
     mv main zdir
-    tar -zcvf zdir_3.0.0_linux_amd64.tar.gz --exclude=*.gz --exclude=cli --exclude=config --exclude=controller --exclude=data/public/* --exclude=logs/* --exclude=router --exclude=compile.sh --exclude=config.ini --exclude=go.mod --exclude=go.sum --exclude=main.go --exclude=run.* --exclude=zdir.exe .
+    tar -zcvf zdir_3.0.0_linux_amd64.tar.gz --exclude=.gitignore --exclude=docker --exclude=.git --exclude=*.gz --exclude=cli --exclude=config --exclude=controller --exclude=data/public/* --exclude=logs/* --exclude=router --exclude=compile.sh --exclude=config.ini --exclude=go.mod --exclude=go.sum --exclude=main.go --exclude=run.* --exclude=zdir.exe .
     echo "Compiled successfully.(Linux)"
     reset_golang_env
 }
 
 # 编译Windows
 compile_windows() {
-    rm -rf *.tar.gz *.exe
+    rm -rf *.tar.gz
     #编译程序
     go env -w CGO_ENABLED=0
     go env -w GOOS=windows
@@ -39,7 +39,7 @@ compile_windows() {
     #重命名程序
     mv main.exe zdir.exe
     #打包程序
-    tar -zcvf zdir_3.0.0_windows_amd64.tar.gz --exclude=sh --exclude=*.gz --exclude=cli --exclude=config --exclude=controller --exclude=data/public/* --exclude=logs/* --exclude=router --exclude=compile.sh --exclude=config.ini --exclude=go.mod --exclude=go.sum --exclude=main.go --exclude=zdir .
+    tar -zcvf zdir_3.0.0_windows_amd64.tar.gz --exclude=.gitignore --exclude=docker --exclude=.git --exclude=sh --exclude=*.gz --exclude=cli --exclude=config --exclude=controller --exclude=data/public/* --exclude=logs/* --exclude=router --exclude=compile.sh --exclude=config.ini --exclude=go.mod --exclude=go.sum --exclude=main.go --exclude=zdir .
     echo "Compiled successfully.(Windows)"
     reset_golang_env
 }
