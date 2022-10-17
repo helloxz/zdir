@@ -4,7 +4,7 @@ WORKDIR /data/apps/zdir
 #复制启动文件
 COPY *.sh /root/
 # 安装
-RUN sh install.sh
+RUN ls /root/ && sh /root/install.sh
 # 暴露文件夹和端口
 VOLUME /data/apps/zdir/data
 EXPOSE 6080
