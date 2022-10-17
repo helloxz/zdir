@@ -1,3 +1,0 @@
-RewriteEngine On
-DirectoryIndex zdir/index.php
-RewriteRule 'static/(.*)$' zdir/static/$1 [L] 
