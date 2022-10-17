@@ -10,6 +10,7 @@ init() {
 	then
 		yum -y install tar wget
 	elif [ -e "/usr/bin/apt-get" ]
+    then
 		#更新软件，否则可能make命令无法安装
 		apt-get update
 		apt-get install -y wget
