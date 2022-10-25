@@ -2,60 +2,69 @@ package config
 
 import (
 	"fmt"
-	"os"
 
-	"gopkg.in/ini.v1"
+	"github.com/spf13/viper"
 )
 
-func Load_ini() *ini.File {
-	//载入配置文件
-	cfg, err := ini.Load("data/config.ini")
-	//如果载入配置出错，则终止执行
-	if err != nil {
-		fmt.Printf("Fail to read file: %v", err)
-		os.Exit(1)
+func Load_ini() {
+	viper.SetConfigFile("data/config.ini") // 指定配置文件路径
+	//指定ini类型的文件
+	viper.SetConfigType("ini")
+	err := viper.ReadInConfig() // 读取配置信息
+
+	if err != nil { // 读取配置信息失败
+		panic(fmt.Errorf("Fatal error config file: %s \n", err))
 	}
-	return cfg
 }
 
 // 返回公共存储的路径
 func Public_path() string {
 	//载入配置文件，通过cfg调用
-	cfg := Load_ini()
-	dir := cfg.Section("storages").Key("public_path").String()
+	Load_ini()
+	dir := viper.GetString("storages.public_path")
 	return dir
 }
 
 // 返回公共存储的域名
 func Public_domain() string {
 	//载入配置文件，通过cfg调用
-	cfg := Load_ini()
-	domain := cfg.Section("storages").Key("public_domain").String()
+	Load_ini()
+	domain := viper.GetString("storages.public_domain")
 	return domain
 }
 
 // 返回端口
 func Listen() string {
 	//载入配置文件，通过cfg调用
-	cfg := Load_ini()
-	info := cfg.Section("servers").Key("port").String()
+	Load_ini()
+	info := viper.GetString("servers.port")
 	return info
 }
 
 // 返回gin运行模式
 func RunMode() string {
 	//载入配置文件，通过cfg调用
-	cfg := Load_ini()
-	info := cfg.Section("servers").Key("RunMode").String()
+	Load_ini()
+	info := viper.GetString("servers.RunMode")
 	return info
 }
 
 // 返回站点信息
 func Site_info() (string, string) {
 	//载入配置文件，通过cfg调用
-	cfg := Load_ini()
-	title := cfg.Section("sites").Key("title").String()
-	name := cfg.Section("sites").Key("name").String()
+	Load_ini()
+	title := viper.GetString("sites.title")
+	name := viper.GetString("sites.name")
 
 	return title, name
+}
+
+// 返回用户信息
+func User_info() (string, string) {
+	//载入配置文件，通过cfg调用
+	Load_ini()
+	username := viper.GetString("users.username")
+	password := viper.GetString("users.password")
+
+	return username, password
 }

@@ -1,13 +1,27 @@
 #!/bin/bash
 #####   name：编译并打包zdir    #####
 
+OS=$1
+ARCH=$2
+
 #编译linux
 compile_linux() {
     rm -rf *.tar.gz *.exe
     #编译程序
     go env -w CGO_ENABLED=0
     go env -w GOOS=linux
-    go env -w GOARCH=amd64
+    
+    #根据参数判断架构
+    case $ARCH in
+        arm64)
+            arch="arm64"
+        ;;
+        *)
+            ARCH="amd64"
+        ;;
+    esac
+    
+    go env -w GOARCH=${ARCH}
     #删除原有的编译文件
     rm -rf main zdir
 
@@ -17,7 +31,7 @@ compile_linux() {
     upx -9 main
     #重命名程序
     mv main zdir
-    tar -zcvf zdir_3.0.0_linux_amd64.tar.gz --exclude=.gitignore --exclude=docker --exclude=.git --exclude=*.gz --exclude=cli --exclude=config --exclude=controller --exclude=data/public/* --exclude=logs/* --exclude=router --exclude=compile.sh --exclude=config.ini --exclude=go.mod --exclude=go.sum --exclude=main.go --exclude=run.* --exclude=zdir.exe .
+    tar -zcvf zdir_3.0.0_linux_${ARCH}.tar.gz --exclude=.gitignore --exclude=docker --exclude=.git --exclude=*.gz --exclude=cli --exclude=config --exclude=controller --exclude=data/public/* --exclude=logs/* --exclude=router --exclude=compile.sh --exclude=config.ini --exclude=go.mod --exclude=go.sum --exclude=main.go --exclude=run.* --exclude=zdir.exe .
     echo "Compiled successfully.(Linux)"
     reset_golang_env
 }

@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"regexp"
@@ -48,11 +47,17 @@ func FileInfo(c *gin.Context) {
 	//获取文件信息
 	finfo, err := os.Stat(full_path)
 
-	fmt.Println(full_path)
+	//fmt.Println(full_path)
 
 	//如果出现错误，比如文件夹不存在
 	if err != nil {
-		log.Fatal(err)
+		log.Print(err)
+		c.JSON(200, gin.H{
+			"code": 500,
+			"msg":  err,
+			"data": "",
+		})
+		c.Abort()
 		return
 	} else {
 		//如果是目录

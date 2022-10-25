@@ -26,8 +26,6 @@ type appinfos struct {
 func GetAppInfo(c *gin.Context) {
 	var storage storages
 
-	// 载入配置文件，通过cfg调用
-	cfg = config.Load_ini()
 	//从配置文件获取存储域名
 	public_domain := config.Public_domain()
 
