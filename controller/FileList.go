@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/url"
@@ -34,8 +35,8 @@ func FileList(c *gin.Context) {
 	//获取请求参数
 	path := c.Query("path")
 	//判断用户传递的路径是否合法
-	var validPath = regexp.MustCompile(`^(\.|\..).+`)
-	v_re := validPath.MatchString(path)
+	v_re := !V_fpath(path)
+	fmt.Println(v_re)
 	if v_re {
 		c.JSON(200, gin.H{
 			"code": -1000,

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"regexp"
+	"strings"
 )
 
 // 验证路径是否合法,返回一个BOOL值
@@ -13,6 +14,12 @@ func V_fpath(fpath string) bool {
 	var validPath = regexp.MustCompile(`^(\.|\..).+`)
 	v_re := validPath.MatchString(fpath)
 	if v_re {
+		return false
+	} else if strings.Contains(fpath, "..") {
+		return false
+	} else if strings.Contains(fpath, "../") {
+		return false
+	} else if strings.Contains(fpath, "./") {
 		return false
 	} else {
 		return true

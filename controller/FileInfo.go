@@ -3,7 +3,6 @@ package controller
 import (
 	"log"
 	"os"
-	"regexp"
 	"strings"
 	"zdir/config"
 
@@ -30,8 +29,7 @@ func FileInfo(c *gin.Context) {
 	fpath := string(c.PostForm("fpath"))
 
 	//判断用户传递的路径是否合法
-	var validPath = regexp.MustCompile(`^(\.|\..).+`)
-	v_re := validPath.MatchString(fpath)
+	v_re := !V_fpath(fpath)
 	if v_re {
 		c.JSON(200, gin.H{
 			"code": -1000,
