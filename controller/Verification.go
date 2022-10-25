@@ -82,3 +82,22 @@ func V_is_file(fpath string) bool {
 		}
 	}
 }
+
+// 验证搜索名称
+func V_search_name(name string) bool {
+	//正则验证，不能包含.. | & * exec --
+	var valid = regexp.MustCompile(`(\.\.|\||&|\*|exec|--)+`)
+	v_re := valid.MatchString(name)
+
+	//name不能为空
+	if name == "" {
+		return false
+	} else if len(name) > 24 {
+		//不能超过24字节，英文字母占用1字节，中文占用3字节
+		return false
+	} else if v_re {
+		return false
+	} else {
+		return true
+	}
+}
