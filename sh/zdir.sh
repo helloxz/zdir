@@ -2,7 +2,7 @@
 #####   name:Zdir一键安装脚本   #####
 
 #声明Zdir版本
-VERSION="3.0.0"
+VERSION="3.1.0"
 
 #检查是否已经安装过
 is_install() {
@@ -47,7 +47,7 @@ get_parameters() {
 download() {
     mkdir -p /tmp/zdir
     cd /tmp/zdir
-    wget http://soft.xiaoz.org/zdir/${VERSION}/zdir_${VERSION}_linux_amd64.tar.gz
+    wget http://soft.xiaoz.org/zdir/zdir_${VERSION}_linux_amd64.tar.gz
     #解压
     tar -xvf zdir_${VERSION}_linux_amd64.tar.gz
 }
@@ -93,12 +93,12 @@ uninstall_zdir() {
     # 停止Zdir
     systemctl stop zdir
     # 获取Zdir安装目录
-    zirpath=`grep "WorkingDirectory" /etc/systemd/system/zdir.service|sed 's/WorkingDirectory=//g'`
+    zirpath=`grep "ExecStart=" /etc/systemd/system/zdir.service|sed 's/ExecStart=//'|sed 's/zdir start//'`
     # 删除服务
     rm -rf /etc/systemd/system/zdir.service
     # 重载服务
     systemctl daemon-reload
-    echo "Zdir卸载完成，请手动执行:`rm -rf ${zirpath}`删除Zdir文件夹！"
+    echo "Zdir卸载完成，请手动执行:rm -rf ${zirpath}删除Zdir文件夹！"
 }
 
 
