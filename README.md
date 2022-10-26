@@ -2,7 +2,21 @@
 
 使用Golang + Vue3开发的轻量级目录列表程序，支持Linux、Docker、Windows部署，支持视频、音频、代码等常规文件预览，适合个人或初创公司文件分享使用，亦可作为轻量级网盘使用。
 
+首页展示：
+
 ![](https://img.rss.ink/imgs/2022/10/17/10d74765a20fdc7a.png)
+
+用户登录界面：
+
+![](https://img.rss.ink/imgs/2022/10/26/ab87df26eb6de9af.png)
+
+多文件上传界面：
+
+![](https://img.rss.ink/imgs/2022/10/26/9c874b430bbbf472.png)
+
+文件详情页面：
+
+![](https://img.rss.ink/imgs/2022/10/26/459da25f39ea1b7c.png)
 
 ## 功能特点
 
