@@ -4,7 +4,6 @@ import (
 	"log"
 	"os"
 	"os/exec"
-	"regexp"
 	"runtime"
 	"strings"
 	"zdir/config"
@@ -16,22 +15,14 @@ func Find(c *gin.Context) {
 	//获取请求参数
 	name := c.Query("name")
 
-	//参数不能以.开头
-	var validPath = regexp.MustCompile(`^(\.\.).+`)
-	v_re := validPath.MatchString(name)
+	//参数未验证通过
+	v_re := !V_search_name(name)
 	if v_re {
 		c.JSON(200, gin.H{
 			"code": -1000,
 			"msg":  "参数不合法！",
 			"data": "",
 		})
-		c.Abort()
-		return
-	}
-
-	//参数不能为空
-	if name == "" {
-		Err_json(1000, "参数不能为空", c)
 		c.Abort()
 		return
 	}
@@ -83,7 +74,7 @@ func Find(c *gin.Context) {
 		//获取文件信息
 		finfo, err := os.Stat(value)
 		if err != nil {
-			log.Fatal(err)
+			log.Print(err)
 			return
 		} else {
 			//如果是目录

@@ -1,13 +1,30 @@
 #!/bin/bash
 #####   name：编译并打包zdir    #####
 
+OS=$1
+ARCH=$2
+
+#Zdir版本号
+VERSION=3.1.0
+
 #编译linux
 compile_linux() {
-    rm -rf *.tar.gz *.exe
+    rm -rf *.tar.gz zdir.exe
     #编译程序
     go env -w CGO_ENABLED=0
     go env -w GOOS=linux
-    go env -w GOARCH=amd64
+    
+    #根据参数判断架构
+    case $ARCH in
+        arm64)
+            arch="arm64"
+        ;;
+        *)
+            ARCH="amd64"
+        ;;
+    esac
+    
+    go env -w GOARCH=${ARCH}
     #删除原有的编译文件
     rm -rf main zdir
 
@@ -17,7 +34,7 @@ compile_linux() {
     upx -9 main
     #重命名程序
     mv main zdir
-    tar -zcvf zdir_3.0.0_linux_amd64.tar.gz --exclude=.gitignore --exclude=docker --exclude=.git --exclude=*.gz --exclude=cli --exclude=config --exclude=controller --exclude=data/public/* --exclude=logs/* --exclude=router --exclude=compile.sh --exclude=config.ini --exclude=go.mod --exclude=go.sum --exclude=main.go --exclude=run.* --exclude=zdir.exe .
+    tar -zcvf zdir_${VERSION}_linux_${ARCH}.tar.gz --exclude=.gitignore --exclude=docker --exclude=.git --exclude=*.gz --exclude=cli --exclude=config --exclude=controller --exclude=data/public/* --exclude=logs/* --exclude=router --exclude=compile.sh --exclude=config.ini --exclude=go.mod --exclude=go.sum --exclude=main.go --exclude=run.* --exclude=zdir.exe .
     echo "Compiled successfully.(Linux)"
     reset_golang_env
 }
@@ -39,7 +56,7 @@ compile_windows() {
     #重命名程序
     mv main.exe zdir.exe
     #打包程序
-    tar -zcvf zdir_3.0.0_windows_amd64.tar.gz --exclude=.gitignore --exclude=docker --exclude=.git --exclude=sh --exclude=*.gz --exclude=cli --exclude=config --exclude=controller --exclude=data/public/* --exclude=logs/* --exclude=router --exclude=compile.sh --exclude=config.ini --exclude=go.mod --exclude=go.sum --exclude=main.go --exclude=zdir .
+    tar -zcvf zdir_${VERSION}_windows_amd64.tar.gz --exclude=.gitignore --exclude=docker --exclude=.git --exclude=sh --exclude=*.gz --exclude=cli --exclude=config --exclude=controller --exclude=data/public/* --exclude=logs/* --exclude=router --exclude=compile.sh --exclude=config.ini --exclude=go.mod --exclude=go.sum --exclude=main.go --exclude=zdir .
     echo "Compiled successfully.(Windows)"
     reset_golang_env
 }

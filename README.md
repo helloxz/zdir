@@ -1,8 +1,22 @@
 # Zdir
 
-使用Golang + Vue3开发的轻量级目录列表程序，支持Linux、Docker、Windows部署，适合个人或初创公司文件分享使用，亦可作为轻量级网盘使用。
+使用Golang + Vue3开发的轻量级目录列表程序，支持Linux、Docker、Windows部署，支持视频、音频、代码等常规文件预览，适合个人或初创公司文件分享使用，亦可作为轻量级网盘使用。
+
+首页展示：
 
 ![](https://img.rss.ink/imgs/2022/10/17/10d74765a20fdc7a.png)
+
+用户登录界面：
+
+![](https://img.rss.ink/imgs/2022/10/26/ab87df26eb6de9af.png)
+
+多文件上传界面：
+
+![](https://img.rss.ink/imgs/2022/10/26/9c874b430bbbf472.png)
+
+文件详情页面：
+
+![](https://img.rss.ink/imgs/2022/10/26/459da25f39ea1b7c.png)
 
 ## 功能特点
 
@@ -18,12 +32,15 @@
 - [x] 二维码生成
 - [x] 支持中文显示
 - [x] 支持Linux、Docker、Windows等多种部署方式
+- [x] 基本的文件管理（上传、重命名、删除、新建目录）
+- [x] 文件上传
+- [x] API支持
 - [ ] 后台管理（站点信息设置等）
-- [ ] 文件管理（上传、删除、编辑、复制、移动）
+- [ ] 文件复制、移动
 - [ ] 私有文件
 - [ ] 私有文件分享
 - [ ] 音乐播放列表
-- [ ] 离线下载
+- [ ] 离线下载 
 
 ## 快速开始
 
@@ -43,7 +60,9 @@ curl -s "http://soft.xiaoz.org/zdir/sh/zdir.sh" | bash -s install
 * 默认安装路径为：`/data/apps/zdir`
 * 需要公开的文件列表路径位于`/data/apps/zdir/data/public`
 
-安装完毕后访问`http://IP:6080`即可
+安装完毕后访问`http://IP:6080/#/user/login`进行初始化或者点击右上方登录按钮完成初始化操作。
+
+![](https://img.rss.ink/imgs/2022/10/25/e12ec1da1a7dc2f8.png)
 
 ___
 

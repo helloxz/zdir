@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"zdir/cli"
+	"zdir/controller"
 	"zdir/router"
 )
 
@@ -20,6 +21,8 @@ func main() {
 	} else if args_len == 2 {
 		//启动程序
 		if args[1] == "start" {
+			//全局缓存初始化
+			controller.InitCache()
 			router.Start()
 		} else if args[1] == "init" {
 			//初始化程序，拷贝配置文件，注册服务

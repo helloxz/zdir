@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/url"
@@ -34,8 +35,8 @@ func FileList(c *gin.Context) {
 	//获取请求参数
 	path := c.Query("path")
 	//判断用户传递的路径是否合法
-	var validPath = regexp.MustCompile(`^(\.|\..).+`)
-	v_re := validPath.MatchString(path)
+	v_re := !V_fpath(path)
+	fmt.Println(v_re)
 	if v_re {
 		c.JSON(200, gin.H{
 			"code": -1000,
@@ -72,7 +73,7 @@ func FileList(c *gin.Context) {
 	result := []info{}
 	files, err := ioutil.ReadDir(full_path)
 	if err != nil {
-		log.Fatal(err)
+		log.Print(err)
 	}
 
 	for _, file := range files {
@@ -81,11 +82,11 @@ func FileList(c *gin.Context) {
 		fname := file.Name()
 		finfo, err := os.Stat(fpath)
 		if err != nil {
-			log.Fatal(err)
+			log.Print(err)
 			return
 		} else {
-			//如果是隐藏文件，直接跳过(.开头的视为隐藏文件)
-			var validHide = regexp.MustCompile(`^\..*`)
+			//如果是隐藏文件，直接跳过(. @ #开头的视为隐藏文件)
+			var validHide = regexp.MustCompile(`^(\.|@|#).*`)
 			v_re := validHide.MatchString(fname)
 			if v_re {
 				continue
@@ -117,10 +118,26 @@ func FileList(c *gin.Context) {
 		}
 
 	}
+	//对数据进行排序并返回，文件夹排前，文件靠后
+	//sort_result_dir := []info{}
+	sort_result_file := []info{}
+	sort_result := []info{}
+	for _, value := range result {
+		if value.Ftype == "folder" {
+			sort_result = append(sort_result, value)
+		} else if value.Ftype == "file" {
+			sort_result_file = append(sort_result_file, value)
+		}
+	}
+
+	for _, value := range sort_result_file {
+		sort_result = append(sort_result, value)
+	}
+
 	//返回json数据
 	c.JSON(200, gin.H{
 		"code": 200,
 		"msg":  "success",
-		"data": result,
+		"data": sort_result,
 	})
 }
