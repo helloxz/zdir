@@ -35,7 +35,7 @@ upgrade(){
     wget http://soft.xiaoz.org/zdir/${name}
 
     #停止Zdir
-    systemd stop zdir
+    systemctl stop zdir
 
     #获取 zdir pid
     pid=`ps -ef|grep zdir|grep -v grep|awk '{print $2}'`
@@ -56,7 +56,7 @@ upgrade(){
     chmod +x ./zdir
 
     # 重新启动
-    systemd start zdir
+    systemctl start zdir
 
     echo "--------------------------------------------------"
     echo "Zdir $VERSION升级完毕！"
