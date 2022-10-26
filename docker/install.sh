@@ -1,5 +1,7 @@
 #!/bin/sh
 
+VERSION=3.1.0
+
 # 初始化环境
 init() {
     #更新软件
@@ -25,16 +27,17 @@ init() {
 #下载Zdir
 download(){
     cd /root && mkdir zdir && cd zdir
-    wget http://soft.xiaoz.org/zdir/3.0.0/zdir_3.0.0_linux_amd64.tar.gz
+    name=zdir_${VERSION}_linux_amd64.tar.gz
+    wget http://soft.xiaoz.org/zdir/${name}
 
     #解压
-    tar -xvf zdir_3.0.0_linux_amd64.tar.gz
+    tar -xvf ${name}
     #拷贝文件
     cp -ar /root/zdir/* /data/apps/zdir
     #添加执行权限
     chmod +x /data/apps/zdir/zdir
     #删除压缩文件
-    rm -rf /root/zdir_3.0.0_linux_amd64.tar.gz
+    rm -rf /root/${name}
     rm -rf /data/apps/zdir/*.tar.gz
 }
 
