@@ -35,7 +35,7 @@ upgrade(){
     wget http://soft.xiaoz.org/zdir/${name}
 
     #停止Zdir
-    system stop zdir
+    systemd stop zdir
 
     #获取 zdir pid
     pid=`ps -ef|grep zdir|grep -v grep|awk '{print $2}'`
@@ -46,6 +46,9 @@ upgrade(){
         sleep 10
     fi
 
+    # 删除原来的静态文件
+    rm -rf $zdir_path"data/dist/assets/*"
+
     #解压Zdir
     tar -xvf $name
 
@@ -53,7 +56,7 @@ upgrade(){
     chmod +x ./zdir
 
     # 重新启动
-    system start zdir
+    systemd start zdir
 
     echo "--------------------------------------------------"
     echo "Zdir $VERSION升级完毕！"
