@@ -9,7 +9,7 @@ VERSION=3.1.0
 
 #编译linux
 compile_linux() {
-    rm -rf *.tar.gz *.exe
+    rm -rf *.tar.gz zdir.exe
     #编译程序
     go env -w CGO_ENABLED=0
     go env -w GOOS=linux
