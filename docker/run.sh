@@ -28,8 +28,11 @@ run() {
     if [[ "${get_arch}" == "x86_64" ]]
     then
         ./zdir start
-    else
+    elif [[ "${get_arch}" == "aarch64" ]]
+    then
         ./zdir_arm64 start
+    else
+        ./zdir_arm start
     fi
 }
 

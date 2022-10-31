@@ -19,10 +19,14 @@ compile_linux() {
         arm64)
             arch="arm64"
         ;;
+        arm)
+            ARCH="arm"
+        ;;
         *)
             ARCH="amd64"
         ;;
     esac
+
     
     go env -w GOARCH=${ARCH}
     #删除原有的编译文件
