@@ -32,7 +32,7 @@ upgrade(){
     # 下载对应版本
     cd $zdir_path
     name=zdir_${VERSION}_linux_amd64.tar.gz
-    wget http://soft.xiaoz.org/zdir/${name}
+    wget http://soft.xiaoz.org/zdir/${VERSION}/${name}
 
     #停止Zdir
     systemctl stop zdir

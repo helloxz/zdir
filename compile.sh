@@ -5,7 +5,7 @@ OS=$1
 ARCH=$2
 
 #Zdir版本号
-VERSION=3.1.0
+VERSION=3.1.1
 
 #编译linux
 compile_linux() {
