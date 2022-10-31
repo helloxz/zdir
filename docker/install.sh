@@ -40,7 +40,7 @@ download(){
     rm -rf /root/${name}
     rm -rf /data/apps/zdir/*.tar.gz
 
-    # 下载ARM架构
+    # 下载ARM64架构
     cd /tmp && mkdir zdir && cd zdir
     name=zdir_${VERSION}_linux_arm64.tar.gz
     wget http://soft.xiaoz.org/zdir/${VERSION}/${name}
@@ -48,6 +48,19 @@ download(){
     tar -xvf ${name}
     #拷贝文件
     cp -ar /tmp/zdir/zdir /data/apps/zdir/zdir_arm64
+    #删除临时目录
+    rm -rf /tmp/*
+
+    # 下载ARM架构
+    cd /tmp && mkdir zdir && cd zdir
+    name=zdir_${VERSION}_linux_arm.tar.gz
+    wget http://soft.xiaoz.org/zdir/${VERSION}/${name}
+    #解压
+    tar -xvf ${name}
+    #拷贝文件
+    cp -ar /tmp/zdir/zdir /data/apps/zdir/zdir_arm
+    #删除临时目录
+    rm -rf /tmp/*
 }
 
 
