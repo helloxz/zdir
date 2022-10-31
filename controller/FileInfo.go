@@ -1,6 +1,10 @@
 package controller
 
 import (
+	"crypto/md5"
+	"encoding/hex"
+	"fmt"
+	"io"
 	"log"
 	"os"
 	"strings"
@@ -16,6 +20,7 @@ type finfo struct {
 	Mtime string
 	Fpath string
 	Ext   string
+	Md5   string
 }
 
 func FileInfo(c *gin.Context) {
@@ -80,6 +85,8 @@ func FileInfo(c *gin.Context) {
 			new_info.Name = finfo.Name()
 			//获取路径
 			new_info.Fpath = fpath
+			//获取MD5
+			new_info.Md5 = GetFileMd5(full_path)
 			c.JSON(200, gin.H{
 				"code": 200,
 				"msg":  "success",
@@ -89,4 +96,19 @@ func FileInfo(c *gin.Context) {
 		}
 
 	}
+}
+
+// 获取文件的md5码，来自：https://blog.csdn.net/yzf279533105/article/details/106305721
+func GetFileMd5(fpath string) string {
+
+	pFile, err := os.Open(fpath)
+	if err != nil {
+		fmt.Println("打开文件失败！")
+		return ""
+	}
+	defer pFile.Close()
+	md5h := md5.New()
+	io.Copy(md5h, pFile)
+
+	return hex.EncodeToString(md5h.Sum(nil))
 }

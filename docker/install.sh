@@ -1,6 +1,6 @@
 #!/bin/sh
 
-VERSION=3.1.0
+VERSION=3.1.1
 
 # 初始化环境
 init() {
@@ -28,7 +28,7 @@ init() {
 download(){
     cd /root && mkdir zdir && cd zdir
     name=zdir_${VERSION}_linux_amd64.tar.gz
-    wget http://soft.xiaoz.org/zdir/${name}
+    wget http://soft.xiaoz.org/zdir/${VERSION}/${name}
 
     #解压
     tar -xvf ${name}
@@ -39,6 +39,15 @@ download(){
     #删除压缩文件
     rm -rf /root/${name}
     rm -rf /data/apps/zdir/*.tar.gz
+
+    # 下载ARM架构
+    cd /tmp && mkdir zdir && cd zdir
+    name=zdir_${VERSION}_linux_arm64.tar.gz
+    wget http://soft.xiaoz.org/zdir/${VERSION}/${name}
+    #解压
+    tar -xvf ${name}
+    #拷贝文件
+    cp -ar /tmp/zdir/zdir /data/apps/zdir/zdir_arm64
 }
 
 

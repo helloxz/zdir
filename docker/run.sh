@@ -23,7 +23,14 @@ check_dir() {
 # 运行zdir
 run() {
     cd /data/apps/zdir/
-    ./zdir start
+    # 判断架构
+    get_arch=$(arch)
+    if [[ "${get_arch}" == "x86_64" ]]
+    then
+        ./zdir start
+    else
+        ./zdir_arm64 start
+    fi
 }
 
 check_dir && run

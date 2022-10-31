@@ -60,7 +60,7 @@ func RenameFile(c *gin.Context) {
 	old_path := public_dir + fpath + old_name
 	new_path := public_dir + fpath + new_name
 	//判断原文件是否存在
-	if !V_is_file(old_path) {
+	if !V_is_path(old_path) {
 		c.JSON(200, gin.H{
 			"code": -1000,
 			"msg":  "文件路径不存在！",
@@ -91,7 +91,7 @@ func RenameFile(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"code": -1000,
 			"msg":  "文件重命名失败！",
-			"data": err,
+			"data": "",
 		})
 		fmt.Println(err)
 		c.Abort()

@@ -1,7 +1,6 @@
 package router
 
 import (
-	"fmt"
 	"io"
 	"net/http"
 	"os"
@@ -42,9 +41,9 @@ func check_auth() gin.HandlerFunc {
 			token := string(headers["X-Token"][0])
 			//获取内存
 			get_token := string(controller.GetCache(cid))
-			fmt.Println(headers)
-			fmt.Println("这是header获取的：" + token)
-			fmt.Println("这是内存获取的：" + get_token)
+			// fmt.Println(headers)
+			// fmt.Println("这是header获取的：" + token)
+			// fmt.Println("这是内存获取的：" + get_token)
 
 			if token == get_token {
 				c.Next()
