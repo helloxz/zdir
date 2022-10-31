@@ -83,6 +83,20 @@ func V_is_file(fpath string) bool {
 	}
 }
 
+// 验证是否是文件或文件夹
+func V_is_path(fpath string) bool {
+	//获取文件信息
+	_, err := os.Stat(fpath)
+
+	//如果读取文件出现错误，比如不存在的情况，返回false
+	if err != nil {
+		return false
+	} else {
+		//文件和文件夹视为有效路径
+		return true
+	}
+}
+
 // 验证搜索名称
 func V_search_name(name string) bool {
 	//正则验证，不能包含.. | & * exec --

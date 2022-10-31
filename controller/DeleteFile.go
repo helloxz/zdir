@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"os"
 	"zdir/config"
 
@@ -36,8 +37,8 @@ func Delete_File(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	//判断文件是否存在
-	if !V_is_file(full_path) {
+	//判断文件或文件夹是否存在
+	if !V_is_path(full_path) {
 		c.JSON(200, gin.H{
 			"code": -1000,
 			"msg":  "文件路径不存在！",
@@ -49,15 +50,17 @@ func Delete_File(c *gin.Context) {
 
 	//上述验证通过，执行文件删除
 
-	err := os.Remove(full_path)
+	err := os.RemoveAll(full_path)
 
 	//如果删除失败
 	if err != nil {
 		c.JSON(200, gin.H{
 			"code": -1000,
 			"msg":  "文件删除失败！",
-			"data": err,
+			"data": "",
 		})
+		//打印错误日志
+		fmt.Println(err)
 		c.Abort()
 		return
 	} else {

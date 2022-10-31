@@ -2,7 +2,7 @@
 #####   name:Zdir一键安装脚本   #####
 
 #声明Zdir版本
-VERSION="3.1.0"
+VERSION="3.1.1"
 
 #检查是否已经安装过
 is_install() {
