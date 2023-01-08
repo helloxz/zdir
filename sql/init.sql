@@ -10,7 +10,7 @@ CREATE TABLE z_options (
 -- 导入默认数据
 INSERT INTO z_options
 ("key", value, note, created_at, updated_at)
-VALUES('site_data', '{"custom_header":"","description":"","footer":"","keywords":"zdir","logo":"","title":"Zdir"}', '', 1672293223, 1672583054);
+VALUES('site_data', '{"custom_header":"","description":"Zdir3是一款轻量级目录列表程序，使用Golang + Vue3开发。","footer":"","keywords":"zdir,目录列表","logo":"","title":"Zdir"}', '', 1672293223, 1672583054);
 
 -- 创建z_db_logs表，用于记录SQL更新日志
 CREATE TABLE z_db_logs (

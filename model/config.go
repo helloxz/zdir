@@ -16,7 +16,7 @@ var (
 )
 
 // 初始化数据库连接
-func init() {
+func InitDB() {
 	//如果数据库文件不存在，会自动创建
 	DB, ERR = gorm.Open(sqlite.Open("data/db/zdir.db3"), &gorm.Config{})
 	//如果出现错误，抛出错误并终止执行

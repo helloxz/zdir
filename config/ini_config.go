@@ -9,9 +9,9 @@ import (
 	"github.com/spf13/viper"
 )
 
-func init() {
+func InitConfig() {
 	//默认配置文件
-	default_config_file := "data/config/confi.ini"
+	default_config_file := "data/config/config.ini"
 	//备用配置文件
 	backup_config_file := "data/config.ini"
 	var config_file string
@@ -24,6 +24,7 @@ func init() {
 	}
 
 	viper.SetConfigFile(config_file) // 指定配置文件路径
+
 	//指定ini类型的文件
 	viper.SetConfigType("ini")
 	err := viper.ReadInConfig() // 读取配置信息

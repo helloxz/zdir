@@ -9,13 +9,15 @@ import (
 )
 
 // 命令行初始化
-func Init() {
+func InitConfig() {
 	//配置文件路径
 	config_file := "data/config/config.ini"
 	//检查配置文件是否存在，如果存在了，则不进行初始化
 	_, err := os.Stat(config_file)
 	//返回的error为空，说明文件存在，存在则不允许再次初始化
 	if err == nil {
+		// fmt.Printf("Configuration file exists, skip this step.\n")
+		// return
 		fmt.Printf("Initialization failed, the configuration file already exists.\n")
 		os.Exit(1)
 	} else {
@@ -67,6 +69,14 @@ func Init() {
 
 // linux添加服务
 func linux_service() {
+	//判断service是否存在，不存在则创建
+	service_file := "/etc/systemd/system/zdir.service"
+	if v_is_file(service_file) {
+		fmt.Printf("Service file exists, skip this step.\n")
+		return
+	}
+
+	//服务文件不存在，继续执行
 	_, err := exec.Command("bash", "sh/reg_service.sh").Output()
 
 	if err != nil {
@@ -124,4 +134,20 @@ func create_db_file() {
 	fmt.Println("Database file created successfully!")
 }
 
-//导入默认数据库
+// 验证是否是一个文件
+func v_is_file(fpath string) bool {
+	//获取文件信息
+	finfo, err := os.Stat(fpath)
+
+	//如果读取文件出现错误，比如不存在的情况，返回false
+	if err != nil {
+		return false
+	} else {
+		//如果是文件夹，返回false
+		if finfo.IsDir() {
+			return false
+		} else {
+			return true
+		}
+	}
+}

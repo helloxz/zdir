@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"zdir/cli"
+	"zdir/config"
 	"zdir/controller"
 	"zdir/router"
 )
@@ -21,13 +22,15 @@ func main() {
 	} else if args_len == 2 {
 		//启动程序
 		if args[1] == "start" {
+			//初始化viper配置文件
+			config.InitConfig()
 			//初始化数据库
 			controller.Create_db_file()
 			//启动Gin
 			router.Start()
 		} else if args[1] == "init" {
 			//初始化程序，拷贝配置文件，注册服务
-			cli.Init()
+			cli.InitConfig()
 		} else if args[1] == "version" {
 			cli.GetVersion()
 			os.Exit(0)

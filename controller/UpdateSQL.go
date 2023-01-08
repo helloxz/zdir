@@ -49,8 +49,7 @@ func UpdateSQL(c *gin.Context) {
 	}
 }
 
-// 导入初始数据
-// 创建数据库文件
+// 创建数据库文件,当start的时候必定先执行此函数
 func Create_db_file() {
 	// 创建文件，在此之前检查目录是否存在
 	// 检查文件夹是否存在
@@ -70,7 +69,10 @@ func Create_db_file() {
 	//判断文件是否存在，存在就不再创建
 	_, err := os.Stat(db_file)
 
-	//如果文件存在，则不再创建
+	//连接数据库
+	model.InitDB()
+
+	//如果文件存在，则不再创建，但需要连接数据库
 	if err == nil {
 		fmt.Println("The database file already exists, skip this step.")
 		return
@@ -79,11 +81,5 @@ func Create_db_file() {
 	//文件不存在，则创建文件并导入初始数据
 	//导入默认的数据库文件，初始数据库的时候不存在zdir.db3会自动创建
 	model.ImportDefaultSQL()
-	// file, err := os.Create(db_file)
-	// if err != nil {
-	// 	fmt.Println(err)
-	// 	return
-	// }
-	// defer file.Close()
 	fmt.Println("Database file created successfully!")
 }
