@@ -1,7 +1,9 @@
 package controller
 
 import (
+	"fmt"
 	"zdir/config"
+	"zdir/model"
 
 	"github.com/gin-gonic/gin"
 )
@@ -13,8 +15,10 @@ type storages struct {
 
 // 定义一个结构体，用来存放站点信息
 type sites struct {
-	Title string
-	Name  string
+	Title       string `json:"title"`
+	Logo        string `json:"logo"`
+	Keywords    string `json:"keywords"`
+	Description string `json:"description"`
 }
 
 // 定义一个结构体，用来返回综合信息
@@ -27,22 +31,23 @@ func GetAppInfo(c *gin.Context) {
 	var storage storages
 
 	//从配置文件获取存储域名
-	public_domain := config.Public_domain()
+	public_domain := config.Public_domain(c)
 
-	//获取请求host
-	host := c.Request.Host
-
-	//如果存储域名为空，则使用请求host作为存储域名
-	if public_domain == "" {
-		storage.Public_domain = "http://" + host + "/public"
-	} else {
-		storage.Public_domain = public_domain
-	}
+	storage.Public_domain = public_domain
 
 	//声明结构体
 	var site sites
 	//获取站点信息
-	site.Title, site.Name = config.Site_info()
+	site_data := model.OptionGet("site_data")
+	if site_data["title"] == nil {
+		site.Title = "Zdir"
+	} else {
+		site.Title = fmt.Sprintf("%v", site_data["title"])
+	}
+
+	site.Logo = fmt.Sprintf("%v", site_data["logo"])
+	site.Keywords = fmt.Sprintf("%v", site_data["keywords"])
+	site.Description = fmt.Sprintf("%v", site_data["description"])
 
 	//声明一个map
 	var appinfo appinfos

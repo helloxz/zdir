@@ -2,11 +2,13 @@
 package controller
 
 import (
-	"regexp"
 	"strings"
+	"time"
 	"zdir/config"
+	"zdir/model"
 
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 )
 
 // 声明一个结构体，用来返回认证信息
@@ -38,8 +40,7 @@ func UserInit(c *gin.Context) {
 		password = strings.Replace(password, " ", "", -1)
 
 		//判断用户名是否符合规范
-		var validUser = regexp.MustCompile(`^[a-z0-9]{2,16}`)
-		v_re := validUser.MatchString(username)
+		v_re := V_username(username)
 		if !v_re {
 			c.JSON(200, gin.H{
 				"code": -1000,
@@ -51,8 +52,7 @@ func UserInit(c *gin.Context) {
 		}
 
 		//判断密码是否符合规范
-		var validPass = regexp.MustCompile(`^[a-zA-Z0-9!@#$%^&\*\(\)_\.]{8,16}`)
-		v_re = validPass.MatchString(password)
+		v_re = V_password(password)
 		if !v_re {
 			c.JSON(200, gin.H{
 				"code": -1000,
@@ -64,13 +64,95 @@ func UserInit(c *gin.Context) {
 		}
 
 		//密码进行md5加密
-		password = md5s(username + password)
+		password = password_encry(username, password)
 		//用户名转小写
 		username = strings.ToLower(username)
 
 		SetKVS("users.username", username)
 		SetKVS("users.password", password)
 
+		c.JSON(200, gin.H{
+			"code": 200,
+			"msg":  "success",
+			"data": "",
+		})
+	}
+
+}
+
+// 修改用户名、密码
+func ChangePassword(c *gin.Context) {
+	//获取表单数据
+	f_username := c.PostForm("username")
+	//去除空白字符
+	f_username = strings.Replace(f_username, " ", "", -1)
+	//用户名转小写
+	f_username = strings.ToLower(f_username)
+	f_old_password := c.PostForm("old_password")
+	f_new_password := c.PostForm("new_password")
+	//去除密码空白字符
+	f_new_password = strings.Replace(f_new_password, " ", "", -1)
+	f_confirm_password := c.PostForm("confirm_password")
+
+	//验证用户名是否合法
+	if !V_username(f_username) {
+		c.JSON(200, gin.H{
+			"code": -1000,
+			"msg":  "用户名不符合规范！",
+			"data": "",
+		})
+		return
+	}
+	//验证密码是否合法
+	if !V_password(f_new_password) {
+		c.JSON(200, gin.H{
+			"code": -1000,
+			"msg":  "新密码不符合规范！",
+			"data": "",
+		})
+		return
+	}
+	//判断2次密码是否一致
+	if f_new_password != f_confirm_password {
+		c.JSON(200, gin.H{
+			"code": -1000,
+			"msg":  "两次密码不一致！",
+			"data": "",
+		})
+		return
+	}
+
+	//从配置文件获取原始密码
+	config_password := viper.GetString("users.password")
+	//从配置文件获取用户名
+	config_username := viper.GetString("users.username")
+	//加密用户原密码
+	encry_old_password := password_encry(config_username, f_old_password)
+	//如果原始密码和用户提供的密码不一致，则终止执行
+	if config_password != encry_old_password {
+		c.JSON(200, gin.H{
+			"code": -1000,
+			"msg":  "原始密码不正确！",
+			"data": "",
+		})
+		return
+	}
+
+	//加密新的密码
+	encry_new_password := password_encry(f_username, f_new_password)
+	//写入保存
+	is_bool := SetKVS("users.username", f_username)
+	SetKVS("users.password", encry_new_password)
+
+	//如果写入失败了
+	if !is_bool {
+		c.JSON(200, gin.H{
+			"code": -1000,
+			"msg":  "配置文件写入失败！",
+			"data": "",
+		})
+		return
+	} else {
 		c.JSON(200, gin.H{
 			"code": 200,
 			"msg":  "success",
@@ -132,6 +214,23 @@ func UserLogin(c *gin.Context) {
 			"msg":  "success",
 			"data": auth,
 		})
+
+		//获取IP、ua等信息写入日志记录
+		ip := GetClientIp(c)
+		ua := c.Request.Header.Get("User-Agent")
+		//当前时间
+		now := time.Now()
+		data := model.Z_login_log{
+			Ip:         ip,
+			Ua:         ua,
+			Cid:        cid,
+			Token:      token,
+			Expired_at: now.Add(time.Hour * 24 * 7).Unix(),
+			Behavior:   "login",
+			State:      1,
+		}
+		//插入数据库
+		model.LoginLogInsert(data)
 		return
 	} else {
 		c.JSON(200, gin.H{

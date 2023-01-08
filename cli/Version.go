@@ -2,6 +2,16 @@ package cli
 
 import "fmt"
 
+var Version string
+var VersionDate string
+
+// 赋值全局变量
+func init() {
+	Version = "3.2.0"
+	VersionDate = "20230108"
+}
+
+// 命令行打印版本
 func GetVersion() {
-	fmt.Printf("Release 3.1.1\n")
+	fmt.Printf(Version + "-" + VersionDate + "\n")
 }

@@ -77,7 +77,7 @@ ___
 
 * 论坛：[https://xiawen.cc/t/zdir](https://xiawen.cc/t/zdir)
 * QQ:446199062
-* QQ群：932795364
+* QQ群：283604395
 * TG:xiaozme
 
 

@@ -47,7 +47,7 @@ get_parameters() {
 download() {
     mkdir -p /tmp/zdir
     cd /tmp/zdir
-    wget http://soft.xiaoz.org/zdir/zdir_${VERSION}_linux_amd64.tar.gz
+    wget http://soft.xiaoz.org/zdir/${VERSION}/zdir_${VERSION}_linux_amd64.tar.gz
     #解压
     tar -xvf zdir_${VERSION}_linux_amd64.tar.gz
 }

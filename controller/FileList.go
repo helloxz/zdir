@@ -28,10 +28,11 @@ type info struct {
 	Link  string
 }
 
+// 获取文件列表
 func FileList(c *gin.Context) {
 	//获取公共存储的路径
 	public_dir := config.Public_path()
-	storage_domain := config.Public_domain()
+	storage_domain := config.Public_domain(c)
 	//获取请求参数
 	path := c.Query("path")
 	//判断用户传递的路径是否合法
@@ -111,7 +112,7 @@ func FileList(c *gin.Context) {
 			new_info.Size = finfo.Size()
 			new_info.Name = fname
 			new_info.Fpath = path + "/" + fname
-			new_info.Link = storage_domain + "/public" + url.QueryEscape(new_info.Fpath)
+			new_info.Link = storage_domain + url.QueryEscape(new_info.Fpath)
 
 			//追加到数据信息
 			result = append(result, new_info)
