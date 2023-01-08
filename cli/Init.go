@@ -10,8 +10,10 @@ import (
 
 // 命令行初始化
 func InitConfig() {
+	//配置文件目录
+	config_dir := "data/config"
 	//配置文件路径
-	config_file := "data/config/config.ini"
+	config_file := config_dir + "/config.ini"
 	//检查配置文件是否存在，如果存在了，则不进行初始化
 	_, err := os.Stat(config_file)
 	//返回的error为空，说明文件存在，存在则不允许再次初始化
@@ -28,6 +30,15 @@ func InitConfig() {
 		if s_error != nil {
 			fmt.Printf("s%\n", s_error)
 			os.Exit(1)
+		}
+
+		//如果配置文件目录不存在，则创建
+		if !V_dir(config_dir) {
+			err := os.MkdirAll(config_dir, 0755)
+			if err != nil {
+				fmt.Printf("%s\n", err)
+				os.Exit(1)
+			}
 		}
 
 		//创建目标文件
@@ -149,5 +160,21 @@ func v_is_file(fpath string) bool {
 		} else {
 			return true
 		}
+	}
+}
+
+// 验证是否是文件夹
+func V_dir(dir string) bool {
+	dirinfo, err := os.Stat(dir)
+
+	if err != nil {
+		fmt.Println(err)
+		return false
+	}
+
+	if dirinfo.IsDir() {
+		return true
+	} else {
+		return false
 	}
 }
