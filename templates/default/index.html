@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ .title }}</title>
+    <meta name="keywords" content="{{ .keywords }}" />
+	<meta name="description" content="{{ .description }}" />
+    <script type="module" crossorigin src="/assets/index.js?v={{ .version }}"></script>
+    <link rel="stylesheet" href="/assets/index.css?v={{ .version }}">
+    <!-- 自定义header部分 -->
+    {{ .custom_header }}
+    <!-- 自定义headder部分END -->
+  </head>
+  <body>
+    <div id="app"></div>
+    
+  </body>
+</html>

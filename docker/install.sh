@@ -1,6 +1,6 @@
 #!/bin/sh
 
-VERSION=3.1.1
+VERSION=3.2.0
 
 # 初始化环境
 init() {

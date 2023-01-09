@@ -5,7 +5,7 @@ OS=$1
 ARCH=$2
 
 #Zdir版本号
-VERSION=3.1.1
+VERSION=3.2.0
 
 #编译linux
 compile_linux() {
@@ -38,7 +38,8 @@ compile_linux() {
     upx -9 main
     #重命名程序
     mv main zdir
-    tar -zcvf zdir_${VERSION}_linux_${ARCH}.tar.gz --exclude=.gitignore --exclude=docker --exclude=.git --exclude=*.gz --exclude=cli --exclude=config --exclude=controller --exclude=data/public/* --exclude=logs/* --exclude=router --exclude=compile.sh --exclude=config.ini --exclude=go.mod --exclude=go.sum --exclude=main.go --exclude=run.* --exclude=zdir.exe .
+    exclude="--exclude=model --exclude=data/db --exclude=.gitignore --exclude=docker --exclude=.git --exclude=*.gz --exclude=cli --exclude=config --exclude=controller --exclude=data/public/* --exclude=logs/* --exclude=router --exclude=compile.sh --exclude=config.ini --exclude=go.mod --exclude=go.sum --exclude=main.go --exclude=run.* --exclude=zdir.exe ."
+    tar -zcvf zdir_${VERSION}_linux_${ARCH}.tar.gz ${exclude}
     echo "Compiled successfully.(Linux)"
     reset_golang_env
 }
@@ -60,7 +61,8 @@ compile_windows() {
     #重命名程序
     mv main.exe zdir.exe
     #打包程序
-    tar -zcvf zdir_${VERSION}_windows_amd64.tar.gz --exclude=.gitignore --exclude=docker --exclude=.git --exclude=sh --exclude=*.gz --exclude=cli --exclude=config --exclude=controller --exclude=data/public/* --exclude=logs/* --exclude=router --exclude=compile.sh --exclude=config.ini --exclude=go.mod --exclude=go.sum --exclude=main.go --exclude=zdir .
+    exclude="--exclude=model --exclude=data/db --exclude=.gitignore --exclude=docker --exclude=.git --exclude=sh --exclude=*.gz --exclude=cli --exclude=config --exclude=controller --exclude=data/public/* --exclude=logs/* --exclude=router --exclude=compile.sh --exclude=config.ini --exclude=go.mod --exclude=go.sum --exclude=main.go --exclude=zdir ."
+    tar -zcvf zdir_${VERSION}_windows_amd64.tar.gz ${exclude}
     echo "Compiled successfully.(Windows)"
     reset_golang_env
 }

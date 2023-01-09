@@ -93,6 +93,8 @@ func Find(c *gin.Context) {
 			name_temp := strings.Split(value, "/")
 			new_info.Name = name_temp[len(name_temp)-1]
 			new_info.Fpath = value
+			//storage_domain := config.Public_domain()
+			//new_info.Link = storage_domain + UrlEncode(new_info.Fpath)
 			//获取扩展名
 			ext_temp := strings.Split(value, ".")
 			//取分隔的最后一个元素

@@ -97,6 +97,30 @@ func V_is_path(fpath string) bool {
 	}
 }
 
+// 验证用户名是否合法
+func V_username(username string) bool {
+	var validUser = regexp.MustCompile(`^[a-z0-9]{2,16}`)
+	v_re := validUser.MatchString(username)
+
+	if !v_re {
+		return false
+	} else {
+		return true
+	}
+}
+
+// 判断用户密码是否符合规范
+func V_password(password string) bool {
+	var validPass = regexp.MustCompile(`^[a-zA-Z0-9!@#$%^&\*\(\)_\.]{8,16}`)
+	v_re := validPass.MatchString(password)
+
+	if !v_re {
+		return false
+	} else {
+		return true
+	}
+}
+
 // 验证搜索名称
 func V_search_name(name string) bool {
 	//正则验证，不能包含.. | & * exec --
@@ -113,5 +137,17 @@ func V_search_name(name string) bool {
 		return false
 	} else {
 		return true
+	}
+}
+
+// 验证IP地址，同时支持IPV4和IPV6
+func V_ip(ip string) bool {
+	var re = regexp.MustCompile(`(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))`)
+	v_re := re.MatchString(ip)
+
+	if v_re {
+		return true
+	} else {
+		return false
 	}
 }
