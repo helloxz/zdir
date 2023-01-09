@@ -2,7 +2,7 @@
 #####   name:Zdir一键安装脚本   #####
 
 #声明Zdir版本
-VERSION="3.1.1"
+VERSION="3.2.0"
 
 #检查是否已经安装过
 is_install() {
@@ -73,7 +73,7 @@ install_zdir() {
     # 初始化zdir
     cd ${zdirpath} && ./zdir init
     # 替换端口
-    sed -i "s/6080/${zdirport}/g" ${zdirpath}/data/config.ini
+    sed -i "s/6080/${zdirport}/g" ${zdirpath}/data/config/config.ini
     #删除临时文件
     rm -rf /tmp/zdir
     # 启动服务
