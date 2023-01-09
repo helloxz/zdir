@@ -138,8 +138,8 @@ func Start() {
 	r.GET("/admin", controller.AdminPage)
 
 	//私有文件路由测试
-	private := r.Group("/private", check_auth())
-	private.StaticFS("/", http.Dir(public_dir))
+	//private := r.Group("/private", check_auth())
+	//private.StaticFS("/", http.Dir(public_dir))
 
 	//获取服务端配置
 	port := config.Listen()

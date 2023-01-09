@@ -184,6 +184,16 @@ func UserLogin(c *gin.Context) {
 	username = strings.Replace(username, " ", "", -1)
 	password = strings.Replace(password, " ", "", -1)
 
+	//如果用户输入的密码是空的，则不允许登录
+	if get_password == "" {
+		c.JSON(200, gin.H{
+			"code": -1000,
+			"msg":  "Password cannot be empty!",
+			"data": "",
+		})
+		return
+	}
+
 	//密码进行md5加密
 	get_password = md5s(get_username + get_password)
 	//用户名转小写
