@@ -35,6 +35,7 @@ func InitConfig() {
 		//如果配置文件目录不存在，则创建
 		if !V_dir(config_dir) {
 			err := os.MkdirAll(config_dir, 0755)
+
 			if err != nil {
 				fmt.Printf("%s\n", err)
 				os.Exit(1)
@@ -168,7 +169,7 @@ func V_dir(dir string) bool {
 	dirinfo, err := os.Stat(dir)
 
 	if err != nil {
-		fmt.Println(err)
+		//fmt.Println(err)
 		return false
 	}
 
