@@ -2,7 +2,9 @@
 ####    name:zdir运行脚本   #####
 
 # zdir配置文件默认目录
-zdir_config_file="/data/apps/zdir/data/config/config.ini"
+
+zdir_config_dir="/data/apps/zdir/data/config/"
+zdir_config_file=${zdir_config_dir}"config.ini"
 
 # 检查目录文件
 check_dir() {
@@ -19,6 +21,7 @@ check_dir() {
 
     if [ ! -f ${zdir_config_file} ]
     then
+        mkdir -p ${zdir_config_dir}
         cp /root/zdir/config.simple.ini ${zdir_config_file}
     fi
 }
