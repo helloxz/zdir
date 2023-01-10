@@ -2,7 +2,6 @@ package controller
 
 import (
 	"os"
-	"regexp"
 	"zdir/config"
 
 	"github.com/gin-gonic/gin"
@@ -23,9 +22,8 @@ func Upload(c *gin.Context) {
 	}
 	//如果上传路径不合法
 	//判断用户传递的路径是否合法
-	var validPath = regexp.MustCompile(`^(\.|\..).+`)
-	v_re := validPath.MatchString(path)
-	if v_re {
+	v_re := V_fpath(path)
+	if !v_re {
 		c.JSON(200, gin.H{
 			"code": -1000,
 			"msg":  "文件夹名称不合法！",
@@ -59,8 +57,18 @@ func Upload(c *gin.Context) {
 
 	// 单文件
 	file, _ := c.FormFile("file")
+	file_name := file.Filename
+	//验证文件名是否合法
+	if !V_fname(file_name) {
+		c.JSON(200, gin.H{
+			"code": -1000,
+			"msg":  "文件名不合法！",
+			"data": "",
+		})
+		return
+	}
 
-	dst := full_path + file.Filename
+	dst := full_path + file_name
 	// 上传文件至指定的完整文件路径
 	c.SaveUploadedFile(file, dst)
 	//返回上传成功
