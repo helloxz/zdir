@@ -2,11 +2,15 @@ package controller
 
 import (
 	"os"
-	"regexp"
 	"zdir/config"
 
 	"github.com/gin-gonic/gin"
 )
+
+// 声明一个结构体，用于保存文件上传成功后的信息
+type fileinfo struct {
+	Url string `json:"url"`
+}
 
 func Upload(c *gin.Context) {
 	//获取文件路径
@@ -23,9 +27,8 @@ func Upload(c *gin.Context) {
 	}
 	//如果上传路径不合法
 	//判断用户传递的路径是否合法
-	var validPath = regexp.MustCompile(`^(\.|\..).+`)
-	v_re := validPath.MatchString(path)
-	if v_re {
+	v_re := V_fpath(path)
+	if !v_re {
 		c.JSON(200, gin.H{
 			"code": -1000,
 			"msg":  "文件夹名称不合法！",
@@ -59,14 +62,30 @@ func Upload(c *gin.Context) {
 
 	// 单文件
 	file, _ := c.FormFile("file")
+	file_name := file.Filename
+	//验证文件名是否合法
+	if !V_fname(file_name) {
+		c.JSON(200, gin.H{
+			"code": -1000,
+			"msg":  "文件名不合法！",
+			"data": "",
+		})
+		return
+	}
 
-	dst := full_path + file.Filename
+	dst := full_path + file_name
 	// 上传文件至指定的完整文件路径
 	c.SaveUploadedFile(file, dst)
+
+	//拼接url
+	var finfo fileinfo
+	//获取公共存储的域名
+	storage_domain := config.Public_domain(c)
+	finfo.Url = storage_domain + path + file_name
 	//返回上传成功
 	c.JSON(200, gin.H{
 		"code": 200,
 		"msg":  "success",
-		"data": "",
+		"data": finfo,
 	})
 }

@@ -11,11 +11,7 @@ import (
 	"zdir/config"
 
 	"github.com/gin-gonic/gin"
-	"gopkg.in/ini.v1"
 )
-
-// 声明一个全局变量用来获取.ini配置
-var cfg *ini.File
 
 // 定义一个结构体，用来存放文件或文件夹信息
 type info struct {

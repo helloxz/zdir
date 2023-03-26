@@ -7,6 +7,7 @@ import (
 	"math/rand"
 	"net/url"
 	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -20,6 +21,8 @@ func md5s(str string) string {
 
 // 生成一个随机字符串
 func RandStr(n int) string {
+	//如果seed固定，那么每次程序重启后重新生成随机数会重复上一次的随机数，所以这里设置一个随机seed
+	rand.Seed(time.Now().UnixNano())
 	var bytes []byte = []byte("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890")
 	result := make([]byte, n)
 	for i := 0; i < n; i++ {

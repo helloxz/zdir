@@ -25,6 +25,17 @@ func Mkdir(c *gin.Context) {
 	//判断上级路径是否存在
 	full_path := public_dir + path
 
+	//需要验证用户传递的path参数是否合法
+	if !V_fpath(path) {
+		c.JSON(200, gin.H{
+			"code": -1000,
+			"msg":  "参数不合法！",
+			"data": "",
+		})
+		c.Abort()
+		return
+	}
+
 	//如果路径不存在
 	if !V_dir(full_path) {
 		c.JSON(200, gin.H{
