@@ -7,8 +7,8 @@ var VersionDate string
 
 // 赋值全局变量
 func init() {
-	Version = "3.2.0"
-	VersionDate = "20230109"
+	Version = "3.3.0"
+	VersionDate = "20230326"
 }
 
 // 命令行打印版本
